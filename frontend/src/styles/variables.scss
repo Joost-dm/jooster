@@ -1,0 +1,26 @@
+$navigation-app-bar-height: 35px; // should be also changed in Navigation.vue
+$view__header__height: 70px;
+$topic-bottom-form-height: 150px;
+
+$primary: #2C3138;
+$primary-dark:  #22252D;
+$secondary: #FFFFFF;
+$secondary-dark: #EEF2F5;
+$extra: #F98500;
+$third-party: #A4A5A9;
+
+$app-bar__background-color: $primary-dark;
+$hamburger-color: $extra;
+$app-bar__text__font-color: $secondary;
+$app-bar__link__font-color: $third-party;
+$app-bar__link__font-color-hover: $secondary;
+
+$view__header__background-color: $primary;
+$view__header__font-color: $secondary;
+
+$drawer__header__background-color: $primary;
+$drawer__header__font-color: $secondary;
+
+$color3: $secondary;
+$color4: $extra;
+$text-background: $secondary;
