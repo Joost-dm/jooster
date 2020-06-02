@@ -1,0 +1,11 @@
+Django==3.0.5
+djangorestframework==3.11.0
+djoser==2.0.3
+gunicorn==20.0.4
+sentry-sdk==0.14.3
+virtualenv==20.0.18
+whitenoise==5.0.1
+psycopg2==2.8.5
+pillow==7.1.2
+
+
