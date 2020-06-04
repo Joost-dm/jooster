@@ -79,6 +79,12 @@ class PostDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
+
+
 class ThreadDetailSerializer(serializers.ModelSerializer):
     children_count = serializers.SerializerMethodField('count_children')
     is_unread = serializers.SerializerMethodField('check_unread')

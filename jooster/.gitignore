@@ -1,2 +1,11 @@
+.git/
+__pycache__/
 .idea/
-
+*.pyc
+env/
+*.log
+*.pot
+__pycache__/
+local_settings.py
+.env
+db.sqlite3
