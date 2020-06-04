@@ -5,7 +5,6 @@
       <v-text-field v-model="registerData.email" label="E-mail" type="email"></v-text-field>
       <v-text-field v-model="registerData.password" label="Password" type="password"></v-text-field>
       <v-text-field v-model="password_check" label="Repeat password" type="password"></v-text-field>
-      <v-file-input show-size v-model="registerData.avatar"></v-file-input>
       <v-btn type="submit">Регистрация</v-btn>
     </v-form>
   </div>
@@ -20,14 +19,13 @@ export default {
       registerData: {
         username: '',
         email: '',
-        password: '',
-        avatar: null
+        password: ''
       }
     }
   },
   methods: {
     async createUser () {
-      this.$store.dispatch('createNewUser', this.registerData)
+      await this.$store.dispatch('createNewUser', this.registerData)
     }
   },
   computed: {

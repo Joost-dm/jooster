@@ -1,12 +1,14 @@
 <template>
 <v-container class="pa-0" mb-5>
+  <v-img height="50" width="50" v-if="post.author.avatar" :src="post.author.avatar" alt=""></v-img>
+  Автор: {{post.author.username}}
   <hr>
   <div style="height: 150px; background-color: gainsboro"><b>{{post.text}}</b></div>
   <hr>
   <span>likes: {{post.likes.length}}</span>
   <br>
   <v-btn @click="toggleLikePost(post)">like</v-btn>
-  <v-btn v-if="user.id === post.author" @click="deletePost(post)">удалить</v-btn>
+  <v-btn v-if="user.id === post.author.id" @click="deletePost(post)">удалить</v-btn>
   <router-link
     v-if="type === 'thread'"
     :to="{

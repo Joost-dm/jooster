@@ -73,19 +73,21 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
 
+class UserPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'avatar', 'is_staff']
+
+
 class PostDetailSerializer(serializers.ModelSerializer):
+    author = UserPostSerializer(CustomUser)
     class Meta:
         model = Post
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = '__all__'
-
-
 class ThreadDetailSerializer(serializers.ModelSerializer):
+    author = UserPostSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
     is_unread = serializers.SerializerMethodField('check_unread')
     def count_children(self, thread):
@@ -108,6 +110,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
 
 class BranchDetailSerializer(serializers.ModelSerializer):
+    author = UserPostSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
     is_unread = serializers.SerializerMethodField('check_unread')
 
@@ -131,6 +134,7 @@ class BranchDetailSerializer(serializers.ModelSerializer):
 
 
 class ForumDetailSerializer(serializers.ModelSerializer):
+    author = UserPostSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
 
     def count_children(self, forum):
