@@ -31,17 +31,14 @@ export default {
   actions: {
     async loginUser ({ commit }, payload) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         var token = await axios.post(API.URL + 'auth_token/token/login/',
           payload)
         commit('createAuthToken', token.data.auth_token)
         var currentUser = await axios.get(API.URL + 'auth/users/me/')
         commit('loginUser', currentUser.data)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
@@ -50,23 +47,19 @@ export default {
     },
     async destroyAuthToken ({ commit }, authToken) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         await axios.post(API.URL + 'auth_token/token/logout/',
           {
             auth_token: authToken
           })
-        commit('setLoading', false)
         commit('logoutUser')
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async createNewUser ({ commit }, user) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         const formData = new FormData()
         for (var key in user) {
@@ -81,16 +74,13 @@ export default {
           username: user.username,
           password: user.password
         })
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async updateUser ({ commit }, user) {
       commit('clearError')
-      commit('setLoading', true)
       const formData = new FormData()
       for (var key in user) {
         formData.append(key, user[key])
@@ -103,11 +93,9 @@ export default {
         })
         var currentUser = await axios.get(API.URL + 'auth/users/me/')
         commit('loginUser', currentUser.data)
-        commit('setLoading', false)
       } catch (error) {
         console.log(error.response)
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
@@ -121,7 +109,7 @@ export default {
         const token = localStorage.getItem('auth_token')
         axios.defaults.headers.common.Authorization = 'Token ' + token
         commit('createAuthToken', token)
-        await timeout(3000)
+        await timeout(500)
         try {
           var currentUser = await axios.get(API.URL + 'auth/users/me/')
           commit('loginUser', currentUser.data)
@@ -135,14 +123,12 @@ export default {
     },
     async getUsersList ({ commit }) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         var usersList = await axios.get(API.URL + 'auth/users/')
         commit('setUsersList', usersList.data)
         commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     }

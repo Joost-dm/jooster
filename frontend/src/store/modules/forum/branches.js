@@ -30,68 +30,58 @@ export default {
   actions: {
     async getAllBranches ({ commit }) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         const allBranchesList = (await axios.get(API.URL + 'api/v1/branch/all/')).data
         commit('setAllBranches', allBranchesList)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async getCurrentBranchById ({ commit, dispatch }, id) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         const currentBranch = (await axios.get(API.URL + 'api/v1/branch/' + id + '/')).data
         await dispatch('setCurrentBranch', currentBranch)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async createBranch ({ commit }, branch) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         await axios.post(API.URL + 'api/v1/branch/add/', branch)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async editBranch ({ commit }, branch) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         await axios.put(API.URL + 'api/v1/branch/' + branch.id + '/', branch)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async deleteBranch ({ commit, dispatch, getters }, branch) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         await axios.delete(API.URL + 'api/v1/branch/' + branch.id + '/')
         await dispatch('getForumChildren', getters.getCurrentForum)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     },
     async getBranchChildren ({ commit, dispatch }, payload) {
+      function timeout (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
+      }
+      commit('setPrimaryLoading', true)
+      await timeout(1500)
       var url
       if (payload.url) {
         url = payload.url
@@ -100,7 +90,6 @@ export default {
         url = API.URL + 'api/v1/branch/' + payload.branch.id + '/children/'
       }
       commit('clearError')
-      commit('setLoading', true)
       try {
         const childrenList = await axios.get(url)
         if (childrenList.data.next) {
@@ -116,22 +105,19 @@ export default {
         }
         const reversedChildrenList = childrenList.data.results.reverse()
         commit('setBranchChildren', reversedChildrenList)
-        commit('setLoading', false)
+        commit('setPrimaryLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
+        commit('setPrimaryLoading', false)
         throw error
       }
     },
     async addBranchMember ({ commit }, payload) {
       commit('clearError')
-      commit('setLoading', true)
       try {
         await axios.post(API.URL + 'api/v1/branch/' + payload.branch.id + '/membership/' + payload.user.id + '/')
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
-        commit('setLoading', false)
         throw error
       }
     }

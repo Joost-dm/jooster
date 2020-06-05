@@ -1,13 +1,17 @@
 export default {
   state: {
     globalLoading: false,
-    loading: false,
+    primaryLoading: false,
+    secondaryLoading: false,
     drawer: true,
     error: null
   },
   mutations: {
-    setLoading (state, payload) {
-      state.loading = payload
+    setPrimaryLoading (state, payload) {
+      state.primaryLoading = payload
+    },
+    setSecondaryLoading (state, payload) {
+      state.secondaryLoading = payload
     },
     setGlobalLoading (state, payload) {
       state.globalLoading = payload
@@ -24,8 +28,11 @@ export default {
 
   },
   actions: {
-    setLoading ({ commit }, payload) {
-      commit('setLoading', payload)
+    setSecondaryLoading ({ commit }, payload) {
+      commit('setSecondaryLoading', payload)
+    },
+    setPrimaryLoading ({ commit }, payload) {
+      commit('setPrimaryLoading', payload)
     },
     setGlobalLoading ({ commit }, payload) {
       commit('setGlobalLoading', payload)
@@ -41,8 +48,11 @@ export default {
     }
   },
   getters: {
-    loading (state) {
-      return state.loading
+    primaryLoading (state) {
+      return state.primaryLoading
+    },
+    secondaryLoading (state) {
+      return state.secondaryLoading
     },
     error (state) {
       return state.error

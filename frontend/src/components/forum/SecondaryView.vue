@@ -16,6 +16,7 @@
       <b v-if="!threadNextPageUrl && currentThread">{{currentThread.text}}</b>
       <hr>
       <div id="secondary__posts">
+        <local-loader v-if="secondaryLoading"></local-loader>
         <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'"></forum-post>
       </div>
       <v-col
@@ -34,6 +35,7 @@
 
 <script>
 import ForumPost from './ForumPost'
+import LocalLoader from '../loaders/LocalLoader'
 
 export default {
   name: 'SecondaryView',
@@ -47,7 +49,8 @@ export default {
     }
   },
   components: {
-    'forum-post': ForumPost
+    'forum-post': ForumPost,
+    'local-loader': LocalLoader
   },
   computed: {
     currentThread () {
@@ -67,6 +70,9 @@ export default {
     },
     currentThreadScrollStart () {
       return this.$store.getters.getCurrentThreadScrollStart
+    },
+    secondaryLoading () {
+      return this.$store.getters.secondaryLoading
     }
   },
   methods: {
@@ -96,7 +102,7 @@ export default {
       if (postsBody) {
         postsBody.scrollTop = postsBody.scrollHeight - this.$store.getters.getCurrentThreadBottomScroll
       }
-      if (this.currentThreadScrollStart && postsList) {
+      if (this.currentThreadScrollStart && postsList && !this.secondaryLoading) {
         postsList.scrollIntoView(false)
         this.$store.dispatch('setCurrentThreadBottomScroll', null)
         postsBody.scrollTop = postsBody.scrollHeight

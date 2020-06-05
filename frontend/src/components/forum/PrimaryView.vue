@@ -15,7 +15,8 @@
       cols="12"
       class="primary-view__body" id="primary-view__threads-body" @scroll="threadsScrollHandler">
       <div id="primary__threads" v-if="currentBranchThreads">
-           <forum-post v-for="thread in currentBranchThreads" :key="thread.id" :post="thread" :type="'thread'"></forum-post>
+        <local-loader v-if="primaryLoading"></local-loader>
+        <forum-post v-for="thread in currentBranchThreads" :key="thread.id" :post="thread" :type="'thread'"></forum-post>
        </div>
       </v-col>
       <!-- ФОРМА -->
@@ -48,6 +49,7 @@
         <b v-if="!threadNextPageUrl && currentThread">{{currentThread.text}}</b>
         <hr>
        <div id="primary__posts" v-if="currentThreadPosts">
+         <local-loader v-if="primaryLoading"></local-loader>
          <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'"></forum-post>
        </div>
       </v-col>
@@ -69,11 +71,13 @@
 <script>
 
 import ForumPost from './ForumPost'
+import LocalLoader from '../loaders/LocalLoader'
 
 export default {
   name: 'PrimaryView',
   components: {
-    'forum-post': ForumPost
+    'forum-post': ForumPost,
+    'local-loader': LocalLoader
   },
   data () {
     return {
@@ -119,6 +123,9 @@ export default {
     },
     currentThreadScrollStart () {
       return this.$store.getters.getCurrentThreadScrollStart
+    },
+    primaryLoading () {
+      return this.$store.getters.primaryLoading
     }
   },
   methods: {
@@ -136,31 +143,43 @@ export default {
     async threadNextPage () {
       if (this.threadNextPageUrl) {
         const currentThread = this.$store.getters.getCurrentThread
-        await this.$store.dispatch('getThreadChildren', { thread: currentThread, url: this.threadNextPageUrl })
+        await this.$store.dispatch(
+          'getThreadChildren',
+          { thread: currentThread, url: this.threadNextPageUrl }
+        )
       }
     },
     async branchNextPage () {
       if (this.branchNextPageUrl) {
         const currentBranch = this.$store.getters.getCurrentBranch
-        await this.$store.dispatch('getBranchChildren', { branch: currentBranch, url: this.branchNextPageUrl })
+        await this.$store.dispatch(
+          'getBranchChildren',
+          { branch: currentBranch, url: this.branchNextPageUrl }
+        )
       }
     },
     async threadsScrollHandler () {
       const threadsBody = document.getElementById('primary-view__threads-body')
-      if (threadsBody.scrollTop <= 20 && threadsBody.scrollTop > 0 && !this.preventBranchScrollTrigger) {
+      if (threadsBody.scrollTop <= 10 && threadsBody.scrollTop > 0 && !this.preventBranchScrollTrigger) {
         this.preventBranchScrollTrigger = true
         const threadsBody = document.getElementById('primary-view__threads-body')
-        this.$store.dispatch('setCurrentBranchBottomScroll', threadsBody.scrollHeight)
+        this.$store.dispatch(
+          'setCurrentBranchBottomScroll',
+          threadsBody.scrollHeight + 100
+        )
         await this.branchNextPage()
         this.preventBranchScrollTrigger = false
       }
     },
     async postsScrollHandler () {
       const postsBody = document.getElementById('primary-view__posts-body')
-      if (postsBody.scrollTop <= 20 && postsBody.scrollTop > 0 && !this.preventThreadScrollTrigger) {
+      if (postsBody.scrollTop <= 10 && postsBody.scrollTop > 0 && !this.preventThreadScrollTrigger) {
         this.preventThreadScrollTrigger = true
         const postsBody = document.getElementById('primary-view__posts-body')
-        this.$store.dispatch('setCurrentThreadBottomScroll', postsBody.scrollHeight)
+        this.$store.dispatch(
+          'setCurrentThreadBottomScroll',
+          postsBody.scrollHeight + 100
+        )
         await this.threadNextPage()
         this.preventThreadScrollTrigger = false
       }
@@ -175,12 +194,12 @@ export default {
       } else if (postsBody) {
         postsBody.scrollTop = postsBody.scrollHeight - this.$store.getters.getCurrentThreadBottomScroll
       }
-      if (this.currentBranchScrollStart && threadsList) {
+      if (this.currentBranchScrollStart && threadsList && !this.primaryLoading) {
         threadsList.scrollIntoView(false)
         this.$store.dispatch('setCurrentBranchBottomScroll', null)
         threadsBody.scrollTop = threadsBody.scrollHeight
         this.$store.dispatch('setCurrentBranchScrollStart', false)
-      } else if (this.currentThreadScrollStart && postsList) {
+      } else if (this.currentThreadScrollStart && postsList && !this.primaryLoading) {
         postsList.scrollIntoView(false)
         this.$store.dispatch('setCurrentThreadBottomScroll', null)
         postsBody.scrollTop = postsBody.scrollHeight

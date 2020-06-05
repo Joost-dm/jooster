@@ -8,7 +8,8 @@ export default {
     currentBranchBottomScroll: null,
     currentThreadBottomScroll: null,
     currentBranchScrollStart: true,
-    currentThreadScrollStart: true
+    currentThreadScrollStart: true,
+    loacalLoaderHeight: 100
   },
   mutations: {
     setBranchInPrimary (state, status) {
@@ -156,6 +157,9 @@ export default {
     },
     getCurrentThreadScrollStart (state) {
       return state.currentThreadScrollStart
+    },
+    getLocalLoaderHeight (state) {
+      return state.localLoaderHeight
     }
   }
 }
