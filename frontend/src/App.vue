@@ -19,19 +19,22 @@
         </v-btn>
       </v-snackbar>
   </template>
-  <navigation></navigation>
+  <global-loader v-if="globalLoading"></global-loader>
+  <navigation v-else></navigation>
   </v-app>
 </template>
 
 <script>
 import Navigation from './components/Navigation'
+import GlobalLoader from './components/loaders/GlobalLoader'
 
 export default {
   name: 'App',
   data: () => ({
   }),
   components: {
-    navigation: Navigation
+    navigation: Navigation,
+    'global-loader': GlobalLoader
   },
   methods: {
     closeError () {
@@ -47,14 +50,13 @@ export default {
     },
     loading () {
       return this.$store.getters.loading
+    },
+    globalLoading () {
+      return this.$store.getters.globalLoading
     }
   },
   created () {
     this.$store.dispatch('checkForLocalAuthToken')
-    this.$store.dispatch('getUsersList')
-  },
-  beforeCreate () {
-
   }
 }
 </script>

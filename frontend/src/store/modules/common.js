@@ -1,5 +1,6 @@
 export default {
   state: {
+    globalLoading: false,
     loading: false,
     drawer: true,
     error: null
@@ -7,6 +8,9 @@ export default {
   mutations: {
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setGlobalLoading (state, payload) {
+      state.globalLoading = payload
     },
     setError (state, error) {
       state.error = error
@@ -22,6 +26,9 @@ export default {
   actions: {
     setLoading ({ commit }, payload) {
       commit('setLoading', payload)
+    },
+    setGlobalLoading ({ commit }, payload) {
+      commit('setGlobalLoading', payload)
     },
     setError ({ commit }, payload) {
       commit('setError', payload)
@@ -42,6 +49,9 @@ export default {
     },
     drawerStatus (state) {
       return state.drawer
+    },
+    globalLoading (state) {
+      return state.globalLoading
     }
   }
 }

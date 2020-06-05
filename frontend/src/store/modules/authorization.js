@@ -112,15 +112,22 @@ export default {
       }
     },
     async checkForLocalAuthToken ({ commit }) {
+      function timeout (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
+      }
       commit('clearError')
+      commit('setGlobalLoading', true)
       if (localStorage.getItem('auth_token')) {
         const token = localStorage.getItem('auth_token')
         axios.defaults.headers.common.Authorization = 'Token ' + token
         commit('createAuthToken', token)
+        await timeout(3000)
         try {
           var currentUser = await axios.get(API.URL + 'auth/users/me/')
           commit('loginUser', currentUser.data)
+          commit('setGlobalLoading', false)
         } catch (error) {
+          commit('setGlobalLoading', false)
           commit('setError', error)
           throw error
         }
