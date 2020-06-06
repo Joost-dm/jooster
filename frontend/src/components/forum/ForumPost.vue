@@ -1,8 +1,8 @@
 <template>
 <v-container fluid class="post">
   <div class="post__left-side">
-    <v-avatar>
-      <v-img class="post__avatar" :src=post.author.avatar></v-img>
+    <v-avatar class="post__avatar">
+      <v-img :src=post.author.avatar></v-img>
     </v-avatar>
   </div>
   <div class="post__right-side">
@@ -15,14 +15,15 @@
       </div>
     </div>
     <div class="post__body">
+      <hr>
       <pre>{{post.text}}</pre>
     </div>
     <div class="post__footer">
       <div class="post__likes">
-        <span>{{post.likes.length}}</span>
-        <span class="mr-5" @click="toggleLikePost(post)">
-          <v-icon v-if="post.likes.indexOf(user.id) != -1" color="error">mdi-thumb-up</v-icon>
-          <v-icon v-else color="black">mdi-thumb-up</v-icon>
+        <span class="post__likes-counter">{{post.likes.length}}</span>
+        <span class="post__likes-button mr-5" @click="toggleLikePost(post)">
+          <v-icon class="post__likes-button__selected" size="17" v-if="post.likes.indexOf(user.id) != -1">mdi-thumb-up</v-icon>
+          <v-icon size="17" v-else >mdi-thumb-up</v-icon>
         </span>
       </div>
       <div class="post__discussion">
@@ -37,7 +38,7 @@
           }}">
            <div @click="setBranchInPrimary(false)">
              <span>{{post.children_count}}</span>
-             <v-icon>mdi-chat</v-icon>
+             <v-icon size="19">mdi-chat</v-icon>
              Непрочитанных: {{post.is_unread}}
            </div>
         </router-link>
@@ -108,6 +109,11 @@ export default {
         } else if (this.type === 'thread') {
           this.$store.dispatch('dislikeThread', post)
         }
+        for (var i = this.post.likes.length - 1; i >= 0; i--) {
+          if (this.post.likes[i] === this.user.id) {
+            this.post.likes.splice(i, 1)
+          }
+        }
       }
     },
     setBranchInPrimary (status) {
@@ -174,6 +180,18 @@ export default {
   align-items: center;
   min-height: $post__footer__min-height;
   padding-left: $post__padding;
+}
+.post__like {
+
+}
+.post__likes-counter {
+}
+.post__likes-button {
+  padding-left: calc(#{$post__padding} / 2);
+  cursor: pointer;
+}
+.post__likes-button__selected {
+  color: $extra;
 }
 .post__discussion a {
   font-weight: bold;
