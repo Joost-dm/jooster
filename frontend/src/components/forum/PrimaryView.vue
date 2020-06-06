@@ -58,8 +58,7 @@
       cols="12"
       class="primary-view__bottom-form">
         <v-container fluid class="pa-0">
-          <v-textarea
-          v-model="newPost.text" label="Сообщение"></v-textarea>
+          <input type="text" v-model="newPost.text">
           <v-btn @click="createPost">Создать</v-btn>
         </v-container>
       </v-col>

@@ -1,12 +1,49 @@
 <template>
-<v-container>
-  <v-row>
-    <v-col  style="background-color: #1b6d85">avatar
-    </v-col>
-    <v-col>
-      post
-    </v-col>
-  </v-row>
+<v-container fluid class="post">
+  <div class="post__left-side">
+    <v-avatar>
+      <v-img class="post__avatar" :src=post.author.avatar></v-img>
+    </v-avatar>
+  </div>
+  <div class="post__right-side">
+    <div class="post__header">
+      <div class="post__author">
+        <span>{{post.author.username}}</span>
+      </div>
+      <div class="post__pub-date">
+        <span>{{dateRefactor(post.pub_date)}}</span>
+      </div>
+    </div>
+    <div class="post__body">
+      <pre>{{post.text}}</pre>
+    </div>
+    <div class="post__footer">
+      <div class="post__likes">
+        <span>{{post.likes.length}}</span>
+        <span class="mr-5" @click="toggleLikePost(post)">
+          <v-icon v-if="post.likes.indexOf(user.id) != -1" color="error">mdi-thumb-up</v-icon>
+          <v-icon v-else color="black">mdi-thumb-up</v-icon>
+        </span>
+      </div>
+      <div class="post__discussion">
+        <router-link
+          v-if="type === 'thread'"
+          :to="{
+          name: 'Forum',
+          params: {
+            forumId: currentForum.id,
+            branchId: currentBranch.id,
+            threadId: post.id
+          }}">
+           <div @click="setBranchInPrimary(false)">
+             <span>{{post.children_count}}</span>
+             <v-icon>mdi-chat</v-icon>
+             Непрочитанных: {{post.is_unread}}
+           </div>
+        </router-link>
+      </div>
+    </div>
+  </div>
 </v-container>
   <!--
 <v-container class="pa-0" mb-5>
@@ -64,6 +101,7 @@ export default {
         } else if (this.type === 'thread') {
           this.$store.dispatch('likeThread', post)
         }
+        this.post.likes.push(this.user.id)
       } else {
         if (this.type === 'post') {
           this.$store.dispatch('dislikePost', post)
@@ -74,11 +112,71 @@ export default {
     },
     setBranchInPrimary (status) {
       this.$store.dispatch('setBranchInPrimary', status)
+    },
+    dateRefactor (date) {
+      const options = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      }
+      date = new Date(date)
+      return date.toLocaleString('ru', options)
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../styles/variables";
 
+.post {
+  display: flex;
+  min-height: $post__min-height;
+  padding: 0;
+  margin-top: $post__margin-top;
+  flex-direction: row;
+}
+.post__left-side {
+  width: $post__avatar-area__size;
+  padding: calc((#{$post__avatar-area__size} - #{$post__avatar__size}) / 2);
+}
+.post__avatar {
+  overflow: hidden;
+  height: $post__avatar__size;
+  width: $post__avatar__size;
+  background-color: white;
+}
+.post__right-side {
+  width: 100%;
+}
+.post__header {
+  display: flex;
+  align-items: center;
+  min-height: $post__header__min-height;
+  padding-left: $post__padding;
+
+}
+.post__author {
+  font-weight: bold;
+}
+.post__pub-date {
+  margin-left: $post__padding;
+}
+.post__body {
+  min-height: calc(#{$post__min-height} - #{$post__header__min-height} - #{$post__footer__min-height});
+  padding-left: $post__padding;
+}
+
+.post__footer {
+  display: flex;
+  align-items: center;
+  min-height: $post__footer__min-height;
+  padding-left: $post__padding;
+}
+.post__discussion a {
+  font-weight: bold;
+  text-decoration: none;
+}
 </style>
