@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.static import serve as _serve
 
@@ -11,7 +10,6 @@ def serveIMG(request, path):
     return _serve(request, path, "")
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("api/v1/", include('forum.urls')),
     path('api/v1/auth/profile/', include('authorization.urls')),
     path('auth/', include('djoser.urls')),
