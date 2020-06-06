@@ -91,7 +91,7 @@ export default {
       if (postsBody.scrollTop <= 20 && postsBody.scrollTop > 0 && !this.preventThreadScrollTrigger) {
         this.preventThreadScrollTrigger = true
         const postsBody = document.getElementById('secondary-view__posts-body')
-        this.$store.dispatch('setCurrentThreadBottomScroll', postsBody.scrollHeight)
+        this.$store.dispatch('setCurrentThreadBottomScroll', postsBody.scrollHeight + 100)
         await this.threadNextPage()
         this.preventThreadScrollTrigger = false
       }

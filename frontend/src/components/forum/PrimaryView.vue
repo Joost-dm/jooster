@@ -163,10 +163,7 @@ export default {
       if (threadsBody.scrollTop <= 10 && threadsBody.scrollTop > 0 && !this.preventBranchScrollTrigger) {
         this.preventBranchScrollTrigger = true
         const threadsBody = document.getElementById('primary-view__threads-body')
-        this.$store.dispatch(
-          'setCurrentBranchBottomScroll',
-          threadsBody.scrollHeight + 100
-        )
+        this.$store.dispatch('setCurrentBranchBottomScroll', threadsBody.scrollHeight + 100)
         await this.branchNextPage()
         this.preventBranchScrollTrigger = false
       }
@@ -176,10 +173,7 @@ export default {
       if (postsBody.scrollTop <= 10 && postsBody.scrollTop > 0 && !this.preventThreadScrollTrigger) {
         this.preventThreadScrollTrigger = true
         const postsBody = document.getElementById('primary-view__posts-body')
-        this.$store.dispatch(
-          'setCurrentThreadBottomScroll',
-          postsBody.scrollHeight + 100
-        )
+        this.$store.dispatch('setCurrentThreadBottomScroll', postsBody.scrollHeight + 100)
         await this.threadNextPage()
         this.preventThreadScrollTrigger = false
       }

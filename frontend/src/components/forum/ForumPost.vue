@@ -1,4 +1,14 @@
 <template>
+<v-container>
+  <v-row>
+    <v-col  style="background-color: #1b6d85">avatar
+    </v-col>
+    <v-col>
+      post
+    </v-col>
+  </v-row>
+</v-container>
+  <!--
 <v-container class="pa-0" mb-5>
   <v-img height="50" width="50" v-if="post.author.avatar" :src="post.author.avatar" alt=""></v-img>
   Автор: {{post.author.username}}
@@ -21,6 +31,7 @@
    <span @click="setBranchInPrimary(false)">Обсуждение [{{post.children_count}}] {{post.is_unread}}</span>
   </router-link>
 </v-container>
+-->
 </template>
 
 <script>
