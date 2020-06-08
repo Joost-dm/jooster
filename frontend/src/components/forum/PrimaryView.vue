@@ -24,8 +24,7 @@
       cols="12"
       class="primary-view__bottom-form">
         <v-container fluid class="pa-0">
-          <v-textarea rows="2" filled outlined auto-grow class="ma-2" color="success" style="font-size: 12px; line-height: 1px"
-          v-model="newThread.text" label="Сообщение"></v-textarea>
+          <picker-area  v-model="newThread.text"></picker-area>
           <v-btn @click="createThread">Создать</v-btn>
         </v-container>
       </v-col>
@@ -71,12 +70,14 @@
 
 import ForumPost from './ForumPost'
 import LocalLoader from '../loaders/LocalLoader'
+import PickerArea from 'vue-emoji-mart-picker'
 
 export default {
   name: 'PrimaryView',
   components: {
     'forum-post': ForumPost,
-    'local-loader': LocalLoader
+    'local-loader': LocalLoader,
+    'picker-area': PickerArea
   },
   data () {
     return {

@@ -16,7 +16,7 @@
     </div>
     <div class="post__body">
       <hr>
-      <pre>{{post.text}}</pre>
+      <pre class="post__text">{{post.text}}</pre>
     </div>
     <div class="post__footer">
       <div class="post__likes">
@@ -136,7 +136,6 @@ export default {
 
 <style scoped lang="scss">
 @import "../../styles/variables";
-
 .post {
   display: flex;
   min-height: $post__min-height;
@@ -144,6 +143,7 @@ export default {
   margin-top: $post__margin-top;
   flex-direction: row;
 }
+
 .post__left-side {
   width: $post__avatar-area__size;
   padding: calc((#{$post__avatar-area__size} - #{$post__avatar__size}) / 2);
@@ -174,6 +174,10 @@ export default {
 .post__body {
   min-height: calc(#{$post__min-height} - #{$post__header__min-height} - #{$post__footer__min-height});
   padding-left: $post__padding;
+}
+
+.post__text {
+  font-family: OpenSansEmoji;
 }
 
 .post__footer {
