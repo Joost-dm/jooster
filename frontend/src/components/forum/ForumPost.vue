@@ -150,6 +150,7 @@ export default {
 }
 .post__avatar {
   overflow: hidden;
+  border-radius: 6px;
   height: $post__avatar__size;
   width: $post__avatar__size;
   background-color: white;
