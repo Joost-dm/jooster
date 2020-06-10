@@ -104,8 +104,8 @@ export default {
         return new Promise(resolve => setTimeout(resolve, ms))
       }
       commit('clearError')
-      commit('setGlobalLoading', true)
       if (localStorage.getItem('auth_token')) {
+        commit('setGlobalLoading', true)
         const token = localStorage.getItem('auth_token')
         axios.defaults.headers.common.Authorization = 'Token ' + token
         commit('createAuthToken', token)

@@ -1,5 +1,5 @@
 <template>
-<v-container fluid class="post">
+<v-container fluid class="post" :id="postID">
   <div class="post__left-side">
     <v-avatar class="post__avatar">
       <v-img :src=post.author.avatar></v-img>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import twemoji from 'twemoji'
+
 export default {
   name: 'ForumPost',
   props: ['post', 'type'],
@@ -85,6 +87,9 @@ export default {
     },
     currentForum () {
       return this.$store.getters.getCurrentForum
+    },
+    postID () {
+      return 'post-' + this.post.id
     }
   },
   methods: {
@@ -129,7 +134,22 @@ export default {
       }
       date = new Date(date)
       return date.toLocaleString('ru', options)
+    },
+    async emojiHandler () {
+      await twemoji.parse(document.getElementById(this.postID))
+      const emojiList = document.getElementsByClassName('emoji')
+      emojiList.forEach(emoji => {
+        emoji.style.cssText = `
+          height: 1em;
+          width: 1em;
+          margin: 0 .05em 0 .1em;
+          vertical-align: -0.1em;
+        `
+      })
     }
+  },
+  mounted () {
+    this.emojiHandler()
   }
 }
 </script>

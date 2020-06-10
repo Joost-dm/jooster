@@ -24,7 +24,22 @@
       cols="12"
       class="primary-view__bottom-form">
         <v-container fluid class="pa-0">
-          <picker-area  v-model="newThread.text"></picker-area>
+          <picker-area  set="twitter" pickerPosition="top" :i18n="{
+            search    : 'Поиск',
+            notfound  : 'Не найдено',
+            categories: {
+              search    : 'Поиск',
+              recent   : 'Часто используемые',
+              people   : 'Смайлы и люди',
+              nature   : 'Животные и природа',
+              foods    : 'Еда и напитки',
+              activity : 'Хобби',
+              places   : 'Путешествия',
+              objects  : 'Предметы',
+              symbols  : 'Символы',
+              flags    : 'Флаги',
+              custom   : 'Другое',
+}}" v-model="newThread.text"></picker-area>
           <v-btn @click="createThread">Создать</v-btn>
         </v-container>
       </v-col>
