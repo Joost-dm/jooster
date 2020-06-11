@@ -82,13 +82,10 @@
     <!----------------------------------------------------------------->
   </v-container>
 </template>
-
 <script>
-
 import ForumPost from './ForumPost'
 import LocalLoader from '../loaders/LocalLoader'
 import PickerArea from 'vue-emoji-mart-picker'
-
 export default {
   name: 'PrimaryView',
   components: {
@@ -229,13 +226,13 @@ export default {
     }
   },
   mounted () {
+    document.getElementsByClassName('primary-view__bottom-form')[0].addEventListener('keyup', this.formResizeHandler)
   },
   updated () {
     this.updateComponentScrollController()
   }
 }
 </script>
-
 <style scoped lang="scss">
   @import '../../styles/variables';
 .primary-view__main {
