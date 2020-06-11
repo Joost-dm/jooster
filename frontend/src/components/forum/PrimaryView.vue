@@ -20,28 +20,7 @@
        </div>
       </v-col>
       <!-- ФОРМА -->
-
-        <v-container fluid class="pa-0">
-          <picker-area class="primary-view__bottom-form"
-            set="twitter"
-            pickerPosition="top" :i18n="{
-            search    : 'Поиск',
-            notfound  : 'Не найдено',
-            categories: {
-              search    : 'Поиск',
-              recent   : 'Часто используемые',
-              people   : 'Смайлы и люди',
-              nature   : 'Животные и природа',
-              foods    : 'Еда и напитки',
-              activity : 'Хобби',
-              places   : 'Путешествия',
-              objects  : 'Предметы',
-              symbols  : 'Символы',
-              flags    : 'Флаги',
-              custom   : 'Другое',
-}}" v-model="newThread.text"></picker-area>
-          <v-icon class="bottom-form__button" @click="createThread">mdi-message-arrow-right</v-icon>
-        </v-container>
+      <post-form :type="'thread'"></post-form>
     </v-row>
     <!----------------------------------------------------------------->
      <v-row
@@ -70,36 +49,26 @@
       <v-col
       cols="12"
       class="primary-view__bottom-form">
-        <v-container fluid class="pa-0">
-          <input type="text" v-model="newPost.text">
-          <v-btn @click="createPost">Создать</v-btn>
-        </v-container>
+      <post-form :type="'post'"></post-form>
       </v-col>
     </v-row>
     <!----------------------------------------------------------------->
   </v-container>
 </template>
 <script>
-import ForumPost from './ForumPost'
+import ForumPost from './Post'
 import LocalLoader from '../loaders/LocalLoader'
-import PickerArea from 'vue-emoji-mart-picker'
+import PostForm from './PostForm'
+
 export default {
   name: 'PrimaryView',
   components: {
     'forum-post': ForumPost,
     'local-loader': LocalLoader,
-    'picker-area': PickerArea
+    'post-form': PostForm
   },
   data () {
     return {
-      newThread: {
-        text: null,
-        parent: null
-      },
-      newPost: {
-        text: null,
-        parent: null
-      },
       preventBranchScrollTrigger: false,
       preventThreadScrollTrigger: false
     }
@@ -140,14 +109,6 @@ export default {
     }
   },
   methods: {
-    createThread () {
-      this.newThread.parent_branch = this.currentBranch.id
-      this.$store.dispatch('createThread', this.newThread)
-    },
-    createPost () {
-      this.newPost.parent_thread = this.currentThread.id
-      this.$store.dispatch('createPost', this.newPost)
-    },
     setBranchInPrimary (status) {
       this.$store.dispatch('setBranchInPrimary', status)
     },
@@ -247,13 +208,5 @@ export default {
   overflow-x: hidden;
   background-color: $text-background;
 }
-.primary-view__bottom-form {
-  transition: 1s;
-}
-.bottom-form__button {
-  color: #F98500;
-  position: absolute;
-  bottom: 5px;
-  font-size: 35px;
-}
+
 </style>

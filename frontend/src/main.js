@@ -6,6 +6,10 @@ import vuetify from './plugins/vuetify'
 import store from './store'
 
 Vue.config.productionTip = false
+Vue.config.silent = false
+Vue.config.ignoredElements = [
+  'vue-emoji-mart-picker'
+]
 
 new Vue({
   router,

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import ForumPost from './ForumPost'
+import ForumPost from './Post'
 import LocalLoader from '../loaders/LocalLoader'
 
 export default {
