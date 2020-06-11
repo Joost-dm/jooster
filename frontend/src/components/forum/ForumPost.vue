@@ -16,7 +16,7 @@
     </div>
     <div class="post__body">
       <hr>
-      <pre class="post__text">{{post.text}}</pre>
+      <div class="post__text" :id="postTextID">{{post.text}}</div>
     </div>
     <div class="post__footer">
       <div class="post__likes">
@@ -90,6 +90,9 @@ export default {
     },
     postID () {
       return 'post-' + this.post.id
+    },
+    postTextID () {
+      return 'post-' + this.post.id + '-text'
     }
   },
   methods: {
@@ -149,6 +152,7 @@ export default {
     }
   },
   mounted () {
+    document.getElementById(this.postTextID).innerHTML = this.post.text
     this.emojiHandler()
   }
 }

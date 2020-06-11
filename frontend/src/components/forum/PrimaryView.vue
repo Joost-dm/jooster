@@ -24,7 +24,9 @@
       cols="12"
       class="primary-view__bottom-form">
         <v-container fluid class="pa-0">
-          <picker-area  set="twitter" pickerPosition="top" :i18n="{
+          <picker-area
+            set="twitter"
+            pickerPosition="top" :i18n="{
             search    : 'Поиск',
             notfound  : 'Не найдено',
             categories: {
@@ -214,7 +216,19 @@ export default {
         postsBody.scrollTop = postsBody.scrollHeight
         this.$store.dispatch('setCurrentThreadScrollStart', false)
       }
+    },
+    formResizeHandler () {
+      const appBarHeight = document.getElementById('v-app-bar').clientHeight
+      const main = document.getElementsByClassName('primary-view__main')[0]
+      main.style.height = 'calc(100vh - ' + appBarHeight + 'px;)'
+      const mainHeight = document.getElementsByClassName('primary-view__main')[0].clientHeight
+      const headerHeight = document.getElementsByClassName('primary-view__header')[0].clientHeight
+      const formHeight = document.getElementsByClassName('primary-view__bottom-form')[0].clientHeight
+      const body = document.getElementsByClassName('primary-view__body')[0]
+      body.style.height = (mainHeight - headerHeight - formHeight) + 'px'
     }
+  },
+  mounted () {
   },
   updated () {
     this.updateComponentScrollController()
@@ -226,10 +240,11 @@ export default {
   @import '../../styles/variables';
 .primary-view__main {
   overflow: hidden;
+  height: calc(100vh - #{$navigation-app-bar-height});
 }
 .primary-view__header {
   background-color: $view__header__background-color;
-  min-height: $view__header__height;
+  height: $view__header__height;
   color: $view__header__font-color;
 }
 .primary-view__body {
@@ -240,5 +255,6 @@ export default {
 }
 .primary-view__bottom-form {
   min-height: $topic-bottom-form-height;
+  transition: 1s;
 }
 </style>
