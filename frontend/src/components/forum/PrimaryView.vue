@@ -22,9 +22,9 @@
       <!-- ФОРМА -->
       <v-col
       cols="12"
-      class="primary-view__bottom-form">
+      >
         <v-container fluid class="pa-0">
-          <picker-area
+          <picker-area class="primary-view__bottom-form"
             set="twitter"
             pickerPosition="top" :i18n="{
             search    : 'Поиск',
@@ -42,7 +42,7 @@
               flags    : 'Флаги',
               custom   : 'Другое',
 }}" v-model="newThread.text"></picker-area>
-          <v-btn @click="createThread">Создать</v-btn>
+          <v-icon class="bottom-form__button" @click="createThread">mdi-message-arrow-right</v-icon>
         </v-container>
       </v-col>
     </v-row>
@@ -251,7 +251,12 @@ export default {
   background-color: $text-background;
 }
 .primary-view__bottom-form {
-  min-height: $topic-bottom-form-height;
   transition: 1s;
+}
+.bottom-form__button {
+  color: #F98500;
+  position: absolute;
+  bottom: 5px;
+  font-size: 35px;
 }
 </style>
