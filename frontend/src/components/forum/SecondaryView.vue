@@ -7,13 +7,13 @@
     <v-col
       cols="12"
       id="secondary-view__header">
-      <span v-if="currentThread">{{currentThread.id}}</span>
+      <span v-if="currentThread">Обсуждение: #{{currentThread.id}}</span>
     </v-col>
     <v-col
       cols="12"
       id="secondary-view__posts-body" @scroll="postsScrollHandler">
       <hr>
-       <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" :type="'thread'"></forum-post>
+       <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" :type="'post'"></forum-post>
       <hr>
       <div id="secondary__posts">
         <local-loader v-if="secondaryLoading"></local-loader>

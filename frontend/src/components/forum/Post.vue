@@ -190,7 +190,7 @@ export default {
   background-color: white;
 }
 .post__right-side {
-  width: 100%;
+  width: calc(100% - #{$post__avatar-area__size});
 }
 .post__header {
   display: flex;
@@ -214,6 +214,8 @@ export default {
   white-space: pre-wrap;
   text-align: justify;
   padding-right: 2em;
+  word-wrap: break-word;
+  width: auto;
 }
 
 .post__footer {
