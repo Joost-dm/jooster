@@ -20,9 +20,7 @@
        </div>
       </v-col>
       <!-- ФОРМА -->
-      <v-col
-      cols="12"
-      >
+
         <v-container fluid class="pa-0">
           <picker-area class="primary-view__bottom-form"
             set="twitter"
@@ -44,7 +42,6 @@
 }}" v-model="newThread.text"></picker-area>
           <v-icon class="bottom-form__button" @click="createThread">mdi-message-arrow-right</v-icon>
         </v-container>
-      </v-col>
     </v-row>
     <!----------------------------------------------------------------->
      <v-row

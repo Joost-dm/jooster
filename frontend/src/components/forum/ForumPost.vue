@@ -16,7 +16,7 @@
     </div>
     <div class="post__body">
       <hr>
-      <div class="post__text" :id="postTextID">{{post.text}}</div>
+      <p class="post__text" :id="postTextID"></p>
     </div>
     <div class="post__footer">
       <div class="post__likes">
@@ -201,7 +201,9 @@ export default {
 }
 
 .post__text {
-  font-family: OpenSansEmoji;
+  white-space: pre-wrap;
+  text-align: justify;
+  padding-right: 2em;
 }
 
 .post__footer {
