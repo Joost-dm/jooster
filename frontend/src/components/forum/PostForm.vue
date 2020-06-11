@@ -1,29 +1,33 @@
 <template>
- <v-container fluid class="pa-0">
-          <picker-area class="primary-view__bottom-form"
-            set="twitter"
-            v-model="newMessage.text"
-            pickerPosition="top"
-            :i18n="{
-            search    : 'Поиск',
-            notfound  : 'Не найдено',
-            categories: {
-              search   : 'Поиск',
-              recent   : 'Часто используемые',
-              people   : 'Смайлы и люди',
-              nature   : 'Животные и природа',
-              foods    : 'Еда и напитки',
-              activity : 'Хобби',
-              places   : 'Путешествия',
-              objects  : 'Предметы',
-              symbols  : 'Символы',
-              flags    : 'Флаги',
-              custom   : 'Другое',
-            }}" >
-          </picker-area>
-   <v-icon :v-if="type === 'thread'" class="bottom-form__button" @click="createThread">mdi-message-arrow-right</v-icon>
-   <v-icon :else-if="type === 'post'" class="bottom-form__button" @click="createPost">mdi-message-arrow-right</v-icon>
-        </v-container>
+  <v-container fluid class="pa-0">
+    <picker-area class="primary-view__bottom-form"
+      set="twitter"
+      v-model="newMessage.text"
+      pickerPosition="top"
+      :i18n="{
+      search    : 'Поиск',
+      notfound  : 'Не найдено',
+      categories: {
+        search   : 'Поиск',
+        recent   : 'Часто используемые',
+        people   : 'Смайлы и люди',
+        nature   : 'Животные и природа',
+        foods    : 'Еда и напитки',
+        activity : 'Хобби',
+        places   : 'Путешествия',
+        objects  : 'Предметы',
+        symbols  : 'Символы',
+        flags    : 'Флаги',
+        custom   : 'Другое',
+      }}" >
+    </picker-area>
+    <v-icon v-if="type === 'thread'" class="bottom-form__button" @click="createThread">
+      mdi-message-arrow-right
+    </v-icon>
+    <v-icon v-else-if="type === 'post'" class="bottom-form__button" @click="createPost">
+      mdi-message-arrow-right
+    </v-icon>
+  </v-container>
 </template>
 
 <script>

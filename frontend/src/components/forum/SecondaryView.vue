@@ -7,13 +7,13 @@
     <v-col
       cols="12"
       id="secondary-view__header">
-      <span v-if="currentThread">{{currentThread.text}}</span>
+      <span v-if="currentThread">{{currentThread.id}}</span>
     </v-col>
     <v-col
       cols="12"
       id="secondary-view__posts-body" @scroll="postsScrollHandler">
       <hr>
-      <b v-if="!threadNextPageUrl && currentThread">{{currentThread.text}}</b>
+       <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" :type="'thread'"></forum-post>
       <hr>
       <div id="secondary__posts">
         <local-loader v-if="secondaryLoading"></local-loader>
@@ -22,11 +22,7 @@
       <v-col
       cols="12"
       id="secondary-view__bottom-form">
-        <v-container fluid class="pa-0">
-          <v-text-field
-          v-model="newPost.text" label="Сообщение"></v-text-field>
-          <v-btn @click="createPost">Создать</v-btn>
-        </v-container>
+        <post-form :type="'post'"></post-form>
       </v-col>
       </v-col>
     </v-row>
@@ -36,21 +32,14 @@
 <script>
 import ForumPost from './Post'
 import LocalLoader from '../loaders/LocalLoader'
+import PostForm from './PostForm'
 
 export default {
   name: 'SecondaryView',
-  data () {
-    return {
-      newPost: {
-        text: null,
-        parent: null
-      },
-      preventThreadScrollTrigger: false
-    }
-  },
   components: {
     'forum-post': ForumPost,
-    'local-loader': LocalLoader
+    'local-loader': LocalLoader,
+    'post-form': PostForm
   },
   computed: {
     currentThread () {
@@ -76,10 +65,6 @@ export default {
     }
   },
   methods: {
-    createPost () {
-      this.newPost.parent_thread = this.currentThread.id
-      this.$store.dispatch('createPost', this.newPost)
-    },
     async threadNextPage () {
       if (this.threadNextPageUrl) {
         const currentThread = this.$store.getters.getCurrentThread

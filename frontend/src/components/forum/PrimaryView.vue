@@ -20,7 +20,7 @@
        </div>
       </v-col>
       <!-- ФОРМА -->
-      <post-form :type="'thread'"></post-form>
+      <post-form v-if="branchInPrimary" :type="'thread'"></post-form>
     </v-row>
     <!----------------------------------------------------------------->
      <v-row
@@ -49,7 +49,7 @@
       <v-col
       cols="12"
       class="primary-view__bottom-form">
-      <post-form :type="'post'"></post-form>
+      <post-form v-if="!branchInPrimary" :type="'post'"></post-form>
       </v-col>
     </v-row>
     <!----------------------------------------------------------------->

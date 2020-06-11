@@ -1,5 +1,5 @@
 <template>
-<v-container fluid class="post" :id="postID">
+<v-container fluid class="post" :class="postClass">
   <div class="post__left-side">
     <v-avatar class="post__avatar">
       <v-img :src=post.author.avatar></v-img>
@@ -16,7 +16,7 @@
     </div>
     <div class="post__body">
       <hr>
-      <p class="post__text" :id="postTextID"></p>
+      <p class="post__text" :class="postTextClass">{{post.text}}</p>
     </div>
     <div class="post__footer">
       <div class="post__likes">
@@ -88,10 +88,10 @@ export default {
     currentForum () {
       return this.$store.getters.getCurrentForum
     },
-    postID () {
+    postClass () {
       return 'post-' + this.post.id
     },
-    postTextID () {
+    postTextClass () {
       return 'post-' + this.post.id + '-text'
     }
   },
@@ -139,9 +139,11 @@ export default {
       return date.toLocaleString('ru', options)
     },
     async emojiHandler () {
-      await twemoji.parse(document.getElementById(this.postID))
-      const emojiList = document.getElementsByClassName('emoji')
-      emojiList.forEach(emoji => {
+      async function emojiParser (post) {
+        await twemoji.parse(post)
+      }
+      document.getElementsByClassName(this.postClass).forEach(post => emojiParser(post))
+      document.getElementsByClassName('emoji').forEach(emoji => {
         emoji.style.cssText = `
           height: 1em;
           width: 1em;
@@ -149,11 +151,19 @@ export default {
           vertical-align: -0.1em;
         `
       })
+    },
+    updateAndMountedHandler () {
+      document.getElementsByClassName(this.postTextClass).forEach(post => {
+        post.innerHTML = this.post.text
+      })
+      this.emojiHandler()
     }
   },
+  updated () {
+    this.updateAndMountedHandler()
+  },
   mounted () {
-    document.getElementById(this.postTextID).innerHTML = this.post.text
-    this.emojiHandler()
+    this.updateAndMountedHandler()
   }
 }
 </script>
