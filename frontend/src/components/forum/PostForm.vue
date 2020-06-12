@@ -63,6 +63,13 @@ export default {
       this.newMessage.parent_thread = this.currentThread.id
       this.$store.dispatch('createPost', this.newMessage)
     }
+  },
+  // заглушка ошибки, возникающей в сторонней библиотеке (емоджи-пикер).
+  errorCaptured (err) {
+    if (err.name !== 'TypeError') {
+      console.error(err)
+    }
+    return false
   }
 }
 </script>
