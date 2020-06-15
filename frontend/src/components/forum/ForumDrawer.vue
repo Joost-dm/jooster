@@ -1,4 +1,44 @@
 <template>
+  <v-container fluid class="pa-0">
+    <div class="forum-drawer__main">
+      <div class="forum-drawer__header"></div>
+      <div class="forum-drawer__body" >
+        <v-list class="pa-0 drawer-menu">
+          <v-list-group value="true">
+            <template v-slot:activator>
+              <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
+              <v-list-item-title>Навигация</v-list-item-title>
+            </template>
+            <router-link
+              v-for="(link, i) in navigationLinks"
+              :to="link.link"
+              :key="i">
+              <v-list-item link>
+                <v-list-item-icon><v-icon>{{link.icon}}</v-icon></v-list-item-icon>
+                <v-list-item-title @click="toggleHamburger">{{link.title}}</v-list-item-title>
+              </v-list-item>
+            </router-link>
+          </v-list-group>
+          <v-list-group value="true">
+            <template v-slot:activator>
+              <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
+              <v-list-item-title>Разделы</v-list-item-title>
+            </template>
+            <router-link
+              v-for="branch in currentForumBranches"
+              :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}"
+              :key="branch.id"            >
+            <v-list-item @click="setBranchInPrimary(true)" link>
+              <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
+              <v-list-item-title @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</v-list-item-title>
+            </v-list-item>
+              </router-link>
+          </v-list-group>
+        </v-list>
+      </div>
+    </div>
+  </v-container>
+  <!--
   <v-container class="pa-0" >
   <v-row
     no-gutters
@@ -7,17 +47,14 @@
     <v-col
       cols="12"
       id="forum-drawer__header">
-        <v-menu v-if="allForums" offset-y>
+        <v-menu nudge-right="-12" v-if="allForums" offset-y>
         <template v-slot:activator="{ on }">
-          <v-btn
-            dark
-            v-on="on"
-          >
+          <v-btn style="width: 100%" dark v-on="on">
             <span v-if="currentForum">{{currentForum.title}}</span>
           </v-btn>
         </template>
-        <v-list>
-          <v-list-item v-for="forum in allForums" :key="forum.id" @click="setCurrentForum(forum)">
+        <v-list >
+          <v-list-item class="ma-0" v-for="forum in allForums" :key="forum.id" @click="setCurrentForum(forum)">
             <span >{{forum.title}}</span>
           </v-list-item>
         </v-list>
@@ -36,11 +73,25 @@
       </v-col>
     </v-row>
   </v-container>
+  -->
 </template>
 
 <script>
 export default {
   name: 'ForumDrawer',
+  data () {
+    return {
+      navigationLinks: [
+        { link: '/login/', title: 'Авторизация', icon: 'mdi-login' },
+        { link: '/register/', title: 'Регистрация', icon: 'mdi-alpha-a' },
+        { link: '/training/', title: 'Тренировка', icon: 'mdi-alpha-b' },
+        { link: '/users/', title: 'Пользователи', icon: 'mdi-alpha-c' },
+        { link: '/forum/', title: 'Форум', icon: 'mdi-alpha-d' },
+        { link: '/forum/forum/add/', title: 'Новый форум', icon: 'mdi-alpha-e' },
+        { link: '/forum/branch/add/', title: 'Новая ветка', icon: 'mdi-alpha-f' }
+      ]
+    }
+  },
   computed: {
     allForums () {
       return this.$store.getters.getAllForumsList
@@ -77,17 +128,17 @@ export default {
 
 <style scoped lang="scss">
   @import '../../styles/variables';
-#forum-drawer__main {
+.forum-drawer__main {
   overflow: hidden;
+  height: calc(100vh - #{$navigation-app-bar-height});
 }
-#forum-drawer__header {
+.forum-drawer__header {
   background-color: $drawer__header__background-color;
-  min-height: $view__header__height;
+  height: $view__header__height;
   color: $drawer__header__font-color;
 }
-#forum-drawer__body {
+.forum-drawer__body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
   overflow-y: scroll;
-  background-color: $color3;
 }
 </style>

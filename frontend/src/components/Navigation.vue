@@ -30,15 +30,7 @@
         </span>
       </button>
       <span v-if="user"> <b>{{user.username}}[{{user.id}}]</b></span>
-      <router-link to="/login/">/Логин/</router-link>
-      <router-link to="/register/">Регистрация/</router-link>
-      <router-link to="/training/">Тренировка/</router-link>
-      <router-link to="/users/">Пользователи/</router-link>
-      <router-link to="/forum/">Форум/</router-link>
-      <router-link to="/forum/1/2/1">Форумeee/</router-link>
-      <router-link to="/forum/1/1/1">Форумeeew/</router-link>
-      <router-link to="/forum/forum/add/">Новый форум/</router-link>
-      <router-link to="/forum/branch/add/">Новая ветка/</router-link>
+
       <v-toolbar-title></v-toolbar-title>
     </v-app-bar>
     <v-content>
