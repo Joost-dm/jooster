@@ -6,10 +6,11 @@
         <v-list color="error" class="pa-0 drawer-menu">
           <v-list-group class="drawer-menu__group" >
             <template v-slot:activator>
-              <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
+              <v-list-item-icon><v-icon>mdi-file-tree-outline</v-icon></v-list-item-icon>
               <v-list-item-title>Навигация</v-list-item-title>
             </template>
             <router-link
+              active-class="drawer-menu__branch-link__active"
               class="drawer-menu__item"
               v-for="(link, i) in navigationLinks"
               :to="link.link"
@@ -26,7 +27,7 @@
               <v-list-item-title>Разделы</v-list-item-title>
             </template>
             <div v-for="branch in currentForumBranches"  :key="branch.id" class="drawer-menu__branch-link">
-              <router-link active-class="test"
+              <router-link active-class="drawer-menu__branch-link__active"
                 :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
               <div @click="setBranchInPrimary(true)" >
                 <v-icon class="drawer-menu__branch-link-icon">mdi-rhombus-medium-outline</v-icon>
@@ -129,9 +130,7 @@ export default {
 
 <style scoped lang="scss">
   @import '../../styles/variables';
-.test {
-  background-color: rebeccapurple;
-}
+
 .forum-drawer__main {
   overflow: hidden;
   height: calc(100vh - #{$navigation-app-bar-height});
@@ -164,24 +163,30 @@ export default {
 }
 .drawer-menu__group {
   background-color: white;
-  color: #FFFFFF !important;
 }
 .drawer-menu__branch-link {
   width: 100%;
   display: inline-block;
   height: 30px;
-  padding-left: 10px;
 }
 .drawer-menu__branch-link:hover {
   background-color: $third-party;
   transition: 0.8s;
 }
+.drawer-menu__branch-link__active {
+  background-color: $third-party;
+  width: 100%;
+  padding: 0;
+}
 .drawer-menu__branch-link-icon {
   margin-left: 20px;
   margin-right: 5px;
 }
-.v-item--active::before {
-  background-color: bisque !important;
-  color: black !important;
+
+</style>
+<style>
+.v-application .primary--text {
+caret-color:purple !important;
+color: black !important;
 }
 </style>

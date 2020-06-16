@@ -60,7 +60,9 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
+@import "styles/variables.scss";
+
 html {
   overflow: hidden !important;
 }
@@ -74,13 +76,12 @@ html {
 }
 /* Трек поле скроллбара */
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background: white;
+    -webkit-box-shadow: inset 0 0 3px $third-party;
+    background: $secondary;
 }
 /* Ползунок скроллбара */
 ::-webkit-scrollbar-thumb {
     border-radius: 2px ;
-    -webkit-box-shadow: inset 0 0 6px black;
-    background: grey;
+    background: $primary;
 }
 </style>
