@@ -196,6 +196,6 @@ export default {
 .primary-view__bottom-form {
   position: absolute;
   width: inherit;
-  bottom: 0;
+  bottom: 3px;
 }
 </style>

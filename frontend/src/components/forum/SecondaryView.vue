@@ -12,9 +12,7 @@
     <v-col
       cols="12"
       id="secondary-view__posts-body" @scroll="postsScrollHandler">
-      <hr>
        <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" :type="'post'"></forum-post>
-      <hr>
       <div id="secondary__posts">
         <local-loader v-if="secondaryLoading"></local-loader>
         <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'"></forum-post>

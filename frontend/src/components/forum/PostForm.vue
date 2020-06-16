@@ -88,7 +88,11 @@ export default {
 }
 
 </style>
-<style>
+<style lang="scss">
+  @import "../../styles/variables";
+.emojipicker-area {
+  border: $third-party solid 1px !important;
+}
 .emojipicker-button {
   bottom: 38px !important;
 }
