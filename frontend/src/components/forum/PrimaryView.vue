@@ -20,7 +20,7 @@
        </div>
       </v-col>
       <!-- ФОРМА -->
-      <post-form v-if="branchInPrimary" :type="'thread'"></post-form>
+      <post-form class="primary-view__bottom-form" v-if="branchInPrimary" :type="'thread'"></post-form>
     </v-row>
     <!----------------------------------------------------------------->
      <v-row
@@ -45,11 +45,7 @@
        </div>
       </v-col>
        <!-- ФОРМА -->
-      <v-col
-      cols="12"
-      class="primary-view__bottom-form">
-      <post-form v-if="!branchInPrimary" :type="'post'"></post-form>
-      </v-col>
+      <post-form class="primary-view__bottom-form" v-if="!branchInPrimary" :type="'post'"></post-form>
     </v-row>
     <!----------------------------------------------------------------->
   </v-container>
@@ -170,20 +166,7 @@ export default {
         postsBody.scrollTop = postsBody.scrollHeight
         this.$store.dispatch('setCurrentThreadScrollStart', false)
       }
-    },
-    formResizeHandler () {
-      const appBarHeight = document.getElementById('v-app-bar').clientHeight
-      const main = document.getElementsByClassName('primary-view__main')[0]
-      main.style.height = 'calc(100vh - ' + appBarHeight + 'px;)'
-      const mainHeight = document.getElementsByClassName('primary-view__main')[0].clientHeight
-      const headerHeight = document.getElementsByClassName('primary-view__header')[0].clientHeight
-      const formHeight = document.getElementsByClassName('primary-view__bottom-form')[0].clientHeight
-      const body = document.getElementsByClassName('primary-view__body')[0]
-      body.style.height = (mainHeight - headerHeight - formHeight) + 'px'
     }
-  },
-  mounted () {
-    document.getElementsByClassName('primary-view__bottom-form')[0].addEventListener('keyup', this.formResizeHandler)
   },
   updated () {
     this.updateComponentScrollController()
@@ -193,6 +176,7 @@ export default {
 <style scoped lang="scss">
   @import '../../styles/variables';
 .primary-view__main {
+  position: relative;
   overflow: hidden;
   height: calc(100vh - #{$navigation-app-bar-height});
   width: 100%;
@@ -207,6 +191,11 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: $text-background;
+  margin-bottom: $topic-bottom-form-height;
 }
-
+.primary-view__bottom-form {
+  position: absolute;
+  width: inherit;
+  bottom: 0;
+}
 </style>

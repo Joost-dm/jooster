@@ -1,32 +1,31 @@
 <template>
   <v-container fluid class="pa-0">
-    <picker-area class="primary-view__bottom-form"
-      set="twitter"
-      v-model="newMessage.text"
-      pickerPosition="top"
-      :i18n="{
-      search    : 'Поиск',
-      notfound  : 'Не найдено',
-      categories: {
-        search   : 'Поиск',
-        recent   : 'Часто используемые',
-        people   : 'Смайлы и люди',
-        nature   : 'Животные и природа',
-        foods    : 'Еда и напитки',
-        activity : 'Хобби',
-        places   : 'Путешествия',
-        objects  : 'Предметы',
-        symbols  : 'Символы',
-        flags    : 'Флаги',
-        custom   : 'Другое',
-      }}" >
-    </picker-area>
-    <v-icon v-if="type === 'thread'" class="bottom-form__button" @click="createThread">
-      mdi-message-arrow-right
-    </v-icon>
-    <v-icon v-else-if="type === 'post'" class="bottom-form__button" @click="createPost">
-      mdi-message-arrow-right
-    </v-icon>
+    <div class="bottom-form__picker">
+      <picker-area
+        set="twitter"
+        v-model="newMessage.text"
+        pickerPosition="top"
+        :i18n="{
+        search    : 'Поиск',
+        notfound  : 'Не найдено',
+        categories: {
+          search   : 'Поиск',
+          recent   : 'Часто используемые',
+          people   : 'Смайлы и люди',
+          nature   : 'Животные и природа',
+          foods    : 'Еда и напитки',
+          activity : 'Хобби',
+          places   : 'Путешествия',
+          objects  : 'Предметы',
+          symbols  : 'Символы',
+          flags    : 'Флаги',
+          custom   : 'Другое',
+        }}" >
+      </picker-area>
+      <v-icon class="bottom-form__button" @click="createPost">
+        mdi-send
+      </v-icon>
+    </div>
   </v-container>
 </template>
 
@@ -55,13 +54,15 @@ export default {
     }
   },
   methods: {
-    createThread () {
-      this.newMessage.parent_branch = this.currentBranch.id
-      this.$store.dispatch('createThread', this.newMessage)
-    },
     createPost () {
-      this.newMessage.parent_thread = this.currentThread.id
-      this.$store.dispatch('createPost', this.newMessage)
+      alert('clicked')
+      if (this.type === 'post') {
+        this.newMessage.parent_thread = this.currentThread.id
+        this.$store.dispatch('createPost', this.newMessage)
+      } else if (this.type === 'thread') {
+        this.newMessage.parent_branch = this.currentBranch.id
+        this.$store.dispatch('createThread', this.newMessage)
+      }
     }
   },
   // заглушка ошибки, возникающей в сторонней библиотеке (емоджи-пикер).
@@ -75,10 +76,20 @@ export default {
 </script>
 
 <style scoped>
+.bottom-form__picker {
+  position: relative;
+}
 .bottom-form__button {
   color: #F98500;
   position: absolute;
   bottom: 5px;
-  font-size: 35px;
+  right: 5px;
+  font-size: 25px;
+}
+
+</style>
+<style>
+.emojipicker-button {
+  bottom: 38px !important;
 }
 </style>
