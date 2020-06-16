@@ -31,14 +31,13 @@
     <v-col
       cols="12"
       class="primary-view__header">
-      <span v-if="currentThread">{{currentThread.text}}</span><br>
+      <span v-if="currentThread">Обсуждение: #{{currentThread.id}}</span><br>
       <v-btn @click="setBranchInPrimary(true)"><v-icon>mdi-arrow-left</v-icon></v-btn>
     </v-col>
     <v-col
       cols="12"
       class="primary-view__body" id="primary-view__posts-body" @scroll="postsScrollHandler">
-       <hr>
-        <b v-if="!threadNextPageUrl && currentThread">{{currentThread.text}}</b>
+        <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" :type="'post'"></forum-post>
         <hr>
        <div id="primary__posts" v-if="currentThreadPosts">
          <local-loader v-if="primaryLoading"></local-loader>

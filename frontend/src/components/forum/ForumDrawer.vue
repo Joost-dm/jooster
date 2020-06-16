@@ -3,13 +3,14 @@
     <div class="forum-drawer__main">
       <div class="forum-drawer__header"></div>
       <div class="forum-drawer__body" >
-        <v-list class="pa-0 drawer-menu">
-          <v-list-group value="true">
+        <v-list color="error" class="pa-0 drawer-menu">
+          <v-list-group class="drawer-menu__group" >
             <template v-slot:activator>
               <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
               <v-list-item-title>Навигация</v-list-item-title>
             </template>
             <router-link
+              class="drawer-menu__item"
               v-for="(link, i) in navigationLinks"
               :to="link.link"
               :key="i">
@@ -19,20 +20,20 @@
               </v-list-item>
             </router-link>
           </v-list-group>
-          <v-list-group value="true">
+          <v-list-group value="true" class="drawer-menu__group">
             <template v-slot:activator>
               <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
               <v-list-item-title>Разделы</v-list-item-title>
             </template>
-            <router-link
-              v-for="branch in currentForumBranches"
-              :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}"
-              :key="branch.id"            >
-            <v-list-item @click="setBranchInPrimary(true)" link>
-              <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
-              <v-list-item-title @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</v-list-item-title>
-            </v-list-item>
-              </router-link>
+            <div v-for="branch in currentForumBranches"  :key="branch.id" class="drawer-menu__branch-link">
+              <router-link active-class="test"
+                :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
+              <div @click="setBranchInPrimary(true)" >
+                <v-icon class="drawer-menu__branch-link-icon">mdi-rhombus-medium-outline</v-icon>
+                <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
+              </div>
+                </router-link>
+            </div>
           </v-list-group>
         </v-list>
       </div>
@@ -128,9 +129,18 @@ export default {
 
 <style scoped lang="scss">
   @import '../../styles/variables';
+.test {
+  background-color: rebeccapurple;
+}
 .forum-drawer__main {
   overflow: hidden;
   height: calc(100vh - #{$navigation-app-bar-height});
+}
+.forum-drawer__main *{
+  color: #000000  !important;
+}
+.forum-drawer__main i{
+  color: #F98500 !important;
 }
 .forum-drawer__header {
   background-color: $drawer__header__background-color;
@@ -140,5 +150,38 @@ export default {
 .forum-drawer__body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
   overflow-y: scroll;
+}
+.drawer-menu {
+}
+.drawer-menu a {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  height: 100%;
+  justify-content: center;
+}
+.drawer-menu__item {
+}
+.drawer-menu__group {
+  background-color: white;
+  color: #FFFFFF !important;
+}
+.drawer-menu__branch-link {
+  width: 100%;
+  display: inline-block;
+  height: 30px;
+  padding-left: 10px;
+}
+.drawer-menu__branch-link:hover {
+  background-color: $third-party;
+  transition: 0.8s;
+}
+.drawer-menu__branch-link-icon {
+  margin-left: 20px;
+  margin-right: 5px;
+}
+.v-item--active::before {
+  background-color: bisque !important;
+  color: black !important;
 }
 </style>
