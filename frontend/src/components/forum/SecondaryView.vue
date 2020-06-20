@@ -7,7 +7,7 @@
     <v-col
       cols="12"
       id="secondary-view__header">
-      <span v-if="currentThread">Обсуждение: #{{currentThread.id}}</span>
+      <span v-if="currentThread">Тема: #{{currentThread.id}}</span>
     </v-col>
     <v-col
       cols="12"
