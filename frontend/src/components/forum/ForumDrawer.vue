@@ -30,7 +30,8 @@
               <router-link active-class="drawer-menu__branch-link__active"
                 :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
               <div @click="setBranchInPrimary(true)" >
-                <v-icon class="drawer-menu__branch-link-icon">mdi-rhombus-medium-outline</v-icon>
+                <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
+                <v-icon v-else class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
                 <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
               </div>
                 </router-link>
@@ -181,6 +182,7 @@ export default {
 .drawer-menu__branch-link-icon {
   margin-left: 20px;
   margin-right: 5px;
+  font-size: 18px !important;
 }
 
 </style>

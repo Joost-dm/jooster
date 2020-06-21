@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0">
-    <v-text-field
-    v-model="newBranch.title" label="title"></v-text-field>
+    <v-text-field v-model="newBranch.title" label="title"></v-text-field>
+    <v-checkbox v-model="newBranch.is_private" label="Приватный"></v-checkbox>
     <v-btn @click="createBranch">Создать</v-btn>
   </v-container>
 </template>
@@ -13,6 +13,7 @@ export default {
     return {
       newBranch: {
         title: null,
+        is_private: null,
         parent_forum: null
       }
     }
