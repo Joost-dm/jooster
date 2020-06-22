@@ -29,7 +29,7 @@
               <div v-for="branch in currentForumBranches"  :key="branch.id" class="drawer-menu__branch-link">
                 <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && branch.author.id !== user.id" >
                   <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
-                  <span style="color: #A4A5A9 !important;">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
+                  <span>{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
               </div>
               <router-link v-else active-class="drawer-menu__branch-link__active"
                 :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
@@ -178,11 +178,11 @@ export default {
   height: 30px;
 }
 .drawer-menu__branch-link:hover {
-  background-color: $third-party;
-  transition: 0.8s;
+  background-color: $hover;
+  transition: 0.2s;
 }
 .drawer-menu__branch-link__active {
-  background-color: $third-party;
+  background-color: $hover;
   width: 100%;
   padding: 0;
 }
