@@ -182,6 +182,7 @@ export default {
   width: 100%;
 }
 .primary-view__header {
+  z-index: 3;
   background-color: $view__header__background-color;
   height: $view__header__height;
   color: $view__header__font-color;
