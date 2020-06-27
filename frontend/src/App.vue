@@ -19,7 +19,8 @@
         </v-btn>
       </v-snackbar>
   </template>
-  <global-loader v-if="globalLoading"></global-loader>
+  <login v-if="!user"></login>
+  <global-loader v-else-if="globalLoading"></global-loader>
   <navigation v-else></navigation>
   </v-app>
 </template>
@@ -27,6 +28,7 @@
 <script>
 import Navigation from './components/Navigation'
 import GlobalLoader from './components/loaders/GlobalLoader'
+import Login from './views/auth/Login'
 
 export default {
   name: 'App',
@@ -34,7 +36,8 @@ export default {
   }),
   components: {
     navigation: Navigation,
-    'global-loader': GlobalLoader
+    'global-loader': GlobalLoader,
+    login: Login
   },
   methods: {
     closeError () {

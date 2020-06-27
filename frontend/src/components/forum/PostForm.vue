@@ -55,7 +55,6 @@ export default {
   },
   methods: {
     createPost () {
-      alert('clicked')
       if (this.type === 'post') {
         this.newMessage.parent_thread = this.currentThread.id
         this.$store.dispatch('createPost', this.newMessage)

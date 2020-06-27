@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '../../router'
 import API from '../APIsettings'
 import errorMixin from '../../mixins/APIErrorMixin'
 
@@ -37,6 +38,7 @@ export default {
         commit('createAuthToken', token.data.auth_token)
         var currentUser = await axios.get(API.URL + 'auth/users/me/')
         commit('loginUser', currentUser.data)
+        router.push('/forum/')
       } catch (error) {
         errorMixin(error, commit)
         throw error
