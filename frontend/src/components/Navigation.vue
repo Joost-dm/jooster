@@ -30,8 +30,9 @@
         </span>
       </button>
       <span v-if="user"> <b>{{user.username}}[{{user.id}}]</b></span>
-
-      <v-toolbar-title></v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-icon class="app-bar__icon">mdi-api</v-icon>
+          <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
     </v-app-bar>
     <v-content>
       <router-view></router-view>
@@ -57,6 +58,9 @@ export default {
     }
   }),
   methods: {
+    logout () {
+      this.$store.dispatch('logoutUser', this.loginData)
+    },
     toggleHamburger () {
       document.getElementById('hamburger').classList.toggle('is-active')
     }
@@ -90,6 +94,14 @@ export default {
 #v-app-bar a:hover {
   text-decoration-line: none;
   color: $app-bar__link__font-color-hover;
+}
+.app-bar__icon {
+  margin-left: 15px;
+  color: $secondary;
+  cursor: pointer;
+}
+.app-bar__icon:hover {
+  color: $extra;
 }
 #nav-drawer {
   overflow: hidden;

@@ -38,7 +38,7 @@ export default {
         commit('createAuthToken', token.data.auth_token)
         var currentUser = await axios.get(API.URL + 'auth/users/me/')
         commit('loginUser', currentUser.data)
-        router.push('/forum/')
+        router.push('/forum/1/1/')
       } catch (error) {
         errorMixin(error, commit)
         throw error
