@@ -19,8 +19,8 @@
         </v-btn>
       </v-snackbar>
   </template>
-  <login v-if="!user"></login>
-  <global-loader v-else-if="globalLoading"></global-loader>
+  <global-loader v-if="globalLoading"></global-loader>
+  <login v-else-if="!user"></login>
   <navigation v-else></navigation>
   </v-app>
 </template>
