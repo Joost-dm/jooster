@@ -63,15 +63,7 @@ export default {
     async createNewUser ({ commit }, user) {
       commit('clearError')
       try {
-        const formData = new FormData()
-        for (var key in user) {
-          formData.append(key, user[key])
-        }
-        await axios.post(API.URL + 'auth/users/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
+        await axios.post(API.URL + 'auth/users/', user)
         await this.loginUser({
           username: user.username,
           password: user.password

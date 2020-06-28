@@ -36,8 +36,10 @@
                 <div @click="setBranchInPrimary(true)" >
                   <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
                   <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || branch.author.id === user.id" class="drawer-menu__branch-link-icon">mdi-lock-open-variant</v-icon>
-                  <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}} </span>
-                  <v-badge class="drawer-menu__branch-link-badge" v-if="branch.is_unread" :content="branch.is_unread"></v-badge>
+                  <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] </span>
+                </div>
+                <div v-if="branch.is_unread" class="branch-link-badge">
+                  <span class="branch-link-badge__counter">{{branch.is_unread}}</span>
                 </div>
               </router-link>
             </div>
@@ -192,8 +194,21 @@ export default {
   margin-right: 5px;
   font-size: 18px !important;
 }
-.drawer-menu__branch-link-badge {
-  top: -10px;
+.branch-link-badge {
+  background-color: #F98500;
+  border-radius: 50%;
+  position: absolute;
+  right: 20px;
+  display: flex;
+  min-width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+
+}
+.branch-link-badge__counter {
+  color: #FFFFFF !important;
+  font-size: 12px;
 }
 
 </style>

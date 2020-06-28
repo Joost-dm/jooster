@@ -1,12 +1,10 @@
 <template>
   <div id="main">
-    <v-form id="register-form" @submit="createUser" enctype="multipart/form-data">
-      <v-text-field v-model="registerData.username" label="Login"></v-text-field>
-      <v-text-field v-model="registerData.email" label="E-mail" type="email"></v-text-field>
-      <v-text-field v-model="registerData.password" label="Password" type="password"></v-text-field>
-      <v-text-field v-model="password_check" label="Repeat password" type="password"></v-text-field>
-      <v-btn type="submit">Регистрация</v-btn>
-    </v-form>
+    <v-text-field v-model="registerData.username" label="Login"></v-text-field>
+    <v-text-field v-model="registerData.email" label="E-mail" type="email"></v-text-field>
+    <v-text-field v-model="registerData.password" label="Password" type="password"></v-text-field>
+    <v-text-field v-model="password_check" label="Repeat password" type="password"></v-text-field>
+    <v-btn @click="createUser">Создать</v-btn>
   </div>
 </template>
 
@@ -17,8 +15,8 @@ export default {
     return {
       password_check: '',
       registerData: {
-        username: '',
         email: '',
+        username: '',
         password: ''
       }
     }
