@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0">
     <div class="forum-drawer__main">
-      <div class="forum-drawer__header"></div>
+      <drawer-header class="forum-drawer__header"></drawer-header>
       <div class="forum-drawer__body" >
         <v-list color="error" class="pa-0 drawer-menu">
           <v-list-group class="drawer-menu__group" >
@@ -87,8 +87,12 @@
 </template>
 
 <script>
+import ForumDrawerHeader from './ForumDrawerHeader'
 export default {
   name: 'ForumDrawer',
+  components: {
+    'drawer-header': ForumDrawerHeader
+  },
   data () {
     return {
       navigationLinks: [
