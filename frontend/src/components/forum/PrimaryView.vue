@@ -10,6 +10,10 @@
       cols="12"
       class="primary-view__header">
       <span v-if="currentBranch" >{{currentBranch.title}}</span>
+      <v-spacer></v-spacer>
+      <div  class="primary-view__header-refresh-button">
+        <v-icon>mdi-refresh</v-icon>
+      </div>
     </v-col>
     <v-col
       cols="12"
@@ -183,9 +187,21 @@ export default {
 }
 .primary-view__header {
   z-index: 3;
+  display: flex;
+  justify-content: space-between;
   background-color: $view__header__background-color;
   height: $view__header__height;
   color: $view__header__font-color;
+}
+.primary-view__header-refresh-button {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  cursor: pointer;
+  padding-right: 30px;
+}
+.primary-view__header-refresh-button i {
+    color: $third-party;
 }
 .primary-view__body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height});

@@ -77,7 +77,6 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 10px;
     margin-bottom: -30px;
     padding-bottom: 0;
   }

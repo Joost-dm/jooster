@@ -21,7 +21,7 @@
               </v-list-item>
             </router-link>
           </v-list-group>
-          <v-list-group v-if="currentForumBranches" value="true" class="drawer-menu__group">
+          <v-list-group v-if="currentForumBranches && currentForumBranches.length > 0" value="true" class="drawer-menu__group">
             <template v-slot:activator>
               <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
               <v-list-item-title>{{currentForum.title}}</v-list-item-title>
