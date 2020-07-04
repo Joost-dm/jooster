@@ -2,7 +2,7 @@
   <div class="forum-drawer-header">
     <v-row class="forum-drawer-header__top">
       <div class="forum-drawer-header__switch">
-        <span class="forum-drawer-header__forum-title">{{currentForum.title}}</span>
+        <span v-if="currentForum" class="forum-drawer-header__forum-title">{{currentForum.title}}</span>
         <div  class="forum-drawer-header__switch-button" @click="toggleForumsList">
           <v-icon v-if="!showForumsChoice" class="forum-drawer-header__button-icon">mdi-chevron-down</v-icon>
           <v-icon v-else class="forum-drawer-header__button-icon">mdi-chevron-up</v-icon>
@@ -15,16 +15,25 @@
           </div>
         </div>
       </div>
-      <div class="forum-drawer-header__create-forum-button">
-        <v-icon class="create-forum-button__icon">mdi-plus</v-icon>
+      <div class="forum-drawer-header__create-forum">
+        <div class="forum-drawer-header__create-forum-button" @click="toggleForumCreateForm">
+          <v-icon class="create-forum-button__icon">mdi-plus</v-icon>
+        </div>
+        <div class="forum-drawer-header__create-forum-form">
+          <forum-create></forum-create>
+        </div>
       </div>
    </v-row>
   </div>
 </template>
 
 <script>
+import ForumCreate from '../../views/forum/ForumCreate'
 export default {
   name: 'ForumDrawerHeader',
+  components: {
+    'forum-create': ForumCreate
+  },
   data () {
     return {
       showForumsChoice: false
@@ -39,6 +48,14 @@ export default {
     }
   },
   methods: {
+    toggleForumCreateForm () {
+      const createForm = document.getElementsByClassName('forum-drawer-header__create-forum-form')[0]
+      if (createForm.style.display === 'none' || !createForm.style.display) {
+        createForm.style.display = 'inherit'
+      } else {
+        createForm.style.display = 'none'
+      }
+    },
     toggleForumsList () {
       const forumsList = document.getElementsByClassName('forum-drawer-header__forums-list')[0]
       const forumsListElementHeight =
@@ -101,6 +118,9 @@ export default {
   .forum-drawer-header__switch-button:hover {
     background-color: $hover;
   }
+  .forum-drawer-header__create-forum {
+    position: relative;
+  }
   .forum-drawer-header__create-forum-button {
     margin-top: 3px;
     display: flex;
@@ -119,6 +139,17 @@ export default {
   .create-forum-button__icon {
     font-size: 20px !important;
   }
+  .forum-drawer-header__create-forum-form {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 2em;
+    min-width: 230px;
+    background-color: $secondary;
+    border: solid $third-party 1px;
+    border-radius: 5px;
+    z-index: 6;
+  }
   .forum-drawer-header__forums-list {
     top: 1.5em;
     left: 0;
@@ -129,9 +160,6 @@ export default {
     overflow: hidden;
     height: 0;
     transition: 0.3s;
-  }
-  .forum-drawer-header__forums-list__displayed {
-    height: auto;
   }
   .forum-drawer-header__forums-list-item {
     padding-left: 1em;

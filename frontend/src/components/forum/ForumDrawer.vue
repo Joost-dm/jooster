@@ -21,29 +21,32 @@
               </v-list-item>
             </router-link>
           </v-list-group>
-          <v-list-group value="true" class="drawer-menu__group">
+          <v-list-group v-if="currentForumBranches" value="true" class="drawer-menu__group">
             <template v-slot:activator>
               <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
-              <v-list-item-title>Разделы</v-list-item-title>
+              <v-list-item-title>{{currentForum.title}}</v-list-item-title>
             </template>
-              <div v-for="branch in currentForumBranches"  :key="branch.id" class="drawer-menu__branch-link">
-                <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && branch.author.id !== user.id" >
-                  <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
-                  <span>{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
+            <div v-for="branch in currentForumBranches"  :key="branch.id" class="drawer-menu__branch-link">
+              <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && branch.author.id !== user.id" >
+                <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
+                <span>{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
+            </div>
+            <router-link v-else active-class="drawer-menu__branch-link__active"
+              :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
+              <div @click="setBranchInPrimary(true)" >
+                <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
+                <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || branch.author.id === user.id" class="drawer-menu__branch-link-icon">mdi-lock-open-variant</v-icon>
+                <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] </span>
               </div>
-              <router-link v-else active-class="drawer-menu__branch-link__active"
-                :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
-                <div @click="setBranchInPrimary(true)" >
-                  <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
-                  <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || branch.author.id === user.id" class="drawer-menu__branch-link-icon">mdi-lock-open-variant</v-icon>
-                  <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] </span>
-                </div>
-                <div v-if="branch.is_unread" class="branch-link-badge">
-                  <span class="branch-link-badge__counter">{{branch.is_unread}}</span>
-                </div>
-              </router-link>
+              <div v-if="branch.is_unread" class="branch-link-badge">
+                <span class="branch-link-badge__counter">{{branch.is_unread}}</span>
+              </div>
+            </router-link>
             </div>
           </v-list-group>
+          <div v-else class="drawer-menu__no-branches" >
+            <span>Форум пуст</span>
+          </div>
         </v-list>
       </div>
     </div>
@@ -212,6 +215,13 @@ export default {
 .branch-link-badge__counter {
   color: #FFFFFF !important;
   font-size: 12px;
+}
+.drawer-menu__no-branches {
+  background-color: $secondary;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 </style>

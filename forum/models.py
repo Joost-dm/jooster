@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from authorization.models import CustomUser
 
 class Forum(Model):
-    title = models.CharField(max_length=30, verbose_name='название')
+    title = models.CharField(max_length=30, verbose_name='название', unique=True)
     description = models.TextField(max_length=10000, verbose_name='описание', blank=True)
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
