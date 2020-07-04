@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0">
     <div class="forum-drawer__main">
-      <drawer-header class="forum-drawer__header"></drawer-header>
+      <drawer-header ></drawer-header>
       <div class="forum-drawer__body" >
         <v-list color="error" class="pa-0 drawer-menu">
           <v-list-group class="drawer-menu__group" >
@@ -134,15 +134,18 @@ export default {
       if (document.documentElement.clientWidth < 595) {
         document.getElementById('hamburger').classList.toggle('is-active')
       }
-    },
-    async setCurrentForum (forum) {
-      await this.$store.dispatch('setCurrentForum', forum)
-      this.$store.dispatch('getForumValues', { currentForumId: forum.id })
     }
   }
 }
 </script>
-
+<style lang="scss">
+  @import '../../styles/variables';
+.v-navigation-drawer--is-mobile {
+  padding-top: 0 !important;
+  top: $navigation-app-bar-height !important;
+  height: calc(100vh - #{$navigation-app-bar-height}) !important;
+}
+</style>
 <style scoped lang="scss">
   @import '../../styles/variables';
 
@@ -156,11 +159,7 @@ export default {
 .forum-drawer__main i{
   color: #F98500 !important;
 }
-.forum-drawer__header {
-  background-color: $drawer__header__background-color;
-  height: $view__header__height;
-  color: $drawer__header__font-color;
-}
+
 .forum-drawer__body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
   overflow-y: scroll;
