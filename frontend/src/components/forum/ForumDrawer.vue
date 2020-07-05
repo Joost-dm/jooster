@@ -6,7 +6,9 @@
         <v-list color="error" class="pa-0 drawer-menu">
           <v-list-group class="drawer-menu__group" >
             <template v-slot:activator>
-              <v-list-item-icon><v-icon>mdi-file-tree-outline</v-icon></v-list-item-icon>
+              <v-list-item-icon>
+                <v-icon>mdi-file-tree-outline</v-icon>
+              </v-list-item-icon>
               <v-list-item-title>Навигация</v-list-item-title>
             </template>
             <router-link
@@ -16,17 +18,23 @@
               :to="link.link"
               :key="i">
               <v-list-item link>
-                <v-list-item-icon><v-icon>{{link.icon}}</v-icon></v-list-item-icon>
+                <v-list-item-icon>
+                  <v-icon>{{link.icon}}</v-icon>
+                </v-list-item-icon>
                 <v-list-item-title @click="toggleHamburger">{{link.title}}</v-list-item-title>
               </v-list-item>
             </router-link>
           </v-list-group>
-          <v-list-group v-if="currentForumBranches && currentForumBranches.length > 0" value="true" class="drawer-menu__group">
+          <v-list-group v-if="currentForumBranches && currentForumBranches.length > 0"
+                        value="true"
+                        class="drawer-menu__group">
             <template v-slot:activator>
               <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
               <v-list-item-title>{{currentForum.title}}</v-list-item-title>
             </template>
-            <div v-for="branch in currentForumBranches"  :key="branch.id" class="drawer-menu__branch-link">
+            <div v-for="branch in currentForumBranches"
+                 :key="branch.id"
+                 class="drawer-menu__branch-link">
               <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && branch.author.id !== user.id" >
                 <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
                 <span>{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
@@ -35,7 +43,9 @@
               :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
               <div @click="setBranchInPrimary(true)" >
                 <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
-                <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || branch.author.id === user.id" class="drawer-menu__branch-link-icon">mdi-lock-open-variant</v-icon>
+                <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || branch.author.id === user.id"
+                        class="drawer-menu__branch-link-icon">mdi-lock-open-variant
+                </v-icon>
                 <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] </span>
               </div>
               <div v-if="branch.is_unread" class="branch-link-badge">
@@ -51,42 +61,6 @@
       </div>
     </div>
   </v-container>
-  <!--
-  <v-container class="pa-0" >
-  <v-row
-    no-gutters
-    id="forum-drawer__main"
-    align="stretch">
-    <v-col
-      cols="12"
-      id="forum-drawer__header">
-        <v-menu nudge-right="-12" v-if="allForums" offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn style="width: 100%" dark v-on="on">
-            <span v-if="currentForum">{{currentForum.title}}</span>
-          </v-btn>
-        </template>
-        <v-list >
-          <v-list-item class="ma-0" v-for="forum in allForums" :key="forum.id" @click="setCurrentForum(forum)">
-            <span >{{forum.title}}</span>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-col>
-    <v-col
-      cols="12"
-      id="forum-drawer__body">
-      <v-divider></v-divider>
-         <ul v-if="currentForumBranches">
-           <router-link v-for="branch in currentForumBranches"
-            :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}"
-            :key="branch.id"            >
-            <li @click="setBranchInPrimary(true)"><span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span></li></router-link>
-        </ul>
-      </v-col>
-    </v-row>
-  </v-container>
-  -->
 </template>
 
 <script>

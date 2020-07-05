@@ -8,6 +8,10 @@
       cols="12"
       id="secondary-view__header">
       <span v-if="currentThread">Тема: #{{currentThread.id}}</span>
+      <v-spacer></v-spacer>
+      <div @click="refreshThread" class="secondary-view__header-refresh-button">
+        <v-icon>mdi-refresh</v-icon>
+      </div>
     </v-col>
     <v-col
       cols="12"
@@ -91,6 +95,13 @@ export default {
         postsBody.scrollTop = postsBody.scrollHeight
         this.$store.dispatch('setCurrentThreadScrollStart', false)
       }
+    },
+    refreshThread () {
+      this.$store.dispatch('clearThreadChildren')
+      const currentThread = this.$store.getters.getCurrentThread
+      if (currentThread) {
+        this.$store.dispatch('getThreadChildren', { thread: currentThread })
+      }
     }
   },
   updated () {
@@ -105,6 +116,9 @@ export default {
   overflow: hidden;
 }
 #secondary-view__header {
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
   background-color: $view__header__background-color;
   min-height: $view__header__height;
   color: $view__header__font-color;
@@ -116,5 +130,18 @@ export default {
 }
 #secondary-view__bottom-form {
   min-height: $topic-bottom-form-height;
+}
+.secondary-view__header-refresh-button {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  cursor: pointer;
+  padding-right: 30px;
+}
+.secondary-view__header-refresh-button i {
+    color: $third-party;
+}
+.secondary-view__header-refresh-button i:hover {
+  color: $extra;
 }
 </style>

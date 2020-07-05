@@ -120,6 +120,9 @@ export default {
         errorMixin(error, commit)
         throw error
       }
+    },
+    clearBranchChildren ({ commit }) {
+      commit('setBranchChildren')
     }
   },
   getters: {

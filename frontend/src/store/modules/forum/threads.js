@@ -136,6 +136,9 @@ export default {
       } catch (error) {
         errorMixin(error, commit)
       }
+    },
+    clearThreadChildren ({ commit }) {
+      commit('setThreadChildren')
     }
   },
   getters: {

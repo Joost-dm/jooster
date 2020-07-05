@@ -11,7 +11,7 @@
       class="primary-view__header">
       <span v-if="currentBranch" >{{currentBranch.title}}</span>
       <v-spacer></v-spacer>
-      <div  class="primary-view__header-refresh-button">
+      <div @click="refreshBranch" class="primary-view__header-refresh-button">
         <v-icon>mdi-refresh</v-icon>
       </div>
     </v-col>
@@ -35,8 +35,12 @@
     <v-col
       cols="12"
       class="primary-view__header">
-      <span v-if="currentThread">Обсуждение: #{{currentThread.id}}</span><br>
+      <span v-if="currentThread">Обсуждение: #{{currentThread.id}}</span>
       <v-btn @click="setBranchInPrimary(true)"><v-icon>mdi-arrow-left</v-icon></v-btn>
+      <v-spacer></v-spacer>
+      <div @click="refreshThread" class="primary-view__header-refresh-button">
+        <v-icon>mdi-refresh</v-icon>
+      </div>
     </v-col>
     <v-col
       cols="12"
@@ -170,6 +174,20 @@ export default {
         postsBody.scrollTop = postsBody.scrollHeight
         this.$store.dispatch('setCurrentThreadScrollStart', false)
       }
+    },
+    refreshBranch () {
+      this.$store.dispatch('clearBranchChildren')
+      const currentBranch = this.$store.getters.getCurrentBranch
+      if (currentBranch) {
+        this.$store.dispatch('getBranchChildren', { branch: currentBranch })
+      }
+    },
+    refreshThread () {
+      this.$store.dispatch('clearThreadChildren')
+      const currentThread = this.$store.getters.getCurrentThread
+      if (currentThread) {
+        this.$store.dispatch('getThreadChildren', { thread: currentThread })
+      }
     }
   },
   updated () {
@@ -202,6 +220,9 @@ export default {
 }
 .primary-view__header-refresh-button i {
     color: $third-party;
+}
+.primary-view__header-refresh-button i:hover {
+    color: $extra;
 }
 .primary-view__body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height});
