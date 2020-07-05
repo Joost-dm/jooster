@@ -122,7 +122,6 @@ export default {
   background-color: $view__header__background-color;
   min-height: $view__header__height;
   color: $view__header__font-color;
-  border: solid 1px $primary-dark;
 }
 #secondary-view__posts-body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
