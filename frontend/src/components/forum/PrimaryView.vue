@@ -216,7 +216,7 @@ export default {
   align-content: center;
   justify-content: center;
   cursor: pointer;
-  padding-right: 30px;
+  margin-right: 30px;
 }
 .primary-view__header-refresh-button i {
     color: $third-party;

@@ -122,6 +122,7 @@ export default {
   background-color: $view__header__background-color;
   min-height: $view__header__height;
   color: $view__header__font-color;
+  border: solid 1px $primary-dark;
 }
 #secondary-view__posts-body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
@@ -136,7 +137,7 @@ export default {
   align-content: center;
   justify-content: center;
   cursor: pointer;
-  padding-right: 30px;
+  margin-right: 30px;
 }
 .secondary-view__header-refresh-button i {
     color: $third-party;
