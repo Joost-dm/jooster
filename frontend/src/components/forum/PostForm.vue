@@ -117,10 +117,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../styles/variables";
 .bottom-form__button {
   z-index: 3;
-  color: #F98500;
+  color: $extra;
   position: absolute;
   bottom: 0.5rem;
   right: 5px;
@@ -136,7 +137,7 @@ export default {
   display: inline-block;
   padding-top: 10px;
   width: 100%;
-  background-color: #FFFFFF;
+  background-color: $secondary;
   z-index: 2;
 }
 
@@ -162,7 +163,7 @@ export default {
   transform: scale(1.2);
 }
 .emoji-invoker > svg {
-  fill: #b1c6d0;
+  fill: $third-party;
 }
 
 .emoji-picker {
@@ -173,15 +174,15 @@ export default {
   right: 0;
   top: auto !important;
   bottom: 0 !important;
-  border: 1px solid #ccc;
+  border: 1px solid $third-party;
   width: 360px;
   height: 15rem;
   overflow: scroll;
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 0.5rem;
-  background: #fff;
-  box-shadow: 1px 1px 8px #c7dbe6;
+  background: $secondary;
+  box-shadow: 1px 1px 8px $third-party;
 }
 .emoji-picker__search {
   display: flex;
@@ -189,13 +190,13 @@ export default {
 .emoji-picker__search > input {
   flex: 1;
   border-radius: 10rem;
-  border: 1px solid #ccc;
+  border: 1px solid $third-party;
   padding: 0.5rem 1rem;
   outline: none;
 }
 .emoji-picker h5 {
   margin-bottom: 0;
-  color: #b1b1b1;
+  color: $third-party;
   text-transform: uppercase;
   font-size: 0.8rem;
   cursor: default;
@@ -216,7 +217,7 @@ export default {
   border-radius: 5px;
 }
 .emoji-picker .emojis span:hover {
-  background: #ececec;
+  background: $hover;
   cursor: pointer;
 }
 </style>

@@ -138,8 +138,8 @@ export default {
 }
 
 .forum-drawer__body {
+  overflow-y: auto;
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
-  overflow-y: scroll;
 }
 .drawer-menu {
 }

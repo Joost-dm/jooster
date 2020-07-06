@@ -233,14 +233,9 @@ export default {
 }
 .primary-view__bottom-form {
   position: absolute;
-  width: calc(100% - 12px);
+  width: 98%;
+  margin: 0 1% 0 1%;
   bottom: 0.3rem;
-}
-@media screen and (max-width: 600px) {
-  .primary-view__bottom-form {
-    width: 98%;
-    margin: 0 1% 0 1%;
-  }
 }
 
 </style>
