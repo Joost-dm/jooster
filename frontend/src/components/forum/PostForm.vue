@@ -7,6 +7,7 @@
       class="regular-input"
       label="Новое сообщение"
       v-model="newMessage.text"
+      hide-details
     >
     </v-textarea>
     <emoji-picker @emoji="append" :search="search">
@@ -121,7 +122,7 @@ export default {
   z-index: 3;
   color: #F98500;
   position: absolute;
-  bottom: 2.5rem;
+  bottom: 0.5rem;
   right: 5px;
   font-size: 25px;
   transition: all 0.2s;
@@ -148,7 +149,7 @@ export default {
 .emoji-invoker {
   z-index: 3;
   position: absolute;
-  bottom: 4.1rem;
+  bottom: 2.3rem;
   right: 0.5rem;
   width: 1.5rem;
   height: 1.5rem;
@@ -156,6 +157,7 @@ export default {
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .emoji-invoker:hover {
   transform: scale(1.2);
 }

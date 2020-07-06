@@ -225,7 +225,7 @@ export default {
     color: $extra;
 }
 .primary-view__body {
-  height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height});
+  height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height} + 12px);
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: $text-background;
@@ -233,7 +233,14 @@ export default {
 }
 .primary-view__bottom-form {
   position: absolute;
-  width: inherit;
-  bottom: 0;
+  width: calc(100% - 12px);
+  bottom: 0.3rem;
 }
+@media screen and (max-width: 600px) {
+  .primary-view__bottom-form {
+    width: 98%;
+    margin: 0 1% 0 1%;
+  }
+}
+
 </style>
