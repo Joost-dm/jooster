@@ -1,14 +1,9 @@
 <template>
-  <v-btn @click="loginGoogle">Login</v-btn>
+  <span>test</span>
 </template>
 
 <script>
 export default {
-  name: 'TrainingVue',
-  methods: {
-    loginGoogle () {
-      this.$store.dispatch('loginGoogle')
-    }
-  }
+  name: 'TrainingVue'
 }
 </script>

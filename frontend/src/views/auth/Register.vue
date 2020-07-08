@@ -23,6 +23,7 @@ export default {
   },
   methods: {
     async createUser () {
+      this.registerData.displayed = this.registerData.username
       await this.$store.dispatch('createNewUser', this.registerData)
     }
   },

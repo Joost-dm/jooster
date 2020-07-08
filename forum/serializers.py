@@ -76,7 +76,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 class UserPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'avatar', 'is_staff']
+        fields = ['id', 'username', 'email', 'avatar', 'is_staff', 'displayed']
 
 
 class PostDetailSerializer(serializers.ModelSerializer):

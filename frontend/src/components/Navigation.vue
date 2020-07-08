@@ -29,7 +29,7 @@
           <span class="hamburger-inner"></span>
         </span>
       </button>
-      <span v-if="user"> <b>{{user.username}}[{{user.id}}]</b></span>
+      <span v-if="user"> <b>{{user.displayed}}[{{user.id}}]</b></span>
           <v-spacer></v-spacer>
           <v-icon class="app-bar__icon">mdi-api</v-icon>
           <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>

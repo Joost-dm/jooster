@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <span v-for="user in usersList" :key="user.id">{{user.username}}<v-btn @click="addMemberToCurrentForum(user)">add</v-btn><br></span>
+    <span v-for="user in usersList" :key="user.id">{{user.displayed}}<v-btn @click="addMemberToCurrentForum(user)">add</v-btn><br></span>
   </v-container>
 </template>
 

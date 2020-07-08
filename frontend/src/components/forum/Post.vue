@@ -8,7 +8,7 @@
   <div class="post__right-side">
     <div class="post__header">
       <div class="post__author">
-        <span>{{post.author.username}}</span>
+        <span>{{post.author.displayed}}</span>
       </div>
       <div class="post__pub-date">
         <span>{{dateRefactor(post.pub_date)}}</span>

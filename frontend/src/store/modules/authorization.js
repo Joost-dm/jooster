@@ -3,6 +3,7 @@ import router from '../../router'
 import API from '../APIsettings'
 import errorMixin from '../../mixins/APIErrorMixin'
 import * as fb from 'firebase'
+import 'firebase/auth'
 
 export default {
   state: {
@@ -39,7 +40,7 @@ export default {
         commit('createAuthToken', token.data.auth_token)
         var currentUser = await axios.get(API.URL + 'auth/users/me/')
         commit('loginUser', currentUser.data)
-        router.push('/forum/1/1/')
+        router.push('/forum/1/1')
       } catch (error) {
         errorMixin(error, commit)
         throw error
@@ -61,11 +62,11 @@ export default {
         throw error
       }
     },
-    async createNewUser ({ commit }, user) {
+    async createNewUser ({ commit, dispatch }, user) {
       commit('clearError')
       try {
         await axios.post(API.URL + 'auth/users/', user)
-        await this.loginUser({
+        await dispatch('loginUser', {
           username: user.username,
           password: user.password
         })
@@ -121,23 +122,46 @@ export default {
       try {
         var usersList = await axios.get(API.URL + 'auth/users/')
         commit('setUsersList', usersList.data)
-        commit('setLoading', false)
       } catch (error) {
         errorMixin(error, commit)
         throw error
       }
     },
-    async loginGoogle ({ commit }) {
+    async loginGoogle ({ commit, dispatch }) {
       commit('clearError')
+      commit('setGlobalLoading', true)
       var provider = new fb.auth.GoogleAuthProvider()
+      const result = await fb.auth().signInWithPopup(provider)
+      const uid = result.user.uid
+      const password = result.user.uid.split('').reverse().join('p')
+      const displayed = result.user.displayName
+      const email = result.user.email
+      // const photoURL = result.user.photoURL
+      // const avatar = await fetch(photoURL, { mode: 'no-cors' })
+      // console.log((await Promise.resolve(avatar)).blob())
       try {
-        const result = await fb.auth().signInWithPopup(provider)
-        alert(result.user)
-        console.log(result.user)
+        await axios.post(API.URL + 'auth/users/', {
+          email,
+          displayed,
+          username: uid,
+          password: password,
+          // avatar: new File(avatar.body, 'avatar1')
+        })
       } catch (error) {
         alert(error)
         // errorMixin(error, commit)
         // throw error
+      }
+      try {
+        await dispatch('loginUser', {
+          username: uid,
+          password: password
+        })
+        commit('setGlobalLoading', false)
+      } catch (error) {
+        errorMixin(error, commit)
+        commit('setGlobalLoading', false)
+        throw error
       }
     }
   },

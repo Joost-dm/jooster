@@ -20,6 +20,7 @@
       <v-btn @click="createToken">Войти</v-btn>
       <v-btn @click="destroyToken">Удалить токен</v-btn>
       <v-btn v-if="user" @click="logout">Выйти</v-btn>
+      <v-btn @click="loginGoogle">Google</v-btn>
       <br><br>
       <v-divider></v-divider>
       <br><br>
@@ -56,6 +57,9 @@ export default {
     },
     destroyToken () {
       this.$store.dispatch('destroyAuthToken')
+    },
+    loginGoogle () {
+      this.$store.dispatch('loginGoogle')
     }
   }
 }
