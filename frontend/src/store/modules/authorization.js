@@ -2,6 +2,7 @@ import axios from 'axios'
 import router from '../../router'
 import API from '../APIsettings'
 import errorMixin from '../../mixins/APIErrorMixin'
+import * as fb from 'firebase'
 
 export default {
   state: {
@@ -124,6 +125,19 @@ export default {
       } catch (error) {
         errorMixin(error, commit)
         throw error
+      }
+    },
+    async loginGoogle ({ commit }) {
+      commit('clearError')
+      var provider = new fb.auth.GoogleAuthProvider()
+      try {
+        const result = await fb.auth().signInWithPopup(provider)
+        alert(result.user)
+        console.log(result.user)
+      } catch (error) {
+        alert(error)
+        // errorMixin(error, commit)
+        // throw error
       }
     }
   },
