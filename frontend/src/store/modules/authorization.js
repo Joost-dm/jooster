@@ -144,7 +144,7 @@ export default {
           email,
           displayed,
           username: uid,
-          password: password,
+          password: password
           // avatar: new File(avatar.body, 'avatar1')
         })
       } catch (error) {
