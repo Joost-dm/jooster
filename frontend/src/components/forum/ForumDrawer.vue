@@ -78,7 +78,6 @@ export default {
         { link: '/training/', title: 'Тренировка', icon: 'mdi-alpha-b' },
         { link: '/users/', title: 'Пользователи', icon: 'mdi-alpha-c' },
         { link: '/forum/', title: 'Форум', icon: 'mdi-alpha-d' },
-        { link: '/forum/forum/add/', title: 'Новый форум', icon: 'mdi-alpha-e' },
         { link: '/forum/branch/add/', title: 'Новая ветка', icon: 'mdi-alpha-f' }
       ]
     }

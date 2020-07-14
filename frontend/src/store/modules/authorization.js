@@ -145,12 +145,11 @@ export default {
           displayed,
           username: uid,
           password: password
-          // avatar: new File(avatar.body, 'avatar1')
         })
       } catch (error) {
         alert(error)
-        // errorMixin(error, commit)
-        // throw error
+        errorMixin(error, commit)
+        throw error
       }
       try {
         await dispatch('loginUser', {
