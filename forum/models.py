@@ -149,6 +149,7 @@ class PostViewer(Model):
 class PostLike(Model):
     post = models.ForeignKey(Post, verbose_name='Пост', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
+    like = models.BooleanField(default= True, verbose_name='Нравится')
 
     class Meta:
         unique_together = ['post', 'user']
@@ -158,6 +159,7 @@ class PostLike(Model):
 class ThreadLike(Model):
     thread = models.ForeignKey(Thread, verbose_name='Тема', default='1', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', default='1', on_delete=models.CASCADE)
+    like = models.BooleanField(default=True, verbose_name='Нравится')
 
     class Meta:
         unique_together = ['thread', 'user']
