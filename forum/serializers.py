@@ -4,6 +4,7 @@ from rest_framework import serializers
 from forum.models import Forum, Branch, Thread, Post, PostLike, ThreadLike, ForumMembership,\
     BranchMembership, PostViewer, ThreadViewer
 from authorization.models import CustomUser
+from authorization.serializers import UserDetailSerializer
 
 
 class ForumMembershipSerializer(serializers.Serializer):
@@ -29,21 +30,25 @@ class BranchMembershipSerializer(serializers.Serializer):
 class PostLikeSerializer(serializers.Serializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
+    like = serializers.BooleanField()
     def create(self, validated_data):
         user = validated_data['user']
         post = validated_data['post']
-        like = PostLike.objects.create(user=user, post=post)
-        return like
+        like = validated_data['like']
+        carma = PostLike.objects.create(user=user, post=post, like=like)
+        return carma
 
 
 class ThreadLikeSerializer(serializers.Serializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     thread = serializers.PrimaryKeyRelatedField(queryset=Thread.objects.all())
+    like = serializers.BooleanField()
     def create(self, validated_data):
         user = validated_data['user']
         thread = validated_data['thread']
-        like = ThreadLike.objects.create(user=user, thread=thread)
-        return like
+        like = validated_data['like']
+        carma = ThreadLike.objects.create(user=user, thread=thread, like=like)
+        return carma
 
 
 class ForumCreateSerializer(serializers.ModelSerializer):
@@ -73,23 +78,32 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
 
-class UserPostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'email', 'avatar', 'is_staff', 'displayed']
-
 
 class PostDetailSerializer(serializers.ModelSerializer):
-    author = UserPostSerializer(CustomUser)
+    author = UserDetailSerializer(CustomUser)
+    carma = serializers.SerializerMethodField('total_carma')
+
+    def total_carma(self, post):
+        likes = PostLike.objects.filter(post=post, like=True)
+        dislikes = PostLike.objects.filter(post=post, like=False)
+        return likes.count() - dislikes.count()
+
     class Meta:
         model = Post
         fields = '__all__'
 
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
-    author = UserPostSerializer(CustomUser)
+    author = UserDetailSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
     is_unread = serializers.SerializerMethodField('check_unread')
+    carma = serializers.SerializerMethodField('total_carma')
+
+    def total_carma(self, thread):
+        likes = ThreadLike.objects.filter(thread=thread, like=True)
+        dislikes = ThreadLike.objects.filter(thread=thread, like=False)
+        return likes.count() - dislikes.count()
+
     def count_children(self, thread):
         return thread.children.count()
 
@@ -99,7 +113,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
         unread_counter = 0
         for post in posts:
             try:
-                PostViewer.objects.get(user = user, post=post)
+                PostViewer.objects.get(user=user, post=post)
             except ObjectDoesNotExist:
                 unread_counter += 1
         return unread_counter
@@ -110,7 +124,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
 
 class BranchDetailSerializer(serializers.ModelSerializer):
-    author = UserPostSerializer(CustomUser)
+    author = UserDetailSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
     is_unread = serializers.SerializerMethodField('check_unread')
 
@@ -134,7 +148,7 @@ class BranchDetailSerializer(serializers.ModelSerializer):
 
 
 class ForumDetailSerializer(serializers.ModelSerializer):
-    author = UserPostSerializer(CustomUser)
+    author = UserDetailSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
 
     def count_children(self, forum):

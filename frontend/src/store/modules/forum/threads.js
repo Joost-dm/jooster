@@ -124,7 +124,7 @@ export default {
     async likeThread ({ commit, dispatch, getters }, thread) {
       commit('clearError')
       try {
-        await axios.post(API.URL + 'api/v1/thread/' + thread.id + '/like/')
+        await axios.post(API.URL + 'api/v1/thread/' + thread.id + '/like/', { like: true })
       } catch (error) {
         errorMixin(error, commit)
       }
@@ -132,7 +132,7 @@ export default {
     async dislikeThread ({ commit, dispatch, getters }, thread) {
       commit('clearError')
       try {
-        await axios.delete(API.URL + 'api/v1/thread/' + thread.id + '/like/')
+        await axios.delete(API.URL + 'api/v1/thread/' + thread.id + '/like/', { like: false })
       } catch (error) {
         errorMixin(error, commit)
       }

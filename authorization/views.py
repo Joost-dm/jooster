@@ -5,9 +5,12 @@ from django.db import IntegrityError
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from djoser.serializers import UserCreateSerializer
+
+from authorization import serializers
 from authorization.models import CustomUser
 
 
@@ -17,8 +20,15 @@ from rest_framework.exceptions import ValidationError
 from djoser.compat import get_user_email, get_user_email_field_name
 from djoser.conf import settings
 
+from forum import permissions
+
 User = get_user_model()
 
+
+class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_url_kwarg = 'id'
+    serializer_class = serializers.UserDetailSerializer
+    queryset = CustomUser.objects.all()
 
 def create(self, validated_data):
     print('it works!')

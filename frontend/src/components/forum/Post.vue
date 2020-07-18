@@ -4,12 +4,12 @@
       <v-avatar class="post__avatar">
         <v-img :src=post.author.avatar></v-img>
       </v-avatar>
-      <span class="post__user_rating">555</span>
+      <span class="post__user_rating">{{post.author.carma}}</span>
       <div class="post__rating_options">
         <div class="post__rating_icon rating_minus">
           <v-icon>mdi-minus</v-icon>
         </div>
-        <span class="post__post_rating">-99</span>
+        <span class="post__post_rating">{{post.carma}}</span>
         <div class="post__rating_icon rating_plus">
           <v-icon>mdi-plus</v-icon>
         </div>

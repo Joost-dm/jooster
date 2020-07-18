@@ -77,7 +77,13 @@ class PostLikeView(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
-              return Response(data={"post": "already liked"}, status=status.HTTP_304_NOT_MODIFIED)
+            if eval(data['like'].capitalize()) != PostLike.objects.get(user=request.user, post=data['post']).like:
+                return self.delete(request, **kwargs)
+            else:
+                if eval(data['like'].capitalize()):
+                    return Response(data={"post": "already liked"}, status=status.HTTP_304_NOT_MODIFIED)
+                else:
+                    return Response(data={"post": "already disliked"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
         data = request.data.copy()
@@ -93,6 +99,7 @@ class ThreadLikeView(generics.GenericAPIView):
     serializer_class = serializers.ThreadLikeSerializer
 
     def post(self, request, **kwargs):
+        print(request.data)
         data = request.data.copy()
         data.update({'thread': kwargs['thread']})
         serializer = self.get_serializer(data=data)
@@ -101,7 +108,13 @@ class ThreadLikeView(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
-              return Response(data={"thread": "already liked"}, status=status.HTTP_304_NOT_MODIFIED)
+            if eval(data['like'].capitalize()) != ThreadLike.objects.get(user=request.user, thread=data['thread']).like:
+                return self.delete(request, **kwargs)
+            else:
+                if eval(data['like'].capitalize()):
+                    return Response(data={"thread": "already liked"}, status=status.HTTP_304_NOT_MODIFIED)
+                else:
+                    return Response(data={"thread": "already disliked"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
         data = request.data.copy()

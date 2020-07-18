@@ -58,7 +58,7 @@ export default {
     async likePost ({ commit, dispatch, getters }, post) {
       commit('clearError')
       try {
-        await axios.post(API.URL + 'api/v1/post/' + post.id + '/like/')
+        await axios.post(API.URL + 'api/v1/post/' + post.id + '/like/', { like: true })
       } catch (error) {
         errorMixin(error, commit)
       }
@@ -66,7 +66,7 @@ export default {
     async dislikePost ({ commit, dispatch, getters }, post) {
       commit('clearError')
       try {
-        await axios.delete(API.URL + 'api/v1/post/' + post.id + '/like/')
+        await axios.delete(API.URL + 'api/v1/post/' + post.id + '/like/', { like: false })
       } catch (error) {
         errorMixin(error, commit)
       }
