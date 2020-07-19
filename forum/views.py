@@ -77,10 +77,12 @@ class PostLikeView(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
-            if eval(data['like'].capitalize()) != PostLike.objects.get(user=request.user, post=data['post']).like:
+            if type(data['like']) != bool:
+                data['like'] = eval(data['like'].capitalize())
+            if data['like'] != PostLike.objects.get(user=request.user, post=data['post']).like:
                 return self.delete(request, **kwargs)
             else:
-                if eval(data['like'].capitalize()):
+                if data['like']:
                     return Response(data={"post": "already liked"}, status=status.HTTP_304_NOT_MODIFIED)
                 else:
                     return Response(data={"post": "already disliked"}, status=status.HTTP_304_NOT_MODIFIED)
@@ -108,10 +110,12 @@ class ThreadLikeView(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
-            if eval(data['like'].capitalize()) != ThreadLike.objects.get(user=request.user, thread=data['thread']).like:
+            if type(data['like']) != bool:
+                data['like'] = eval(data['like'].capitalize())
+            if data['like'] != ThreadLike.objects.get(user=request.user, thread=data['thread']).like:
                 return self.delete(request, **kwargs)
             else:
-                if eval(data['like'].capitalize()):
+                if data['like']:
                     return Response(data={"thread": "already liked"}, status=status.HTTP_304_NOT_MODIFIED)
                 else:
                     return Response(data={"thread": "already disliked"}, status=status.HTTP_304_NOT_MODIFIED)

@@ -5,12 +5,20 @@
         <v-img :src=post.author.avatar></v-img>
       </v-avatar>
       <span class="post__user_rating">{{post.author.carma}}</span>
-      <div class="post__rating_options">
-        <div class="post__rating_icon rating_minus">
+      <div  class="post__rating_options">
+        <div v-if="post.users_disliked_list.indexOf(user.id) !== -1"
+             class="post__rating_icon rating_minus rating_disliked">
+          <v-icon>mdi-minus</v-icon>
+        </div>
+        <div v-else class="post__rating_icon rating_minus" @click="dislikePost(post)">
           <v-icon>mdi-minus</v-icon>
         </div>
         <span class="post__post_rating">{{post.carma}}</span>
-        <div class="post__rating_icon rating_plus">
+        <div v-if="post.users_liked_list.indexOf(user.id) !== -1"
+             class="post__rating_icon rating_plus rating_liked">
+          <v-icon>mdi-plus</v-icon>
+        </div>
+        <div v-else class="post__rating_icon rating_plus" @click="likePost(post)">
           <v-icon>mdi-plus</v-icon>
         </div>
       </div>
@@ -29,16 +37,9 @@
         <p class="post__text" :class="postTextClass">{{post.text}}</p>
       </div>
       <div class="post__footer">
-        <div class="post__likes">
-          <span class="post__likes-counter">{{post.likes.length}}</span>
-          <span class="post__likes-button mr-5" @click="toggleLikePost(post)">
-            <v-icon class="post__likes-button__selected" size="17" v-if="post.likes.indexOf(user.id) != -1">mdi-thumb-up</v-icon>
-            <v-icon size="17" v-else >mdi-thumb-up</v-icon>
-          </span>
-        </div>
         <div class="post__discussion">
           <router-link
-            v-if="type === 'thread'"
+            v-if="type === 'thread' && !threadStarter"
             :to="{
             name: 'Forum',
             params: {
@@ -63,13 +64,16 @@ import twemoji from 'twemoji'
 
 export default {
   name: 'ForumPost',
-  props: ['post', 'type'],
+  props: ['post', 'type', 'threadStarter'],
   computed: {
     user () {
       return this.$store.getters.getCurrentUser
     },
     currentBranch () {
       return this.$store.getters.getCurrentBranch
+    },
+    currentThread () {
+      return this.$store.getters.getCurrentThread
     },
     currentForum () {
       return this.$store.getters.getCurrentForum
@@ -89,24 +93,73 @@ export default {
         this.$store.dispatch('deleteThread', post)
       }
     },
-    toggleLikePost (post) {
-      if (post.likes.indexOf(this.$store.getters.getCurrentUser.id) === -1) {
-        if (this.type === 'post') {
+    likePost (post) {
+      var threads = this.$store.getters.getCurrentBranchChildren
+      var posts = this.$store.getters.getCurrentThreadChildren
+      var allPosts = posts.concat(threads)
+      allPosts.push(this.currentThread)
+      if (post.users_liked_list.indexOf(this.user.id) === -1) {
+        if (this.type === 'post' && !this.threadStarter) {
           this.$store.dispatch('likePost', post)
-        } else if (this.type === 'thread') {
+        } else {
           this.$store.dispatch('likeThread', post)
         }
-        this.post.likes.push(this.user.id)
-      } else {
-        if (this.type === 'post') {
+        if (post.users_disliked_list.indexOf(this.user.id) === -1) {
+          allPosts.forEach(postInAllPosts => {
+            if (postInAllPosts.author.id === post.author.id) {
+              postInAllPosts.author.carma++
+            }
+            if (postInAllPosts.id === post.id && postInAllPosts.pub_date === post.pub_date) {
+              postInAllPosts.users_liked_list.push(this.user.id)
+              postInAllPosts.carma++
+            }
+          })
+        } else {
+          allPosts.forEach(postInAllPosts => {
+            if (postInAllPosts.author.id === post.author.id) {
+              postInAllPosts.author.carma++
+            }
+            if (postInAllPosts.id === post.id && postInAllPosts.pub_date === post.pub_date) {
+              postInAllPosts.carma++
+              const index = postInAllPosts.users_disliked_list.indexOf(this.user.id)
+              postInAllPosts.users_disliked_list.splice(index, 1)
+            }
+          })
+        }
+      }
+    },
+    dislikePost (post) {
+      var threads = this.$store.getters.getCurrentBranchChildren
+      var posts = this.$store.getters.getCurrentThreadChildren
+      var allPosts = posts.concat(threads)
+      allPosts.push(this.currentThread)
+      if (post.users_disliked_list.indexOf(this.user.id) === -1) {
+        if (this.type === 'post' && !this.threadStarter) {
           this.$store.dispatch('dislikePost', post)
-        } else if (this.type === 'thread') {
+        } else {
           this.$store.dispatch('dislikeThread', post)
         }
-        for (var i = this.post.likes.length - 1; i >= 0; i--) {
-          if (this.post.likes[i] === this.user.id) {
-            this.post.likes.splice(i, 1)
-          }
+        if (post.users_liked_list.indexOf(this.user.id) === -1) {
+          allPosts.forEach(postInAllPosts => {
+            if (postInAllPosts.author.id === post.author.id) {
+              postInAllPosts.author.carma--
+            }
+            if (postInAllPosts.id === post.id && postInAllPosts.pub_date === post.pub_date) {
+              postInAllPosts.users_disliked_list.push(this.user.id)
+              postInAllPosts.carma--
+            }
+          })
+        } else {
+          allPosts.forEach(postInAllPosts => {
+            if (postInAllPosts.author.id === post.author.id) {
+              postInAllPosts.author.carma--
+            }
+            if (postInAllPosts.id === post.id && postInAllPosts.pub_date === post.pub_date) {
+              postInAllPosts.carma--
+              const index = postInAllPosts.users_liked_list.indexOf(this.user.id)
+              postInAllPosts.users_liked_list.splice(index, 1)
+            }
+          })
         }
       }
     },
@@ -207,6 +260,18 @@ export default {
 .rating_plus i:hover  {
   color: $success
 }
+.rating_disliked i {
+  color: $error;
+  transition: none;
+  transform: scale(1.2);
+}
+
+.rating_liked i {
+  color: $success;
+  transition: none;
+  transform: scale(1.2);
+}
+
 .post__post_rating {
   font-size: 12px;
   color: $primary;

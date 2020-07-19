@@ -60,15 +60,19 @@ export default {
       try {
         await axios.post(API.URL + 'api/v1/post/' + post.id + '/like/', { like: true })
       } catch (error) {
-        errorMixin(error, commit)
+        if (error.code !== 304) {
+          errorMixin(error, commit)
+        }
       }
     },
     async dislikePost ({ commit, dispatch, getters }, post) {
       commit('clearError')
       try {
-        await axios.delete(API.URL + 'api/v1/post/' + post.id + '/like/', { like: false })
+        await axios.post(API.URL + 'api/v1/post/' + post.id + '/like/', { like: false })
       } catch (error) {
-        errorMixin(error, commit)
+        if (error.code !== 304) {
+          errorMixin(error, commit)
+        }
       }
     }
   },

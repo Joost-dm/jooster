@@ -82,6 +82,22 @@ class PostCreateSerializer(serializers.ModelSerializer):
 class PostDetailSerializer(serializers.ModelSerializer):
     author = UserDetailSerializer(CustomUser)
     carma = serializers.SerializerMethodField('total_carma')
+    users_liked_list = serializers.SerializerMethodField('users_liked')
+    users_disliked_list = serializers.SerializerMethodField('users_disliked')
+
+    def users_liked(self, post):
+        users = CustomUser.objects.filter(postlike__post=post, postlike__like=True)
+        id_list = []
+        for user in users:
+            id_list.append(user.id)
+        return id_list
+
+    def users_disliked(self, post):
+        users = CustomUser.objects.filter(postlike__post=post, postlike__like=False)
+        id_list = []
+        for user in users:
+            id_list.append(user.id)
+        return id_list
 
     def total_carma(self, post):
         likes = PostLike.objects.filter(post=post, like=True)
@@ -90,7 +106,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ['id', 'author', 'carma', 'users_liked_list', 'users_disliked_list',
+                  'text', 'pub_date', 'parent_forum', 'parent_branch', 'parent_thread', 'viewers']
 
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
@@ -98,6 +115,22 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     children_count = serializers.SerializerMethodField('count_children')
     is_unread = serializers.SerializerMethodField('check_unread')
     carma = serializers.SerializerMethodField('total_carma')
+    users_liked_list = serializers.SerializerMethodField('users_liked')
+    users_disliked_list = serializers.SerializerMethodField('users_disliked')
+
+    def users_liked(self, thread):
+        users = CustomUser.objects.filter(threadlike__thread=thread, threadlike__like=True)
+        id_list = []
+        for user in users:
+            id_list.append(user.id)
+        return id_list
+
+    def users_disliked(self, thread):
+        users = CustomUser.objects.filter(threadlike__thread=thread, threadlike__like=False)
+        id_list = []
+        for user in users:
+            id_list.append(user.id)
+        return id_list
 
     def total_carma(self, thread):
         likes = ThreadLike.objects.filter(thread=thread, like=True)
@@ -120,7 +153,8 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
             model = Thread
-            fields = '__all__'
+            fields = ['id', 'author', 'children_count', 'is_unread', 'carma', 'users_liked_list', 'users_disliked_list',
+                      'text', 'pub_date', 'parent_forum', 'parent_branch', 'viewers']
 
 
 class BranchDetailSerializer(serializers.ModelSerializer):
