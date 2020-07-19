@@ -37,7 +37,7 @@
         <p class="post__text" :class="postTextClass">{{post.text}}</p>
       </div>
       <div class="post__footer">
-        <div class="post__discussion">
+        <div class="post__discussion" @click="clearUnread(post)">
           <router-link
             v-if="type === 'thread' && !threadStarter"
             :to="{
@@ -48,9 +48,10 @@
               threadId: post.id
             }}">
              <div @click="setBranchInPrimary(false)">
-               <span>{{post.children_count}}</span>
                <v-icon size="19">mdi-chat</v-icon>
-               Непрочитанных: {{post.is_unread}}
+               <span>{{post.children_count}}</span>
+               <v-icon v-if="post.is_unread > 0" color="orange" size="19">mdi-new-box</v-icon>
+               <span v-if="post.is_unread > 0">{{post.is_unread}}</span>
              </div>
           </router-link>
         </div>
@@ -162,6 +163,9 @@ export default {
           })
         }
       }
+    },
+    clearUnread (post) {
+      post.is_unread = 0
     },
     setBranchInPrimary (status) {
       this.$store.dispatch('setBranchInPrimary', status)

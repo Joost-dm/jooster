@@ -34,10 +34,11 @@
             </template>
             <div v-for="branch in currentForumBranches"
                  :key="branch.id"
-                 class="drawer-menu__branch-link">
+                 class="drawer-menu__branch-link"
+                 @click="clearUnread(branch)">
               <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && branch.author.id !== user.id" >
                 <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
-                <span>{{branch.title}} [{{branch.children_count}}] {{branch.is_unread}}</span>
+                <span>{{branch.title}} [{{branch.children_count}}] </span>
             </div>
             <router-link v-else active-class="drawer-menu__branch-link__active"
               :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
@@ -110,6 +111,9 @@ export default {
       if (document.documentElement.clientWidth < 595) {
         document.getElementById('hamburger').classList.toggle('is-active')
       }
+    },
+    clearUnread (branch) {
+      branch.is_unread = null
     }
   }
 }

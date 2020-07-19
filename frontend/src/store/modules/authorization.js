@@ -40,6 +40,7 @@ export default {
         commit('createAuthToken', token.data.auth_token)
         var currentUser = await axios.get(API.URL + 'auth/users/me/')
         commit('loginUser', currentUser.data)
+        commit('setCurrentForum', null)
         router.push('/forum/1/1')
       } catch (error) {
         errorMixin(error, commit)
@@ -147,9 +148,6 @@ export default {
           password: password
         })
       } catch (error) {
-        alert(error)
-        errorMixin(error, commit)
-        throw error
       }
       try {
         await dispatch('loginUser', {

@@ -9,7 +9,7 @@ export default {
     currentThreadBottomScroll: null,
     currentBranchScrollStart: true,
     currentThreadScrollStart: true,
-    loacalLoaderHeight: 100
+    localLoaderHeight: 100
   },
   mutations: {
     setBranchInPrimary (state, status) {
