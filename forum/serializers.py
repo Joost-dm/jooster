@@ -117,6 +117,10 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     carma = serializers.SerializerMethodField('total_carma')
     users_liked_list = serializers.SerializerMethodField('users_liked')
     users_disliked_list = serializers.SerializerMethodField('users_disliked')
+    parent_branch_title = serializers.SerializerMethodField('get_parent_branch_title')
+
+    def get_parent_branch_title(self, thread):
+        return Branch.objects.get(id=thread.parent_branch.id).title
 
     def users_liked(self, thread):
         users = CustomUser.objects.filter(threadlike__thread=thread, threadlike__like=True)
@@ -154,7 +158,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
     class Meta:
             model = Thread
             fields = ['id', 'author', 'children_count', 'is_unread', 'carma', 'users_liked_list', 'users_disliked_list',
-                      'text', 'pub_date', 'parent_forum', 'parent_branch', 'viewers']
+                      'text', 'pub_date', 'parent_forum', 'parent_branch', 'viewers', 'parent_branch_title']
 
 
 class BranchDetailSerializer(serializers.ModelSerializer):

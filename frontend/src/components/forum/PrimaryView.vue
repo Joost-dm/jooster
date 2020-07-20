@@ -9,8 +9,15 @@
     <v-col
       cols="12"
       class="primary-view__header">
-      <span v-if="currentBranch" >{{currentBranch.title}}</span>
-      <v-spacer></v-spacer>
+      <div class="header__info">
+        <div class="header__title">
+          <span v-if="currentBranch" >#{{currentBranch.title.toLowerCase()}}</span>
+        </div>
+        <div class="header__subtitle">
+          <span v-if="currentBranch.is_private">закрытая ветка</span>
+          <span v-else>открытая ветка</span>
+        </div>
+      </div>
       <div @click="refreshBranch" class="primary-view__header-refresh-button">
         <v-icon>mdi-refresh</v-icon>
       </div>
@@ -35,7 +42,17 @@
     <v-col
       cols="12"
       class="primary-view__header">
-      <span v-if="currentThread">Обсуждение: #{{currentThread.id}}</span>
+      <div class="header__info">
+        <div class="header__title">
+          <span v-if="currentThread">обсуждение #{{currentThread.id}}</span>
+        </div>
+        <div class="header__subtitle header__subtitle__link">
+          <span v-if="currentThread"
+                @click="setParrentBranchInPrimary">
+            #{{currentThread.parent_branch_title.toLowerCase()}}
+          </span>
+        </div>
+      </div>
       <v-btn @click="setBranchInPrimary(true)"><v-icon>mdi-arrow-left</v-icon></v-btn>
       <v-spacer></v-spacer>
       <div @click="refreshThread" class="primary-view__header-refresh-button">
@@ -188,6 +205,10 @@ export default {
       if (currentThread) {
         this.$store.dispatch('getThreadChildren', { thread: currentThread })
       }
+    },
+    async setParrentBranchInPrimary () {
+      this.$store.dispatch('setBranchInPrimary', true)
+      this.$store.dispatch('getCurrentBranchById', this.currentThread.parent_branch)
     }
   },
   updated () {
@@ -206,11 +227,43 @@ export default {
 .primary-view__header {
   z-index: 3;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   background-color: $view__header__background-color;
   height: $view__header__height;
   color: $view__header__font-color;
 }
+
+.header__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.header__title {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  font-size: 14px;
+  color: $secondary;
+}
+.header__subtitle {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  font-size: 14px;
+  color: $third-party;
+}
+
+.header__subtitle__link span:hover {
+  transition: 0.3s;
+  cursor: pointer;
+  color: $extra;
+}
+
 .primary-view__header-refresh-button {
   display: flex;
   align-content: center;

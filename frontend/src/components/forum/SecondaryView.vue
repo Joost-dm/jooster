@@ -7,7 +7,18 @@
     <v-col
       cols="12"
       id="secondary-view__header">
-      <span v-if="currentThread">Тема: #{{currentThread.id}}</span>
+      <div class="header__info">
+        <div class="header__title">
+          <span v-if="currentThread">обсуждение #{{currentThread.id}}</span>
+        </div>
+        <div class="header__subtitle header__subtitle__link">
+          <span v-if="currentThread"
+                @click="setParrentBranchInPrimary">
+            #{{currentThread.parent_branch_title.toLowerCase()}}
+          </span>
+        </div>
+      </div>
+
       <v-spacer></v-spacer>
       <div @click="refreshThread" class="secondary-view__header-refresh-button">
         <v-icon>mdi-refresh</v-icon>
@@ -103,6 +114,9 @@ export default {
       if (currentThread) {
         this.$store.dispatch('getThreadChildren', { thread: currentThread })
       }
+    },
+    async setParrentBranchInPrimary () {
+      this.$store.dispatch('getCurrentBranchById', this.currentThread.parent_branch)
     }
   },
   updated () {
@@ -123,6 +137,34 @@ export default {
   background-color: $view__header__background-color;
   min-height: $view__header__height;
   color: $view__header__font-color;
+}
+.header__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.header__title {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  font-size: 14px;
+  color: $secondary;
+}
+.header__subtitle {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  font-size: 14px;
+  color: $third-party;
+}
+.header__subtitle__link span:hover {
+  transition: 0.3s;
+  cursor: pointer;
+  color: $extra;
 }
 #secondary-view__posts-body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height});
