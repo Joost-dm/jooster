@@ -53,8 +53,9 @@
           </span>
         </div>
       </div>
-      <v-btn @click="setBranchInPrimary(true)"><v-icon>mdi-arrow-left</v-icon></v-btn>
-      <v-spacer></v-spacer>
+      <div @click="setBranchInPrimary(true)" class="header__back-button">
+        <v-icon >mdi-arrow-left</v-icon>
+      </div>
       <div @click="refreshThread" class="primary-view__header-refresh-button">
         <v-icon>mdi-refresh</v-icon>
       </div>
@@ -264,6 +265,19 @@ export default {
   color: $extra;
 }
 
+.header__back-button {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+.header__back-button i {
+    color: $third-party ;
+}
+.header__back-button i:hover {
+    color: $extra;
+}
 .primary-view__header-refresh-button {
   display: flex;
   align-content: center;

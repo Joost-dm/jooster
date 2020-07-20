@@ -32,8 +32,11 @@
           <span>{{dateRefactor(post.pub_date)}}</span>
         </div>
       </div>
+      <div class="post__divider">
+        <div class="post__divider-part1"></div>
+        <div class="post__divider-part2"></div>
+      </div>
       <div class="post__body">
-        <hr>
         <p class="post__text" :class="postTextClass">{{post.text}}</p>
       </div>
       <div class="post__footer">
@@ -286,16 +289,36 @@ export default {
 }
 .post__header {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
   min-height: $post__header__min-height;
-  padding-left: $post__padding;
 
 }
 .post__author {
   font-weight: bold;
+  font-size: 14px;
 }
 .post__pub-date {
-  margin-left: $post__padding;
+  margin-right: $post__padding;
+  font-size: 12px;
+}
+.post__divider {
+  width: 100%;
+  height: 1px;
+  display: flex;
+  flex-direction: row;
+
+}
+.post__divider-part1 {
+  background-color: $third-party;
+  width: calc(100% - 7rem);
+  height: 100%;
+}
+.post__divider-part2 {
+  background-color: $extra;
+  width: 7rem;
+  height: 100%;
 }
 .post__body {
   min-height: calc(#{$post__min-height} - #{$post__header__min-height} - #{$post__footer__min-height});
