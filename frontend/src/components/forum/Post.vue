@@ -51,13 +51,12 @@
               threadId: post.id
             }}">
              <div @click="setBranchInPrimary(false)">
-               <v-icon size="19">mdi-chat</v-icon>
-               <span>{{post.children_count}}</span>
-               <v-icon v-if="post.is_unread > 0" color="orange" size="19">mdi-new-box</v-icon>
-               <span v-if="post.is_unread > 0">{{post.is_unread}}</span>
+               <span class="post__discussion-link">обсуждение: {{post.children_count}}</span>
+               <span class="post__discussion-unread" v-if="post.is_unread > 0">новых: {{post.is_unread}}</span>
              </div>
           </router-link>
         </div>
+        <div class="post__options">options</div>
       </div>
     </div>
   </v-container>
@@ -335,6 +334,8 @@ export default {
 
 .post__footer {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   min-height: $post__footer__min-height;
   padding-left: $post__padding;
@@ -352,7 +353,19 @@ export default {
   color: $extra;
 }
 .post__discussion a {
-  font-weight: bold;
   text-decoration: none;
+  font-size: 12px;
+
+}
+.post__discussion span {
+  margin-right: 1rem;
+}
+.post__discussion-link:hover {
+  color: $extra;
+  transition: 0.2s;
+}
+.post__discussion-unread {
+  color: $extra;
+
 }
 </style>
