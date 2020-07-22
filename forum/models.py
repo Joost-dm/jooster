@@ -1,9 +1,17 @@
+"""
+Project messaging structure looks like:
+Forum > Branch > Thread > Post
+Were Forums consist of branches, branches consist of threads and threads consist of posts.
+"""
+
 from django.db import models
 from django.db.models import Model
 from django.contrib.auth.models import AbstractUser
 from authorization.models import CustomUser
 
 class Forum(Model):
+    """ Forum model. """
+
     title = models.CharField(max_length=30, verbose_name='название', unique=True)
     description = models.TextField(max_length=10000, verbose_name='описание', blank=True)
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
@@ -24,6 +32,8 @@ class Forum(Model):
         verbose_name_plural = 'форумы'
 
 class ForumMembership(Model):
+    """ Model of membership in private forums. """
+
     forum = models.ForeignKey(Forum, verbose_name='форум', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='пользователь', on_delete=models.CASCADE)
 
@@ -33,6 +43,7 @@ class ForumMembership(Model):
         verbose_name_plural = 'участники форумов'
 
 class Branch(Model):
+    """ Branch model. """
     title = models.CharField(max_length=30, verbose_name='заголовок')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
@@ -55,6 +66,8 @@ class Branch(Model):
 
 
 class BranchMembership(Model):
+    """ Model of membership in private branches. """
+
     branch = models.ForeignKey(Branch, verbose_name='ветка', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='пользователь', on_delete=models.CASCADE)
 
@@ -65,6 +78,8 @@ class BranchMembership(Model):
 
 
 class Thread(Model):
+    """ Thread model. """
+
     text = models.TextField(max_length=10000, verbose_name='текст')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
@@ -94,7 +109,10 @@ class Thread(Model):
         verbose_name = 'тема'
         verbose_name_plural = 'темы'
 
+
 class ThreadViewer(Model):
+    """ Model, created for collecting and counting user's views of the thread. """
+
     thread = models.ForeignKey(Thread, verbose_name='Тема', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
     counter = models.SmallIntegerField(default=0, verbose_name='Счетчик просмотров')
@@ -103,7 +121,23 @@ class ThreadViewer(Model):
         verbose_name = 'просмотр'
         verbose_name_plural = 'просмотры'
 
+
+class ThreadLike(Model):
+    """ Model for collecting users opinions of the thread. """
+
+    thread = models.ForeignKey(Thread, verbose_name='Тема', default='1', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, verbose_name='Пользователь', default='1', on_delete=models.CASCADE)
+    like = models.BooleanField(default=True, verbose_name='Нравится')
+
+    class Meta:
+        unique_together = ['thread', 'user']
+        verbose_name = 'мнение'
+        verbose_name_plural = 'мнения'
+
+
 class Post(Model):
+    """ Post model. """
+
     text = models.CharField(max_length=10000, verbose_name='текст')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
@@ -137,6 +171,8 @@ class Post(Model):
 
 
 class PostViewer(Model):
+    """ Model, created for collecting and counting user's views of the post. """
+
     post = models.ForeignKey(Post, verbose_name='Пост', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
     counter = models.SmallIntegerField(default=0, verbose_name='Счетчик просмотров')
@@ -147,6 +183,8 @@ class PostViewer(Model):
         verbose_name_plural = 'просмотры'
 
 class PostLike(Model):
+    """ Model for collecting users opinions of the post. """
+
     post = models.ForeignKey(Post, verbose_name='Пост', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
     like = models.BooleanField(default= True, verbose_name='Нравится')
@@ -156,12 +194,4 @@ class PostLike(Model):
         verbose_name = 'лайк'
         verbose_name_plural = 'лайки'
 
-class ThreadLike(Model):
-    thread = models.ForeignKey(Thread, verbose_name='Тема', default='1', on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser, verbose_name='Пользователь', default='1', on_delete=models.CASCADE)
-    like = models.BooleanField(default=True, verbose_name='Нравится')
 
-    class Meta:
-        unique_together = ['thread', 'user']
-        verbose_name = 'лайк'
-        verbose_name_plural = 'лайки'

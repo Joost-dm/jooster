@@ -26,12 +26,14 @@ User = get_user_model()
 
 
 class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """User's profile details view"""
+
     lookup_url_kwarg = 'id'
     serializer_class = serializers.UserDetailSerializer
     queryset = CustomUser.objects.all()
 
+#todo delete?
 def create(self, validated_data):
-    print('it works!')
     try:
         user = self.perform_create(validated_data)
     except IntegrityError:
