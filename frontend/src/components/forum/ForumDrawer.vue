@@ -9,7 +9,7 @@
               <v-list-item-icon>
                 <v-icon>mdi-file-tree-outline</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>Навигация</v-list-item-title>
+              <v-list-item-title>Разделы</v-list-item-title>
             </template>
             <router-link
               active-class="drawer-menu__branch-link__active"
