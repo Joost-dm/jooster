@@ -1,3 +1,5 @@
+""" Forum permissions decloration. """
+
 from django.http import Http404
 from rest_framework import permissions
 from forum import models
@@ -5,6 +7,8 @@ from django.shortcuts import get_object_or_404
 
 
 class IsAuthorOrReadOnlyOrAdmin(permissions.BasePermission):
+    """ Is author or read only permission. """
+
     def has_object_permission(self, request, view, obj):
         if (request.user and request.user.is_staff):
             return True
@@ -14,6 +18,8 @@ class IsAuthorOrReadOnlyOrAdmin(permissions.BasePermission):
 
 
 class IsPrivateForumMemberOrAdmin(permissions.BasePermission):
+    """ User is a member of private forum. """
+
     def has_permission(self, request, view):
         if (request.user and request.user.is_staff):
             return True
@@ -42,6 +48,8 @@ class IsPrivateForumMemberOrAdmin(permissions.BasePermission):
 
 
 class IsPrivateBranchMemberOrAdmin(permissions.BasePermission):
+    """ User is a member of private branch. """
+
     def has_permission(self, request, view):
         if (request.user and request.user.is_staff):
             return True
