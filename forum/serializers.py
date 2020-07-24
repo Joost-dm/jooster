@@ -238,7 +238,7 @@ class ForumDetailSerializer(serializers.ModelSerializer):
 
     def count_children(self, forum):
         """ Returns the count of the forum's children. """
-        
+
         return forum.children.count()
 
     class Meta:

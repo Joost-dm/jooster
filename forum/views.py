@@ -14,9 +14,13 @@ from forum.paginationclasses import StandardResultsSetPagination
 
 
 class ForumMemberView(generics.GenericAPIView):
+    """ Private forum membership view. """
+
     serializer_class = serializers.ForumMembershipSerializer
 
     def post(self, request, **kwargs):
+        """ POST-request for creating new forum. """
+
         data = request.data.copy()
         data.update({'forum': kwargs['forum']})
         data.update({'user': kwargs['user']})
@@ -29,6 +33,8 @@ class ForumMemberView(generics.GenericAPIView):
               return Response(data={"user": "already in members"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
+        """ DELETE-request for deleting existing forum. """
+
         data = request.data.copy()
         data.update({'forum': kwargs['forum']})
         data.update({'user': kwargs['user']})
@@ -40,9 +46,13 @@ class ForumMemberView(generics.GenericAPIView):
 
 # todo: permissions
 class BranchMemberView(generics.GenericAPIView):
+    """ Private branch membership view. """
+
     serializer_class = serializers.BranchMembershipSerializer
 
     def post(self, request, **kwargs):
+        """ POST-request for creating new branch. """
+
         data = request.data.copy()
         data.update({'branch': kwargs['branch']})
         data.update({'user': kwargs['user']})
@@ -55,6 +65,8 @@ class BranchMemberView(generics.GenericAPIView):
               return Response(data={"user": "already in members"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
+        """ DELETE-request for deleting existing branch. """
+
         data = request.data.copy()
         data.update({'branch': kwargs['branch']})
         data.update({'user': kwargs['user']})
@@ -66,9 +78,13 @@ class BranchMemberView(generics.GenericAPIView):
 
 # todo: permissions
 class PostLikeView(generics.GenericAPIView):
+    """ Post carma managing view. """
+
     serializer_class = serializers.PostLikeSerializer
 
     def post(self, request, **kwargs):
+        """ Changes post carma according at POST-request. """
+
         data = request.data.copy()
         data.update({'post': kwargs['post']})
         serializer = self.get_serializer(data=data)
@@ -88,6 +104,8 @@ class PostLikeView(generics.GenericAPIView):
                     return Response(data={"post": "already disliked"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
+        """ In current version used only from post-method at this view. Deletes current user's opinion."""
+
         data = request.data.copy()
         data.update({'post': kwargs['post']})
         serializer = self.get_serializer(data=data)
@@ -98,9 +116,13 @@ class PostLikeView(generics.GenericAPIView):
 
 # todo: permissions
 class ThreadLikeView(generics.GenericAPIView):
+    """ Thread carma managing view. """
+
     serializer_class = serializers.ThreadLikeSerializer
 
     def post(self, request, **kwargs):
+        """ Changes thread carma according at POST-request. """
+
         print(request.data)
         data = request.data.copy()
         data.update({'thread': kwargs['thread']})
@@ -121,6 +143,8 @@ class ThreadLikeView(generics.GenericAPIView):
                     return Response(data={"thread": "already disliked"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
+        """ In current version used only from post-method at this view. Deletes current user's opinion."""
+
         data = request.data.copy()
         data.update({'thread': kwargs['thread']})
         serializer = self.get_serializer(data=data)
@@ -130,15 +154,21 @@ class ThreadLikeView(generics.GenericAPIView):
 
 
 class CreateForumView(generics.CreateAPIView):
+    """ Forum creation view. """
+
     serializer_class = serializers.ForumCreateSerializer
 
 
 class CreateBranchView(generics.CreateAPIView):
+    """ Branch creation view. """
+
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin]
     serializer_class = serializers.BranchCreateSerializer
 
 
 class CreateThreadView(generics.CreateAPIView):
+    """ Thread creation view. """
+
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.ThreadCreateSerializer
@@ -148,6 +178,8 @@ class CreateThreadView(generics.CreateAPIView):
 
 
 class CreatePostView(generics.CreateAPIView):
+    """ Post creation view. """
+
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.PostCreateSerializer
@@ -196,6 +228,7 @@ class ListPostsView(generics.ListAPIView):
 
 
 class ListForumChildren(generics.ListAPIView):
+
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin]
     serializer_class = serializers.BranchDetailSerializer
     def get(self, request, *args, **kwargs):

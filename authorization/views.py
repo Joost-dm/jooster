@@ -1,3 +1,5 @@
+""" Forum views."""
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
