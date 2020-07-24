@@ -1,3 +1,5 @@
+""" Forum views. """
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from forum import serializers
@@ -322,7 +324,7 @@ class ThreadDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 class PostDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Post detailed view. """
-    
+
     lookup_url_kwarg = 'post'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,

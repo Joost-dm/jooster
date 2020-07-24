@@ -1,3 +1,5 @@
+""" Forum pagination classes. """
+
 from rest_framework.pagination import PageNumberPagination
 
 

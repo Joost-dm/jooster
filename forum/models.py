@@ -1,4 +1,6 @@
 """
+Forum models.
+
 Project messaging structure looks like:
 Forum > Branch > Thread > Post
 Were Forums consist of branches, branches consist of threads and threads consist of posts.
