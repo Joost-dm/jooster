@@ -228,20 +228,28 @@ class ListPostsView(generics.ListAPIView):
 
 
 class ListForumChildren(generics.ListAPIView):
+    """ Forum children (branches) view. """
 
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin]
     serializer_class = serializers.BranchDetailSerializer
     def get(self, request, *args, **kwargs):
+        """Returns the list of forums's children branches. """
+
         self.queryset = Branch.objects.all().filter(parent_forum=kwargs['forum'])
         return self.list(request, *args, **kwargs)
 
 
 class ListBranchChildren(generics.ListAPIView):
+    """ Branch children (threads) view. """
+
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.ThreadDetailSerializer
     pagination_class = StandardResultsSetPagination
+
     def get(self, request, *args, **kwargs):
+        """ Returns the paginated list of branch's children threads. Sorted by -pub_date.  """
+
         self.queryset = Thread.objects.all().filter(parent_branch=kwargs['branch'])[::-1]
         for thread in self.queryset:
             try:
@@ -256,11 +264,16 @@ class ListBranchChildren(generics.ListAPIView):
 
 
 class ListThreadChildren(generics.ListAPIView):
+    """ Thread children (posts) view. """
+
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.PostDetailSerializer
     pagination_class = StandardResultsSetPagination
+
     def get(self, request, *args, **kwargs):
+        """ Returns the paginated list of thread's children posts. Sorted by -pub_date.  """
+
         self.queryset = Post.objects.all().filter(parent_thread=kwargs['thread'])[::-1]
         for post in self.queryset:
             try:
@@ -275,6 +288,8 @@ class ListThreadChildren(generics.ListAPIView):
 
 
 class ForumDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Forum detailed view. """
+
     lookup_url_kwarg = 'forum'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsAuthorOrReadOnlyOrAdmin]
@@ -283,6 +298,8 @@ class ForumDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BranchDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Branch detailed view. """
+
     lookup_url_kwarg = 'branch'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,
@@ -292,6 +309,8 @@ class BranchDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ThreadDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Thread detailed view. """
+
     lookup_url_kwarg = 'thread'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,
@@ -302,6 +321,8 @@ class ThreadDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PostDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Post detailed view. """
+    
     lookup_url_kwarg = 'post'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,
