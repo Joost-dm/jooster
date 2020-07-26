@@ -48,7 +48,6 @@ UserCreateSerializer.create= create
 class SetAvatar(APIView):
     @method_decorator(csrf_exempt)
     def post(self, request):
-        print('dddd')
         # Получение изображения.
         image = request.FILES['avatar']
         try:

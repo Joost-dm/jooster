@@ -61,7 +61,6 @@ class IsPrivateBranchMemberOrAdmin(permissions.BasePermission):
             branch_id = models.Thread.objects.get(id=request.data['parent_thread']).parent_branch.id
         else:
             branch_id = 0
-        print(branch_id)
         try:
             get_object_or_404(models.BranchMembership, user = request.user.id, branch=branch_id)
             return True

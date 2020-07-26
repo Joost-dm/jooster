@@ -1,5 +1,12 @@
 """ Forum middleware. """
+
 import time
+from django.contrib.auth.models import AbstractUser
+from djoser.urls import authtoken
+
+from authorization.models import CustomUser
+from main import settings
+
 
 class ResponseTimeCounter:
     """ Response time counter. """
@@ -8,6 +15,8 @@ class ResponseTimeCounter:
         self.get_response = get_response
 
     def __call__(self, request):
+        #auth_token = request.headers['Authorization'].split(' ')[1]
+        #print(dir(request))
         time_start = time.time()
         response = self.get_response(request)
         time_end = time.time()

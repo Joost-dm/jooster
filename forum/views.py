@@ -125,7 +125,6 @@ class ThreadLikeView(generics.GenericAPIView):
     def post(self, request, **kwargs):
         """ Changes thread carma according at POST-request. """
 
-        print(request.data)
         data = request.data.copy()
         data.update({'thread': kwargs['thread']})
         serializer = self.get_serializer(data=data)
