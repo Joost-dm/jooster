@@ -22,6 +22,8 @@ export default {
 
 <style scoped lang="scss">
 
+@import "../frontend/src/styles/variables.scss";
+
 html, body {
   height: 100%;
 }
@@ -58,7 +60,7 @@ html, body {
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(52, 73, 94, 1.0);
+      background-color: $extra;
       animation: cube-loader 2.76s infinite linear both;
       transform-origin: 100% 100%;
     }
@@ -82,6 +84,10 @@ html, body {
     }
   }
 }
+
+.label {
+      color: $primary;
+    }
 
 @keyframes cube-loader {
   0%, 10% {
