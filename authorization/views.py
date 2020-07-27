@@ -61,6 +61,8 @@ class SetAvatar(APIView):
             if "users" in path:
                 storage.delete(path)
             user.avatar = image
+            print(user.avatar.path)
+            # user.avatar_url = user.avatar.path
             user.save()
             return user
         except ValidationError:

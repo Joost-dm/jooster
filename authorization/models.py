@@ -11,14 +11,19 @@ class CustomUser(AbstractUser):
         unique=True,
         verbose_name='Отоброжаемое имя'
     )
+
     avatar = models.ImageField(
         default='images/avatars/default_avatar.png',
         upload_to='images/avatars/',
         verbose_name='аватар'
     )
-    # avatar_url = models.FilePathField(default='images/avatars/default_avatar.png')
+
+    foreign_avatar_url = models.URLField(
+        null=True
+    )
+
     AVATAR_FIELD = 'avatar'
-    REQUIRED_FIELDS = ['email', 'avatar', 'displayed']
+    REQUIRED_FIELDS = ['email', 'avatar', 'displayed', 'foreign_avatar_url']
 
 
 

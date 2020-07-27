@@ -137,7 +137,7 @@ export default {
       const password = result.user.uid.split('').reverse().join('p')
       const displayed = result.user.displayName
       const email = result.user.email
-      // const photoURL = result.user.photoURL
+      const photoURL = result.user.photoURL
       // const avatar = await fetch(photoURL, { mode: 'no-cors' })
       // console.log((await Promise.resolve(avatar)).blob())
       try {
@@ -145,7 +145,8 @@ export default {
           email,
           displayed,
           username: uid,
-          password: password
+          password: password,
+          foreign_avatar_url: photoURL
         })
       } catch (error) {
       }

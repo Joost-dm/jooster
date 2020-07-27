@@ -2,7 +2,7 @@
   <v-container fluid class="post" :class="postClass">
     <div class="post__left-side">
       <v-avatar class="post__avatar">
-        <v-img :src=post.author.avatar></v-img>
+        <v-img :src=post.author.avatar_url></v-img>
       </v-avatar>
       <span class="post__user_rating">{{post.author.carma}}</span>
       <div  class="post__rating_options">
