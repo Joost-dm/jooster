@@ -11,9 +11,9 @@ def serveIMG(request, path):
 
 urlpatterns = [
     path("api/v1/", include('forum.urls')),
-    path('api/v1/auth/profile/', include('authorization.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth_token/', include('djoser.urls.authtoken')),
+    path('api/v1/auth/', include('authorization.urls')),
+    path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/auth_token/', include('djoser.urls.authtoken')),
     re_path(r"(?P<path>(.+\.(jpg|bmp|png|jpeg|svg)))", serveIMG),
     re_path(r"(?P<path>(^/?$|.+))", serve),
 ]

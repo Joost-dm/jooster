@@ -26,7 +26,7 @@ from forum import permissions
 
 User = get_user_model()
 
-
+#todo PERMISSIONS!!!
 class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """User's profile details view"""
 

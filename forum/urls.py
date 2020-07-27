@@ -7,7 +7,7 @@ def index(request):
     return render(request, 'forum/index.html')
 
 urlpatterns = [
-    path('user/<int:id>/', UserDetailsView.as_view()),
+
     path('forum/<int:forum>/membership/<int:user>/', views.ForumMemberView.as_view()), #Post - add, DELETE - remove
     path('branch/<int:branch>/membership/<int:user>/', views.BranchMemberView.as_view()),
 

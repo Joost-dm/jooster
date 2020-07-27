@@ -35,10 +35,10 @@ export default {
     async loginUser ({ commit }, payload) {
       commit('clearError')
       try {
-        var token = await axios.post(API.URL + 'auth_token/token/login/',
+        var token = await axios.post(API.URL + 'api/v1/auth_token/token/login/',
           payload)
         commit('createAuthToken', token.data.auth_token)
-        var currentUser = await axios.get(API.URL + 'auth/users/me/')
+        var currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
         commit('loginUser', currentUser.data)
         commit('setCurrentForum', null)
         router.push('/forum/1/1')
@@ -53,7 +53,7 @@ export default {
     async destroyAuthToken ({ commit }, authToken) {
       commit('clearError')
       try {
-        await axios.post(API.URL + 'auth_token/token/logout/',
+        await axios.post(API.URL + 'api/v1/auth_token/token/logout/',
           {
             auth_token: authToken
           })
@@ -66,7 +66,7 @@ export default {
     async createNewUser ({ commit, dispatch }, user) {
       commit('clearError')
       try {
-        await axios.post(API.URL + 'auth/users/', user)
+        await axios.post(API.URL + 'api/v1/auth/users/', user)
         await dispatch('loginUser', {
           username: user.username,
           password: user.password
@@ -83,12 +83,12 @@ export default {
         formData.append(key, user[key])
       }
       try {
-        await axios.put(API.URL + 'auth/users/me/', formData, {
+        await axios.put(API.URL + 'api/v1/auth/users/me/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        var currentUser = await axios.get(API.URL + 'auth/users/me/')
+        var currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
         commit('loginUser', currentUser.data)
       } catch (error) {
         console.log(error.response)
@@ -108,7 +108,7 @@ export default {
         commit('createAuthToken', token)
         await timeout(500)
         try {
-          var currentUser = await axios.get(API.URL + 'auth/users/me/')
+          var currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
           commit('loginUser', currentUser.data)
           commit('setGlobalLoading', false)
         } catch (error) {
@@ -121,7 +121,7 @@ export default {
     async getUsersList ({ commit }) {
       commit('clearError')
       try {
-        var usersList = await axios.get(API.URL + 'auth/users/')
+        var usersList = await axios.get(API.URL + 'api/v1/auth/users/')
         commit('setUsersList', usersList.data)
       } catch (error) {
         errorMixin(error, commit)
@@ -141,7 +141,7 @@ export default {
       // const avatar = await fetch(photoURL, { mode: 'no-cors' })
       // console.log((await Promise.resolve(avatar)).blob())
       try {
-        await axios.post(API.URL + 'auth/users/', {
+        await axios.post(API.URL + 'api/v1/auth/users/', {
           email,
           displayed,
           username: uid,

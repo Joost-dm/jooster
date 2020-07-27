@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
         upload_to='images/avatars/',
         verbose_name='аватар'
     )
+    # avatar_url = models.FilePathField(default='images/avatars/default_avatar.png')
     AVATAR_FIELD = 'avatar'
     REQUIRED_FIELDS = ['email', 'avatar', 'displayed']
 
