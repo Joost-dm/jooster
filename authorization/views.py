@@ -9,12 +9,14 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from djoser.serializers import UserCreateSerializer
 
 from authorization import serializers
 from authorization.models import CustomUser
-
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import BaseAuthentication
 
 from django.contrib.auth import  get_user_model
 from rest_framework.exceptions import ValidationError
@@ -34,6 +36,7 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.UserDetailSerializer
     queryset = CustomUser.objects.all()
 
+"""
 #todo delete?
 def create(self, validated_data):
     try:
@@ -42,8 +45,8 @@ def create(self, validated_data):
         self.fail("cannot_create_user")
 
     return user
-
 UserCreateSerializer.create= create
+"""
 
 class SetAvatar(APIView):
     @method_decorator(csrf_exempt)
@@ -61,7 +64,6 @@ class SetAvatar(APIView):
             if "users" in path:
                 storage.delete(path)
             user.avatar = image
-            print(user.avatar.path)
             # user.avatar_url = user.avatar.path
             user.save()
             return user

@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
     displayed = models.CharField(
         max_length=40,
         unique=True,
-        verbose_name='Отоброжаемое имя'
+        verbose_name='отоброжаемое имя'
     )
 
     avatar = models.ImageField(
@@ -19,11 +19,10 @@ class CustomUser(AbstractUser):
     )
 
     foreign_avatar_url = models.URLField(
-        null=True
+        null=True,
+        blank=True,
+        verbose_name='аватар из стороних источников'
     )
 
     AVATAR_FIELD = 'avatar'
     REQUIRED_FIELDS = ['email', 'avatar', 'displayed', 'foreign_avatar_url']
-
-
-

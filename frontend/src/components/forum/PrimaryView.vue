@@ -13,7 +13,7 @@
         <div class="header__title">
           <span v-if="currentBranch" >#{{currentBranch.title.toLowerCase()}}</span>
         </div>
-        <div class="header__subtitle">
+        <div v-if="currentBranch" class="header__subtitle">
           <span v-if="currentBranch.is_private">закрытая ветка</span>
           <span v-else>открытая ветка</span>
         </div>

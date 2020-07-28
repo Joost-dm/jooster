@@ -83,6 +83,7 @@ export default {
         formData.append(key, user[key])
       }
       try {
+        console.log(formData)
         await axios.put(API.URL + 'api/v1/auth/users/me/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -138,8 +139,6 @@ export default {
       const displayed = result.user.displayName
       const email = result.user.email
       const photoURL = result.user.photoURL
-      // const avatar = await fetch(photoURL, { mode: 'no-cors' })
-      // console.log((await Promise.resolve(avatar)).blob())
       try {
         await axios.post(API.URL + 'api/v1/auth/users/', {
           email,

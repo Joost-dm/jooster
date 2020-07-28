@@ -127,6 +127,10 @@ AUTH_USER_MODEL = 'authorization.CustomUser'
 # social-auth-app-django
 DJOSER = {
     'HIDE_USERS': False,
+    'SERIALIZERS': {
+        'user': 'authorization.serializers.UserDetailSerializer',
+        'current_user': 'authorization.serializers.UserDetailSerializer',
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
