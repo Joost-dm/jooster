@@ -123,6 +123,16 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'authorization.CustomUser'
 
+USER_SETTINGS = {
+    'USER_AVATAR_SETTINGS': {
+        'AVATAR_IMAGE_NAME': 'avatar',
+        'MAX_WIDTH': 2000,
+        'MAX_HEIGHT': 2000,
+        'MAX_SIZE': 500000,
+        'COMPRESSED_WIDTH': 100,
+        'COMPRESSED_HEIGHT': 100
+    }
+}
 # Djoser settings https://djoser.readthedocs.io/en/latest/settings.html
 # social-auth-app-django
 DJOSER = {

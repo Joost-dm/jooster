@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from authorization.models import CustomUser
 from forum.models import Post, Thread, PostLike, ThreadLike
-from authorization.validators import UserDownloadedAvatarHandler
+from authorization.validators import DownloadedAvatarValidator
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """ Extended user-model serializer """
@@ -9,7 +9,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     messages_count = serializers.SerializerMethodField('count_messages')
     carma = serializers.SerializerMethodField('user_carma')
     avatar_url = serializers.SerializerMethodField('actual_avatar_url_handler')
-    avatar = serializers.ImageField(write_only=True, validators=[UserDownloadedAvatarHandler])
+    avatar = serializers.ImageField(write_only=True, validators=[DownloadedAvatarValidator])
     is_staff = serializers.BooleanField(read_only=True)
 
     def count_messages(self, user):
