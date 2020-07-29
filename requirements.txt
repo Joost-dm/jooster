@@ -8,6 +8,7 @@ whitenoise==5.0.1
 pillow==7.1.2
 dj-database-url==0.5.0
 django-cors-headers==3.3.0
-django-relativefilepathfield==1.0.3
+python-resize-image==1.1.19
 psycopg2==2.8.5
+
 

@@ -36,17 +36,6 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.UserDetailSerializer
     queryset = CustomUser.objects.all()
 
-"""
-#todo delete?
-def create(self, validated_data):
-    try:
-        user = self.perform_create(validated_data)
-    except IntegrityError:
-        self.fail("cannot_create_user")
-
-    return user
-UserCreateSerializer.create= create
-"""
 
 class SetAvatar(APIView):
     @method_decorator(csrf_exempt)
