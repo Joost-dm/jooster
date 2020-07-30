@@ -24,7 +24,7 @@ class CustomUser(AbstractUser):
     )
 
     avatar = models.ImageField(
-        default='images/avatars/default_avatar.png',
+        default='images/default_avatar.png',
         upload_to=generate_avatar_path,
         verbose_name='аватар'
     )
