@@ -26,7 +26,7 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(
         default='images/avatars/default_avatar.png',
         upload_to=generate_avatar_path,
-        verbose_name='аватар',
+        verbose_name='аватар'
     )
 
     foreign_avatar_url = models.URLField(
@@ -38,18 +38,18 @@ class CustomUser(AbstractUser):
     def save(self, *args, **kwargs):
         """ User's profile update handler. """
 
-        if self.avatar:
-            self.avatar_update_handler()
-
+        self.avatar_update_handler()
         super(CustomUser, self).save(*args, **kwargs)
 
     def avatar_update_handler(self):
         """ Downloaded avatar image update handler. """
 
-        self.get_avatar_ext()
-        self.generate_avatar_name()
-        self.delete_current_avatar()
-        self.compress_avatar()
+        user = CustomUser.objects.get(id=self.id)
+        if user.avatar != self.avatar:
+            self.get_avatar_ext()
+            self.generate_avatar_name()
+            self.resize_avatar()
+            self.delete_current_avatar()
 
     def get_avatar_ext(self):
         """ Parses an avatar image extension. """
@@ -59,7 +59,7 @@ class CustomUser(AbstractUser):
             user_avatar_ext = 'jpeg'
         self.user_avatar_ext = user_avatar_ext
 
-    def compress_avatar(self):
+    def resize_avatar(self):
         """ Compresses user's avatar image. New sizes declared at project settings. """
 
         user_avatar = Image.open(self.avatar)
@@ -76,13 +76,13 @@ class CustomUser(AbstractUser):
 
     def delete_current_avatar(self):
         """ Removes existing same-named avatar image. """
-
         try:
             user = CustomUser.objects.get(id=self.id)
         except IntegrityError:
             raise ValidationError('Некорректный пользователь.')
 
         storage, path = user.avatar.storage, user.avatar.path
+
         if self.avatar.name in path:
             storage.delete(path)
 

@@ -3,6 +3,7 @@ from authorization.models import CustomUser
 from forum.models import Post, Thread, PostLike, ThreadLike
 from authorization.validators import DownloadedAvatarValidator
 
+
 class UserDetailSerializer(serializers.ModelSerializer):
     """ Extended user-model serializer """
 

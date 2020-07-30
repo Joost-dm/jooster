@@ -4,8 +4,7 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 import store from './store'
-import * as firebase from 'firebase/app'
-import 'firebase/analytics'
+import firebase from 'firebase/app'
 import 'firebase/auth'
 
 Vue.config.productionTip = false
@@ -32,6 +31,5 @@ new Vue({
 
     }
     firebase.initializeApp(firebaseConfig)
-    firebase.analytics()
   }
 }).$mount('#app')

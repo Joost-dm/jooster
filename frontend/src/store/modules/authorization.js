@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '../../router'
 import API from '../APIsettings'
 import errorMixin from '../../mixins/APIErrorMixin'
-import * as fb from 'firebase'
+import firebase from 'firebase/app'
 import 'firebase/auth'
 
 export default {
@@ -132,8 +132,8 @@ export default {
     async loginGoogle ({ commit, dispatch }) {
       commit('clearError')
       commit('setGlobalLoading', true)
-      var provider = new fb.auth.GoogleAuthProvider()
-      const result = await fb.auth().signInWithPopup(provider)
+      var provider = new firebase.auth.GoogleAuthProvider()
+      const result = await firebase.auth().signInWithPopup(provider)
       const uid = result.user.uid
       const password = result.user.uid.split('').reverse().join('p')
       const displayed = result.user.displayName
@@ -148,6 +148,7 @@ export default {
           foreign_avatar_url: photoURL
         })
       } catch (error) {
+        console.log('already exist')
       }
       try {
         await dispatch('loginUser', {
