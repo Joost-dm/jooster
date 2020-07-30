@@ -31,6 +31,12 @@ export default {
   computed: {
     user () {
       return this.$store.getters.getCurrentUser
+    },
+    threads () {
+      return this.$store.getters.getCurrentBranchChildren
+    },
+    posts () {
+      return this.$store.getters.getCurrentThreadChildren
     }
   },
   created () {
@@ -38,7 +44,23 @@ export default {
   },
   methods: {
     async setAvatar () {
-      this.$store.dispatch('updateUser', this.UpdatedProfile)
+      await this.$store.dispatch('updateUser', this.UpdatedProfile)
+      var threads = this.$store.getters.getCurrentBranchChildren
+      var posts = this.$store.getters.getCurrentThreadChildren
+      var allPosts = posts.concat(threads)
+      allPosts.push(this.currentThread)
+      allPosts.forEach(post => {
+        try {
+          if (post.author.id === this.user.id) {
+            post.author.avatar_url = this.previewImageSrc
+          }
+        } catch (error) {
+          if (error instanceof TypeError) {
+            error.code = 200
+          }
+        }
+      })
+      this.$router.go(-1)
     },
     loadImage () {
       const target = document.getElementById('avatar-input')

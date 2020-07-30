@@ -29,6 +29,9 @@ export default {
     },
     setUsersList (state, usersList) {
       state.usersList = usersList
+    },
+    updateUser (state, updatedUser) {
+      state.user = updatedUser
     }
   },
   actions: {
@@ -83,7 +86,6 @@ export default {
         formData.append(key, user[key])
       }
       try {
-        console.log(formData)
         await axios.put(API.URL + 'api/v1/auth/users/me/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -92,7 +94,6 @@ export default {
         var currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
         commit('loginUser', currentUser.data)
       } catch (error) {
-        console.log(error.response)
         errorMixin(error, commit)
         throw error
       }
@@ -161,6 +162,9 @@ export default {
         commit('setGlobalLoading', false)
         throw error
       }
+    },
+    updateUserProfile ({ commit }, updatedUser) {
+      commit('updateUser', updatedUser)
     }
   },
   getters: {
