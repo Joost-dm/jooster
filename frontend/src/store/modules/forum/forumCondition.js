@@ -9,7 +9,8 @@ export default {
     currentThreadBottomScroll: null,
     currentBranchScrollStart: true,
     currentThreadScrollStart: true,
-    localLoaderHeight: 100
+    localLoaderHeight: 100,
+    accountSettingsIsShown: true
   },
   mutations: {
     setBranchInPrimary (state, status) {
@@ -40,6 +41,9 @@ export default {
     },
     setCurrentThreadScrollStart (state, boolean) {
       state.currentThreadScrollStart = boolean
+    },
+    setAccountSettingsWindowStatus(state, boolean) {
+      state.accountSettingsIsShown = boolean
     }
   },
   actions: {
@@ -127,6 +131,11 @@ export default {
     },
     setCurrentThreadScrollStart ({ commit }, boolean) {
       commit('setCurrentThreadScrollStart', boolean)
+    },
+    setAccountSettingsWindowStatus({ commit }, boolean) {
+      const settingsWindow = document.getElementsByClassName('account_settings')[0]
+      settingsWindow.style.height('200px')
+      commit
     }
 
   },
@@ -160,6 +169,9 @@ export default {
     },
     getLocalLoaderHeight (state) {
       return state.localLoaderHeight
+    },
+    accountSettingsIsShown (state) {
+      return state.accountSettingsIsShown
     }
   }
 }

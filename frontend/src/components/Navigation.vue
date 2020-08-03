@@ -30,10 +30,14 @@
         </span>
       </button>
       <span v-if="user"> <b>{{user.displayed}}</b></span>
-          <v-spacer></v-spacer>
-          <v-icon class="app-bar__icon">mdi-api</v-icon>
-          <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
+      <v-icon class="app-bar__icon">mdi-account-cog</v-icon>
+      <v-spacer></v-spacer>
+      <v-icon class="app-bar__icon">mdi-api</v-icon>
+      <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
     </v-app-bar>
+    <div v-if="accountSettingsIsShown" class="account_settings">
+    test
+    </div>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -68,6 +72,9 @@ export default {
   computed: {
     user () {
       return this.$store.getters.getCurrentUser
+    },
+    accountSettingsIsShown () {
+      return this.$store.getters.accountSettingsIsShown
     }
   },
   mounted () {
@@ -110,9 +117,23 @@ export default {
 #hamburger {
   margin-left: -20px;
 }
+.account_settings {
+  position: absolute;
+  background-color: $secondary;
+  border: $third-party solid 1px;
+  border-radius: 0 0 5px 0;
+  width: 500px;
+  height: 200px;
+  top: $navigation-app-bar-height;
+  z-index: 7;
+}
 @media screen and (max-width: 595px){
   #nav-drawer {
     padding-top: $navigation-app-bar-height;
+  }
+  .account_settings {
+    width: 100%;
+    border-radius: 0 0 5px 5px;
   }
 }
 </style>
