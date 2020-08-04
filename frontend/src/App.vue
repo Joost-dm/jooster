@@ -44,7 +44,11 @@ export default {
       this.$store.dispatch('clearError')
     },
     mobileScreenHeightController () {
-      window.addEventListener('resize', this.$store.dispatch('mobileScreenHeightController'))
+      window.addEventListener('resize', onresize)
+
+      function onresize () {
+        this.$store.dispatch('mobileScreenHeightController')
+      }
     }
   },
   computed: {
