@@ -22,7 +22,7 @@
       </div>
       <div class="account_settings__top_controls">
         <v-icon class="account_settings__icon" @click="setAvatar">mdi-content-save</v-icon>
-        <v-icon class="account_settings__icon" @click="closeAccountSettings">mdi-close</v-icon>
+        <v-icon class="account_settings__icon" @click="closeAccountSettings">mdi-chevron-up</v-icon>
       </div>
     </div>
 
@@ -86,6 +86,7 @@ export default {
       })
       this.user.avatar_url = this.previewImageSrc
       this.$store.dispatch('setAccountSettingsWindowStatus', false)
+      delete this.UpdatedProfile.avatar
     },
     loadImage () {
       const target = document.getElementById('avatar-input')
@@ -157,10 +158,9 @@ export default {
   position: relative;
 }
 .account_settings__user_avatar img {
-  position: absolute;
-  width: $post__avatar__size;
-  top: calc(100% - #{$post__avatar__size});
-
+  max-width: $post__avatar__size;
+  max-height: $post__avatar__size;
+// сделать корректное отображение
 }
 .account_settings__user_displayed {
   font-weight: bold;
