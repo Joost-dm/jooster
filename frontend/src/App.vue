@@ -44,11 +44,10 @@ export default {
       this.$store.dispatch('clearError')
     },
     mobileScreenHeightController () {
-      var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-
       window.addEventListener('resize', onresize)
 
       function onresize () {
+        var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
         var appBarHeight = document.getElementById('v-app-bar').offsetHeight
         var headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
         var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
