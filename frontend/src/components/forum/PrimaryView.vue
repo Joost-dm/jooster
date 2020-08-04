@@ -209,13 +209,28 @@ export default {
     async setParrentBranchInPrimary () {
       this.$store.dispatch('setBranchInPrimary', true)
       this.$store.dispatch('getCurrentBranchById', this.currentThread.parent_branch)
+    },
+    mobileScreenHeightController () {
+      var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+      var appBarHeight = document.getElementById('v-app-bar').offsetHeight
+      var headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
+      var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
+      var primaryBody = document.getElementsByClassName('primary-view__body')[0]
+      var mobileForumDrawer = document.getElementsByClassName('v-navigation-drawer--is-mobile')[0]
+      primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight + 12) + 'px'
+      try {
+        mobileForumDrawer.style.height = (viewportHeight - appBarHeight) + 'px'
+      } catch (error) {
+        error.message = null
+      }
     }
   },
   updated () {
     this.updateComponentScrollController()
   },
   mounted () {
-    this.$store.dispatch('mobileScreenHeightController')
+    this.mobileScreenHeightController()
+    window.addEventListener('resize', this.mobileScreenHeightController)
   }
 }
 </script>
