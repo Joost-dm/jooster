@@ -42,6 +42,9 @@ export default {
   methods: {
     closeError () {
       this.$store.dispatch('clearError')
+    },
+    mobileScreenHeightController () {
+      window.addEventListener('resize', this.$store.dispatch('mobileScreenHeightController'))
     }
   },
   computed: {
@@ -62,7 +65,7 @@ export default {
     this.$store.dispatch('checkForLocalAuthToken')
   },
   mounted () {
-    window.addEventListener('resize', this.$store.dispatch('mobileScreenHeightController'))
+    this.mobileScreenHeightController()
   }
 }
 </script>
