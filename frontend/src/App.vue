@@ -61,12 +61,11 @@ export default {
 
         if (!hasOrientationChanged && (newViewportHeight !== viewportHeight)) {
           addressbarHeight = Math.abs(newViewportHeight - viewportHeight)
+          var primaryBody = document.getElementsByClassName('primary-view__body')[0]
           if (newViewportHeight < viewportHeight) {
-            var primaryBody = document.getElementsByClassName('primary-view__body')[0]
             primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight - addressbarHeight + 12) + 'px'
-            alert(primaryBody.offsetHeight)
           } else {
-            // Android Chrome address bar has disappeared
+            primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight + 12) + 'px'
           }
         } else if (hasOrientationChanged) {
           // Orientation change
