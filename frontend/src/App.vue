@@ -44,11 +44,12 @@ export default {
       this.$store.dispatch('clearError')
     },
     mobileScreenHeightController () {
-      window.addEventListener('resize', onresize)
-
-      function onresize () {
-        this.$store.dispatch('mobileScreenHeightController')
-      }
+      var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+      var appBarHeight = document.getElementById('v-app-bar').offsetHeight
+      var headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
+      var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
+      var primaryBody = document.getElementsByClassName('primary-view__body')[0]
+      primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight + 12) + 'px'
     }
   },
   computed: {
@@ -69,7 +70,7 @@ export default {
     this.$store.dispatch('checkForLocalAuthToken')
   },
   mounted () {
-    this.mobileScreenHeightController()
+    window.addEventListener('resize', this.mobileScreenHeightController)
   }
 }
 </script>
