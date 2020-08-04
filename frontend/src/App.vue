@@ -44,7 +44,6 @@ export default {
       this.$store.dispatch('clearError')
     },
     mobileScreenHeightController () {
-      alert('work')
       var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
       var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
       var isPortrait = viewportHeight > viewportWidth
@@ -52,6 +51,9 @@ export default {
       window.addEventListener('resize', onresize)
 
       function onresize () {
+        var appBarHeight = document.getElementById('v-app-bar').offsetHeight
+        var headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
+        var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
         var newViewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
         var newViewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
         var hasOrientationChanged = (newViewportHeight > newViewportWidth) !== isPortrait
@@ -59,9 +61,10 @@ export default {
 
         if (!hasOrientationChanged && (newViewportHeight !== viewportHeight)) {
           addressbarHeight = Math.abs(newViewportHeight - viewportHeight)
-          alert(addressbarHeight)
           if (newViewportHeight < viewportHeight) {
-            // Android Chrome address bar has appeared
+            var primaryBody = document.getElementsByClassName('primary-view__body')[0]
+            primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight - addressbarHeight + 12) + 'px'
+            alert(primaryBody.offsetHeight)
           } else {
             // Android Chrome address bar has disappeared
           }
@@ -90,8 +93,10 @@ export default {
     }
   },
   created () {
-    this.mobileScreenHeightController()
     this.$store.dispatch('checkForLocalAuthToken')
+  },
+  mounted () {
+    this.mobileScreenHeightController()
   }
 }
 </script>
@@ -101,10 +106,12 @@ export default {
 html {
   overflow: hidden !important;
 }
-#app {
-  height: 100vh;
+body {
+  max-height: 50vh;
+  .primary-view__main {
+    max-height: 100%;
+  }
 }
-
 /* Размеры скроллбара */
 ::-webkit-scrollbar {
     width: 5px;

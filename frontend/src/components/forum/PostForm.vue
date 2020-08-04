@@ -127,7 +127,7 @@ export default {
   z-index: 3;
   color: $extra;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1.1rem;
   right: 5px;
   font-size: 25px;
   transition: all 0.2s;
@@ -140,6 +140,7 @@ export default {
   position: relative;
   display: inline-block;
   padding-top: 10px;
+  padding-bottom: 0.8rem;
   width: 100%;
   background-color: $secondary;
   z-index: 2;
@@ -154,10 +155,10 @@ export default {
 .emoji-invoker {
   z-index: 3;
   position: absolute;
-  bottom: 2.3rem;
+  bottom: 2.1rem;
   right: 0.5rem;
   width: 1.5rem;
-  height: 1.5rem;
+  height: 2.3rem;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;

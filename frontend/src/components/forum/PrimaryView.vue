@@ -221,7 +221,6 @@ export default {
 .primary-view__main {
   position: relative;
   overflow: hidden;
-  height: calc(100vh - #{$navigation-app-bar-height});
   width: 100%;
 }
 .primary-view__header {

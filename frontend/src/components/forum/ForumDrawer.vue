@@ -133,7 +133,6 @@ export default {
 
 .forum-drawer__main {
   overflow: hidden;
-  height: calc(100vh - #{$navigation-app-bar-height});
 }
 .forum-drawer__main *{
   color: #000000  !important;
