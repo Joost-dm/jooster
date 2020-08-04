@@ -58,7 +58,7 @@ export default {
         var newViewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
         var hasOrientationChanged = (newViewportHeight > newViewportWidth) !== isPortrait
         var addressbarHeight = 130
-
+        alert(newViewportHeight)
         if (!hasOrientationChanged && (newViewportHeight !== viewportHeight)) {
           addressbarHeight = Math.abs(newViewportHeight - viewportHeight)
           var primaryBody = document.getElementsByClassName('primary-view__body')[0]
@@ -79,7 +79,6 @@ export default {
   },
   computed: {
     error () {
-      this.mobileScreenHeightController()
       return this.$store.getters.error
     },
     user () {
@@ -94,6 +93,9 @@ export default {
   },
   created () {
     this.$store.dispatch('checkForLocalAuthToken')
+  },
+  mounted () {
+    this.mobileScreenHeightController()
   }
 }
 </script>
