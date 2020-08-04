@@ -45,8 +45,6 @@ export default {
     },
     mobileScreenHeightController () {
       var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-      var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-      var isPortrait = viewportHeight > viewportWidth
 
       window.addEventListener('resize', onresize)
 
@@ -54,26 +52,8 @@ export default {
         var appBarHeight = document.getElementById('v-app-bar').offsetHeight
         var headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
         var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
-        var newViewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-        var newViewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-        var hasOrientationChanged = (newViewportHeight > newViewportWidth) !== isPortrait
-        var addressbarHeight = 130
-        alert(newViewportHeight)
-        if (!hasOrientationChanged && (newViewportHeight !== viewportHeight)) {
-          addressbarHeight = Math.abs(newViewportHeight - viewportHeight)
-          var primaryBody = document.getElementsByClassName('primary-view__body')[0]
-          if (newViewportHeight < viewportHeight) {
-            primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight - addressbarHeight + 12) + 'px'
-          } else {
-            primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight + 12) + 'px'
-          }
-        } else if (hasOrientationChanged) {
-          // Orientation change
-        }
-
-        viewportHeight = newViewportHeight
-        viewportWidth = newViewportWidth
-        isPortrait = viewportHeight > viewportWidth
+        var primaryBody = document.getElementsByClassName('primary-view__body')[0]
+        primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight + 12) + 'px'
       }
     }
   },
