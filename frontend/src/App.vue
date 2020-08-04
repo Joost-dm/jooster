@@ -79,6 +79,7 @@ export default {
   },
   computed: {
     error () {
+      this.mobileScreenHeightController()
       return this.$store.getters.error
     },
     user () {
@@ -93,9 +94,6 @@ export default {
   },
   created () {
     this.$store.dispatch('checkForLocalAuthToken')
-  },
-  mounted () {
-    this.mobileScreenHeightController()
   }
 }
 </script>
