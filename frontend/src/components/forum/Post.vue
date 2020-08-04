@@ -234,6 +234,7 @@ export default {
   border-radius: 6px;
   height: $post__avatar__size;
   width: $post__avatar__size;
+  border: $third-party solid 1px;
   background-color: white;
 }
 .post__user_rating {

@@ -30,14 +30,12 @@
         </span>
       </button>
       <span v-if="user"> <b>{{user.displayed}}</b></span>
-      <v-icon class="app-bar__icon">mdi-account-cog</v-icon>
+      <v-icon class="app-bar__icon" @click="toggleAccountSettings">mdi-account-cog</v-icon>
       <v-spacer></v-spacer>
       <v-icon class="app-bar__icon">mdi-api</v-icon>
       <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
     </v-app-bar>
-    <div v-if="accountSettingsIsShown" class="account_settings">
-    test
-    </div>
+    <account_settings></account_settings>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -46,9 +44,11 @@
 
 <script>
 import Branches from './forum/ForumDrawer'
+import AccountSettings from './forum/AccountSettings'
 export default {
   components: {
-    branches: Branches
+    branches: Branches,
+    account_settings: AccountSettings
   },
   name: 'Navigation',
   data: () => ({
@@ -67,6 +67,13 @@ export default {
     },
     toggleHamburger () {
       document.getElementById('hamburger').classList.toggle('is-active')
+    },
+    toggleAccountSettings () {
+      if (this.accountSettingsIsShown) {
+        this.$store.dispatch('setAccountSettingsWindowStatus', false)
+      } else {
+        this.$store.dispatch('setAccountSettingsWindowStatus', true)
+      }
     }
   },
   computed: {
@@ -117,23 +124,10 @@ export default {
 #hamburger {
   margin-left: -20px;
 }
-.account_settings {
-  position: absolute;
-  background-color: $secondary;
-  border: $third-party solid 1px;
-  border-radius: 0 0 5px 0;
-  width: 500px;
-  height: 200px;
-  top: $navigation-app-bar-height;
-  z-index: 7;
-}
+
 @media screen and (max-width: 595px){
   #nav-drawer {
     padding-top: $navigation-app-bar-height;
-  }
-  .account_settings {
-    width: 100%;
-    border-radius: 0 0 5px 5px;
   }
 }
 </style>

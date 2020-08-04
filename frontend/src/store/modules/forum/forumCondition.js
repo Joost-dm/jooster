@@ -42,7 +42,7 @@ export default {
     setCurrentThreadScrollStart (state, boolean) {
       state.currentThreadScrollStart = boolean
     },
-    setAccountSettingsWindowStatus(state, boolean) {
+    setAccountSettingsWindowStatus (state, boolean) {
       state.accountSettingsIsShown = boolean
     }
   },
@@ -132,12 +132,16 @@ export default {
     setCurrentThreadScrollStart ({ commit }, boolean) {
       commit('setCurrentThreadScrollStart', boolean)
     },
-    setAccountSettingsWindowStatus({ commit }, boolean) {
+    setAccountSettingsWindowStatus ({ commit }, boolean) {
       const settingsWindow = document.getElementsByClassName('account_settings')[0]
-      settingsWindow.style.height('200px')
-      commit
+      if (boolean === true) {
+        settingsWindow.style.top = '0'
+        commit('setAccountSettingsWindowStatus', true)
+      } else {
+        settingsWindow.style.top = '-200px'
+        commit('setAccountSettingsWindowStatus', false)
+      }
     }
-
   },
   getters: {
     getBranchInPrimary (state) {

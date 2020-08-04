@@ -77,6 +77,7 @@ export default {
         this.newMessage.parent_branch = this.currentBranch.id
         await this.$store.dispatch('createThread', this.newMessage)
       }
+      this.user.messages_count++
       this.newMessage.text = ''
     },
     append (emoji) {
@@ -112,6 +113,9 @@ export default {
     },
     currentBranch () {
       return this.$store.getters.getCurrentBranch
+    },
+    user () {
+      return this.$store.getters.getCurrentUser
     }
   }
 }
