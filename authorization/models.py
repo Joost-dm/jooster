@@ -7,6 +7,7 @@ from resizeimage import resizeimage
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from main.settings import USER_SETTINGS
+from django.db.models import ObjectDoesNotExist
 
 def generate_avatar_path(obj, filename):
     """ Generates an unique path to user's avatar dir according to user's id. """
@@ -37,8 +38,10 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         """ User's profile update handler. """
-
-        self.avatar_update_handler()
+        try:
+            self.avatar_update_handler()
+        except ObjectDoesNotExist:
+            pass
         super(CustomUser, self).save(*args, **kwargs)
 
     def avatar_update_handler(self):

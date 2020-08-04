@@ -10,7 +10,7 @@ export default {
     currentBranchScrollStart: true,
     currentThreadScrollStart: true,
     localLoaderHeight: 100,
-    accountSettingsIsShown: true
+    accountSettingsIsShown: false
   },
   mutations: {
     setBranchInPrimary (state, status) {
