@@ -44,6 +44,7 @@ export default {
       this.$store.dispatch('clearError')
     },
     mobileScreenHeightController () {
+      onresize()
       window.addEventListener('resize', onresize)
 
       function onresize () {
