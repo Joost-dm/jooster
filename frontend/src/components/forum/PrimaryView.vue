@@ -213,6 +213,9 @@ export default {
   },
   updated () {
     this.updateComponentScrollController()
+  },
+  mounted () {
+    this.$store.dispatch('mobileScreenHeightController')
   }
 }
 </script>
