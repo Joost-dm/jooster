@@ -52,8 +52,11 @@ export default {
       commit('clearError')
       try {
         await axios.post(API.URL + 'api/v1/thread/add/', thread)
+        commit('setCurrentBranchBottomScroll', 0)
+        const currentBranchChildren = getters.getCurrentBranchChildren
         commit('setBranchChildren', null)
-        await dispatch('getBranchChildren', { branch: getters.getCurrentBranch })
+        commit('setBranchChildren', currentBranchChildren)
+        await dispatch('getBranchChildren', { branch: getters.getCurrentBranch, lazy: true })
       } catch (error) {
         errorMixin(error, commit)
         throw error
@@ -74,8 +77,17 @@ export default {
       commit('clearError')
       try {
         await axios.delete(API.URL + 'api/v1/thread/' + thread.id + '/')
+        var currentBranchChildren = getters.getCurrentBranchChildren
+        for (var i = 0; i < currentBranchChildren.length; i++) {
+          if (currentBranchChildren[i].id === thread.id) {
+            currentBranchChildren.splice(i, 1)
+          }
+        }
         commit('setBranchChildren', null)
-        await dispatch('getBranchChildren', { branch: getters.getCurrentBranch })
+        commit('setBranchChildren', currentBranchChildren)
+        if (thread.id === getters.getCurrentThread.id) {
+          commit('setCurrentThread', null)
+        }
       } catch (error) {
         errorMixin(error, commit)
         throw error
@@ -85,12 +97,11 @@ export default {
       function timeout (ms) {
         return new Promise(resolve => setTimeout(resolve, ms))
       }
-      if (getters.getBranchInPrimary) {
+      if (getters.getBranchInPrimary && !payload.lazy) {
         commit('setSecondaryLoading', true)
       } else {
         commit('setPrimaryLoading', true)
       }
-      await timeout(1500)
       var url
       if (!payload.url) {
         url = API.URL + 'api/v1/thread/' + payload.thread.id + '/children/'
@@ -101,6 +112,7 @@ export default {
       commit('clearError')
       try {
         const childrenList = await axios.get(url)
+        await timeout(1500)
         if (childrenList.data.next) {
           commit('setThreadNextPageUrl', childrenList.data.next)
         } else {
@@ -113,6 +125,10 @@ export default {
           dispatch('setCurrentThreadBottomScroll', 0)
         }
         const reversedChildrenList = childrenList.data.results.reverse()
+        if (payload.lazy) {
+          commit('setThreadChildren', null)
+          dispatch('setCurrentThreadBottomScroll', 0)
+        }
         commit('setThreadChildren', reversedChildrenList)
         getters.getBranchInPrimary ? commit('setSecondaryLoading', false) : commit('setPrimaryLoading', false)
       } catch (error) {

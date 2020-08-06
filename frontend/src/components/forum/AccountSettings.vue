@@ -158,9 +158,9 @@ export default {
   position: relative;
 }
 .account_settings__user_avatar img {
-  max-width: $post__avatar__size;
-  max-height: $post__avatar__size;
-// сделать корректное отображение
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .account_settings__user_displayed {
   font-weight: bold;

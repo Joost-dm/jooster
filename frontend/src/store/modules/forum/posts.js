@@ -26,8 +26,11 @@ export default {
       commit('clearError')
       try {
         await axios.post(API.URL + 'api/v1/post/add/', post)
+        commit('setCurrentThreadBottomScroll', 0)
+        const currentThreadChildren = getters.getCurrentThreadChildren
         commit('setThreadChildren', null)
-        await dispatch('getThreadChildren', { thread: getters.getCurrentThread })
+        commit('setThreadChildren', currentThreadChildren)
+        await dispatch('getThreadChildren', { thread: getters.getCurrentThread, lazy: true })
       } catch (error) {
         errorMixin(error, commit)
         throw error
@@ -48,8 +51,14 @@ export default {
       commit('clearError')
       try {
         await axios.delete(API.URL + 'api/v1/post/' + post.id + '/')
+        var currentThreadChildren = getters.getCurrentThreadChildren
+        for (var i = 0; i < currentThreadChildren.length; i++) {
+          if (currentThreadChildren[i].id === post.id) {
+            currentThreadChildren.splice(i, 1)
+          }
+        }
         commit('setThreadChildren', null)
-        await dispatch('getThreadChildren', { thread: getters.getCurrentThread })
+        commit('setThreadChildren', currentThreadChildren)
       } catch (error) {
         errorMixin(error, commit)
         throw error

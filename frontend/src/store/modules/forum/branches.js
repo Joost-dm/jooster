@@ -80,8 +80,9 @@ export default {
       function timeout (ms) {
         return new Promise(resolve => setTimeout(resolve, ms))
       }
-      commit('setPrimaryLoading', true)
-      await timeout(1500)
+      if (!payload.lazy) {
+        commit('setPrimaryLoading', true)
+      }
       var url
       if (payload.url) {
         url = payload.url
@@ -92,6 +93,7 @@ export default {
       commit('clearError')
       try {
         const childrenList = await axios.get(url)
+        await timeout(1500)
         if (childrenList.data.next) {
           commit('setBranchNextPageUrl', childrenList.data.next)
         } else {
@@ -104,6 +106,10 @@ export default {
           dispatch('setCurrentBranchBottomScroll', 0)
         }
         const reversedChildrenList = childrenList.data.results.reverse()
+        if (payload.lazy) {
+          commit('setBranchChildren', null)
+          dispatch('setCurrentBranchBottomScroll', 0)
+        }
         commit('setBranchChildren', reversedChildrenList)
         commit('setPrimaryLoading', false)
       } catch (error) {

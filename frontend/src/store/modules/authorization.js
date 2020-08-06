@@ -44,7 +44,7 @@ export default {
         var currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
         commit('loginUser', currentUser.data)
         commit('setCurrentForum', null)
-        router.push('/forum/1/1')
+        await router.push('/forum/1/1')
       } catch (error) {
         errorMixin(error, commit)
         throw error

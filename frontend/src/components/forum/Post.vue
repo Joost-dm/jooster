@@ -6,7 +6,11 @@
       </v-avatar>
       <span class="post__user_rating">{{post.author.carma}}</span>
       <div  class="post__rating_options">
-        <div v-if="post.users_disliked_list.indexOf(user.id) !== -1"
+        <div v-if="user.id === post.author.id"
+             class="post__rating_icon disabled_icon">
+          <v-icon>mdi-minus</v-icon>
+        </div>
+        <div v-else-if="post.users_disliked_list.indexOf(user.id) !== -1"
              class="post__rating_icon rating_minus rating_disliked">
           <v-icon>mdi-minus</v-icon>
         </div>
@@ -14,7 +18,11 @@
           <v-icon>mdi-minus</v-icon>
         </div>
         <span class="post__post_rating">{{post.carma}}</span>
-        <div v-if="post.users_liked_list.indexOf(user.id) !== -1"
+        <div v-if="user.id === post.author.id"
+             class="post__rating_icon disabled_icon">
+          <v-icon>mdi-plus</v-icon>
+        </div>
+        <div v-else-if="post.users_liked_list.indexOf(user.id) !== -1"
              class="post__rating_icon rating_plus rating_liked">
           <v-icon>mdi-plus</v-icon>
         </div>
@@ -56,7 +64,9 @@
              </div>
           </router-link>
         </div>
-        <div class="post__options">options</div>
+        <div class="post__options" v-if="user.id === post.author.id || user.is_staff">
+          <v-icon class="post__icon post__delete-icon" @click="deletePost(post)">mdi-delete</v-icon>
+        </div>
       </div>
     </div>
   </v-container>
@@ -95,11 +105,24 @@ export default {
       } else if (this.type === 'thread') {
         this.$store.dispatch('deleteThread', post)
       }
+      if (this.user.id === post.author.id) {
+        this.user.messages_count--
+        this.user.carma -= post.carma
+        const threads = this.$store.getters.getCurrentBranchChildren
+        const posts = this.$store.getters.getCurrentThreadChildren
+        const allPosts = posts.concat(threads)
+        allPosts.push(this.currentThread)
+        allPosts.forEach(postInAllPosts => {
+          if (postInAllPosts.author.id === post.author.id) {
+            postInAllPosts.author.carma = this.user.carma
+          }
+        })
+      }
     },
     likePost (post) {
-      var threads = this.$store.getters.getCurrentBranchChildren
-      var posts = this.$store.getters.getCurrentThreadChildren
-      var allPosts = posts.concat(threads)
+      const threads = this.$store.getters.getCurrentBranchChildren
+      const posts = this.$store.getters.getCurrentThreadChildren
+      const allPosts = posts.concat(threads)
       allPosts.push(this.currentThread)
       if (post.users_liked_list.indexOf(this.user.id) === -1) {
         if (this.type === 'post' && !this.threadStarter) {
@@ -132,9 +155,9 @@ export default {
       }
     },
     dislikePost (post) {
-      var threads = this.$store.getters.getCurrentBranchChildren
-      var posts = this.$store.getters.getCurrentThreadChildren
-      var allPosts = posts.concat(threads)
+      const threads = this.$store.getters.getCurrentBranchChildren
+      const posts = this.$store.getters.getCurrentThreadChildren
+      const allPosts = posts.concat(threads)
       allPosts.push(this.currentThread)
       if (post.users_disliked_list.indexOf(this.user.id) === -1) {
         if (this.type === 'post' && !this.threadStarter) {
@@ -229,6 +252,7 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .post__avatar {
   overflow: hidden;
   border-radius: 6px;
@@ -237,36 +261,53 @@ export default {
   border: $third-party solid 1px;
   background-color: white;
 }
+
 .post__user_rating {
   color: $third-party;
   text-align: center;
   font-size: 10px;
 }
+
 .post__rating_options {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: -3px;
 }
+
 .post__rating_icon {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
+
 .post__rating_icon i {
   font-size: 16px;
   cursor: pointer;
   transition: 0.2s;
 }
+
 .post__rating_icon i:hover {
   transform: scale(1.2);
 }
+
+.disabled_icon i {
+  cursor: auto;
+  color: $third-party;
+}
+
+.disabled_icon i:hover {
+  transform: none;
+}
+
 .rating_minus i:hover  {
   color: $error;
 }
+
 .rating_plus i:hover  {
   color: $success
 }
+
 .rating_disliked i {
   color: $error;
   transition: none;
@@ -284,42 +325,48 @@ export default {
   color: $primary;
   font-weight: 500;
 }
+
 .post__right-side {
   width: calc(100% - #{$post__avatar-area__size});
 }
+
 .post__header {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
   min-height: $post__header__min-height;
-
 }
+
 .post__author {
   font-weight: bold;
   font-size: 14px;
 }
+
 .post__pub-date {
   margin-right: $post__padding;
   font-size: 12px;
 }
+
 .post__divider {
   width: 100%;
   height: 1px;
   display: flex;
   flex-direction: row;
-
 }
+
 .post__divider-part1 {
   background-color: $third-party;
   width: calc(100% - 7rem);
   height: 100%;
 }
+
 .post__divider-part2 {
   background-color: $extra;
   width: 7rem;
   height: 100%;
 }
+
 .post__body {
   min-height: calc(#{$post__min-height} - #{$post__header__min-height} - #{$post__footer__min-height});
   padding-left: $post__padding;
@@ -341,11 +388,7 @@ export default {
   min-height: $post__footer__min-height;
   padding-left: $post__padding;
 }
-.post__like {
 
-}
-.post__likes-counter {
-}
 .post__likes-button {
   padding-left: calc(#{$post__padding} / 2);
   cursor: pointer;
@@ -367,6 +410,18 @@ export default {
 }
 .post__discussion-unread {
   color: $extra;
-
+}
+.post__icon {
+  font-size: 16px;
+  margin-left: 0.2rem;
+  margin-right: 0.3rem;
+  top: -0.5rem;
+}
+.post__icon:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+.post__delete-icon:hover {
+  color: $error;
 }
 </style>
