@@ -2,10 +2,9 @@ from io import BytesIO
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.db import models, IntegrityError
+from django.db import models
 from resizeimage import resizeimage
 from rest_framework.authtoken.models import Token
-from rest_framework.exceptions import ValidationError
 from main.settings import USER_SETTINGS
 from django.db.models import ObjectDoesNotExist
 

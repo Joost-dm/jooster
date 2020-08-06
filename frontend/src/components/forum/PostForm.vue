@@ -123,11 +123,20 @@ export default {
 
 <style scoped lang="scss">
 @import "../../styles/variables";
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 10px;
+  width: 100%;
+  background-color: $secondary;
+  z-index: 2;
+}
 .bottom-form__button {
   z-index: 3;
   color: $extra;
   position: absolute;
-  bottom: 1.1rem;
+  bottom: 0.5rem;
   right: 5px;
   font-size: 25px;
   transition: all 0.2s;
@@ -136,32 +145,23 @@ export default {
 .bottom-form__button:hover {
   transform: scale(1.2);
 }
-.wrapper {
-  position: relative;
-  display: inline-block;
-  padding-top: 10px;
-  padding-bottom: 0.8rem;
-  width: 100%;
-  background-color: $secondary;
-  z-index: 2;
-}
-
-.regular-input {
-  position: relative;
-  width: 100%;
-  font-family: Montserrat;
-}
 
 .emoji-invoker {
   z-index: 3;
   position: absolute;
-  bottom: 2.1rem;
+  bottom: 1.5rem;
   right: 0.5rem;
   width: 1.5rem;
   height: 2.3rem;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
+}
+
+.regular-input {
+  position: relative;
+  width: 100%;
+  font-family: Montserrat;
 }
 
 .emoji-invoker:hover {

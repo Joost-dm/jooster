@@ -217,7 +217,7 @@ export default {
       var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
       var primaryBody = document.getElementsByClassName('primary-view__body')[0]
       var mobileForumDrawer = document.getElementsByClassName('v-navigation-drawer--is-mobile')[0]
-      primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight + 12) + 'px'
+      primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight) + 'px'
       try {
         mobileForumDrawer.style.height = (viewportHeight - appBarHeight) + 'px'
       } catch (error) {
@@ -308,7 +308,7 @@ export default {
     color: $extra;
 }
 .primary-view__body {
-  height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height} + 12px);
+  height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height});
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: $text-background;
@@ -318,7 +318,7 @@ export default {
   position: absolute;
   width: 98%;
   margin: 0 1% 0 1%;
-  bottom: 0.3rem;
+  bottom: 0;
 }
 
 </style>
