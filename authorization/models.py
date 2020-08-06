@@ -25,9 +25,9 @@ class CustomUser(AbstractUser):
     )
 
     avatar = models.ImageField(
-        default='images/default_avatar.png',
+        default='images/avatars/default_avatar.png',
         upload_to=generate_avatar_path,
-        verbose_name='аватар'
+        verbose_name='аватар',
     )
 
     foreign_avatar_url = models.URLField(
@@ -52,7 +52,7 @@ class CustomUser(AbstractUser):
             self.get_avatar_ext()
             self.generate_avatar_name()
             self.resize_avatar()
-            self.delete_current_avatar()
+            # self.delete_current_avatar()
 
     def get_avatar_ext(self):
         """ Parses an avatar image extension. """
@@ -76,9 +76,9 @@ class CustomUser(AbstractUser):
 
         self.avatar = InMemoryUploadedFile(new_user_avatar_io, None, self.avatar.name, 'image/' + self.user_avatar_ext,
                                            new_user_avatar_io.tell(), None)
-
+    """
     def delete_current_avatar(self):
-        """ Removes existing same-named avatar image. """
+      
         try:
             user = CustomUser.objects.get(id=self.id)
         except IntegrityError:
@@ -87,8 +87,7 @@ class CustomUser(AbstractUser):
         storage, path = user.avatar.storage, user.avatar.path
 
         if self.avatar.name in path:
-            storage.delete(path)
-
+            storage.delete(path)"""
     def generate_avatar_name(self):
         """ Generates an user's avatar image name according project settings."""
 

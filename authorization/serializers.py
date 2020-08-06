@@ -36,12 +36,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
             2. Foreign avatar (example: from social network account when using social auth)
             3. Default avatar """
 
-        domain = self.context['request'].build_absolute_uri().split('/api/')[0] # Getting domain from request
-
-        if 'default_avatar.png' in user.avatar.path and user.foreign_avatar_url:
+        if 'default_avatar.png' in user.avatar.url and user.foreign_avatar_url:
             return user.foreign_avatar_url
         else:
-            return domain + user.avatar.url
+            return user.avatar.url
 
     class Meta:
         model = CustomUser
