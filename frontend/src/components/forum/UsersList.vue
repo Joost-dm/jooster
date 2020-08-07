@@ -19,7 +19,7 @@
           <v-icon>mdi-plus</v-icon>
         </div>
       </div>
-      <div class="users_list__no_search_results" v-if="!filteredList[0]">
+      <div class="users_list__no_search_results" v-if="filteredList && !filteredList[0]">
         <span>Поиск не дал результатов.</span>
       </div>
     </div>
@@ -95,7 +95,17 @@ export default {
 .users_list__search_input {
   width: 100%;
 }
+.users_list__search_input:active, :hover, :focus {
+    outline: 0;
+    outline-offset: 0;
+}
 .users_list__search_icon {
+  transition: 0.2s;
+  cursor: pointer;
+}
+.users_list__search_icon:hover {
+  transition: 0.2s;
+  transform: scale(1.2);
 }
 .users_list__no_search_results {
   display: flex;
