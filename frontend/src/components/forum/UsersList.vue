@@ -2,7 +2,7 @@
   <div class="users_list">
     <div class="users_list__search">
       <div class="users_list__search_area">
-        <input class="users_list__search_input" type="text" placeholder="Начните ввод имени пользователя">
+        <input class="users_list__search_input" type="text" placeholder="Начните ввод имени">
         <div class="users_list__search_icon" @click="search">
           <v-icon>mdi-magnify</v-icon>
         </div>
@@ -39,14 +39,6 @@ export default {
       return this.$store.getters.getUsersList
     }
   },
-  async created () {
-    await this.$store.dispatch('getUsersList')
-    this.filteredList = this.usersList
-  },
-  mounted () {
-    const searchInput = document.getElementsByClassName('users_list__search_input')[0]
-    searchInput.addEventListener('keyup', this.search)
-  },
   methods: {
     addMemberToCurrentForum (user) {
       this.$store.dispatch('addForumMember', { user: user, forum: this.$store.getters.getCurrentForum })
@@ -56,6 +48,14 @@ export default {
       const searchValue = document.getElementsByClassName('users_list__search_input')[0].value.toUpperCase()
       this.filteredList = this.filteredList.filter(user => user.displayed.toUpperCase().startsWith(searchValue))
     }
+  },
+  async created () {
+    await this.$store.dispatch('getUsersList')
+    this.filteredList = this.usersList
+  },
+  mounted () {
+    const searchInput = document.getElementsByClassName('users_list__search_input')[0]
+    searchInput.addEventListener('keyup', this.search)
   }
 }
 </script>

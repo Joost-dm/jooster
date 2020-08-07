@@ -3,13 +3,12 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from forum import serializers
-from forum.models import Forum, Branch, Thread, Post, PostLike, ThreadLike, ForumMembership,\
+from forum.models import Forum, Branch, Thread, Post, PostLike, ThreadLike, ForumMembership, \
     BranchMembership, ThreadViewer, PostViewer
 from authorization.models import CustomUser
 from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404
 from forum import permissions
-
 
 # todo: permissions
 from forum.paginationclasses import StandardResultsSetPagination
@@ -32,7 +31,7 @@ class ForumMemberView(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
-              return Response(data={"user": "already in members"}, status=status.HTTP_304_NOT_MODIFIED)
+            return Response(data={"user": "already in members"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
         """ DELETE-request for deleting existing forum. """
@@ -64,7 +63,7 @@ class BranchMemberView(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
-              return Response(data={"user": "already in members"}, status=status.HTTP_304_NOT_MODIFIED)
+            return Response(data={"user": "already in members"}, status=status.HTTP_304_NOT_MODIFIED)
 
     def delete(self, request, **kwargs):
         """ DELETE-request for deleting existing branch. """
@@ -173,6 +172,7 @@ class CreateThreadView(generics.CreateAPIView):
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.ThreadCreateSerializer
+
     def post(self, request, *args, **kwargs):
         request.data['parent_forum'] = Branch.objects.get(id=request.data['parent_branch']).parent_forum.id
         return self.create(request, *args, **kwargs)
@@ -184,6 +184,7 @@ class CreatePostView(generics.CreateAPIView):
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.PostCreateSerializer
+
     def post(self, request, *args, **kwargs):
         request.data['parent_branch'] = Thread.objects.get(id=request.data['parent_thread']).parent_branch.id
         request.data['parent_forum'] = Branch.objects.get(id=request.data['parent_branch']).parent_forum.id
@@ -193,6 +194,7 @@ class CreatePostView(generics.CreateAPIView):
 # todo: permissions or delete
 class ListForumsView(generics.ListAPIView):
     serializer_class = serializers.ForumDetailSerializer
+
     def get(self, request, *args, **kwargs):
         self.queryset = Forum.objects.all().order_by('pub_date')
         return self.list(request, *args, **kwargs)
@@ -201,6 +203,7 @@ class ListForumsView(generics.ListAPIView):
 # todo: permissions or delete
 class ListBranchesView(generics.ListAPIView):
     serializer_class = serializers.BranchDetailSerializer
+
     def get(self, request, *args, **kwargs):
         self.queryset = Branch.objects.all().order_by('-pub_date')
         return self.list(request, *args, **kwargs)
@@ -209,6 +212,7 @@ class ListBranchesView(generics.ListAPIView):
 # todo: permissions or delete
 class ListThreadsView(generics.ListAPIView):
     serializer_class = serializers.ThreadDetailSerializer
+
     def get(self, request, *args, **kwargs):
         try:
             self.queryset = Thread.objects.all().order_by('-pub_date')[:kwargs['key']]
@@ -220,6 +224,7 @@ class ListThreadsView(generics.ListAPIView):
 # todo: permissions or delete
 class ListPostsView(generics.ListAPIView):
     serializer_class = serializers.PostDetailSerializer
+
     def get(self, request, *args, **kwargs):
         try:
             self.queryset = Post.objects.all().order_by('-pub_date')[:kwargs['key']]
@@ -233,6 +238,7 @@ class ListForumChildren(generics.ListAPIView):
 
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin]
     serializer_class = serializers.BranchDetailSerializer
+
     def get(self, request, *args, **kwargs):
         """Returns the list of forums's children branches. """
 
@@ -254,11 +260,11 @@ class ListBranchChildren(generics.ListAPIView):
         self.queryset = Thread.objects.all().filter(parent_branch=kwargs['branch'])[::-1]
         for thread in self.queryset:
             try:
-                ThreadViewer.objects.create(thread=thread ,user=request.user)
+                ThreadViewer.objects.create(thread=thread, user=request.user)
             except ValueError:
                 pass
             except IntegrityError:
-                viewer = ThreadViewer.objects.get(thread=thread ,user=request.user)
+                viewer = ThreadViewer.objects.get(thread=thread, user=request.user)
                 viewer.counter = viewer.counter + 1
                 viewer.save()
         return self.list(request, *args, **kwargs)
@@ -278,11 +284,11 @@ class ListThreadChildren(generics.ListAPIView):
         self.queryset = Post.objects.all().filter(parent_thread=kwargs['thread'])[::-1]
         for post in self.queryset:
             try:
-                PostViewer.objects.create(post=post ,user=request.user)
+                PostViewer.objects.create(post=post, user=request.user)
             except ValueError:
                 pass
             except IntegrityError:
-                viewer = PostViewer.objects.get(post=post ,user=request.user)
+                viewer = PostViewer.objects.get(post=post, user=request.user)
                 viewer.counter = viewer.counter + 1
                 viewer.save()
         return self.list(request, *args, **kwargs)

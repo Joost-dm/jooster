@@ -37,7 +37,7 @@
                    :key="branch.id"
                    class="drawer-menu__branch-link"
                    @click="clearUnread(branch)">
-                <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && branch.author.id !== user.id" >
+                <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && !user.is_staff">
                   <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
                   <span>{{branch.title}} [{{branch.children_count}}] </span>
               </div>
@@ -45,7 +45,7 @@
                 :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
                 <div @click="setBranchInPrimary(true)" >
                   <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
-                  <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || branch.author.id === user.id"
+                  <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || user.is_staff"
                           class="drawer-menu__branch-link-icon">mdi-lock-open-variant
                   </v-icon>
                   <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] </span>

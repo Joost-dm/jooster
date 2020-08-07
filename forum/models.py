@@ -10,6 +10,8 @@ from django.db import models
 from django.db.models import Model
 from django.contrib.auth.models import AbstractUser
 from authorization.models import CustomUser
+from rest_framework.authtoken.models import Token
+
 
 class Forum(Model):
     """ Forum model. """
@@ -29,9 +31,15 @@ class Forum(Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.is_private:
+            ForumMembership.objects.create(forum=self, user=self.author)
+
     class Meta:
         verbose_name = 'форум'
         verbose_name_plural = 'форумы'
+
 
 class ForumMembership(Model):
     """ Model of membership in private forums. """
@@ -43,6 +51,7 @@ class ForumMembership(Model):
         unique_together = ['forum', 'user']
         verbose_name = 'участники форума'
         verbose_name_plural = 'участники форумов'
+
 
 class Branch(Model):
     """ Branch model. """
@@ -61,6 +70,11 @@ class Branch(Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.is_private:
+            BranchMembership.objects.create(branch=self, user=self.author)
 
     class Meta:
         verbose_name = 'ветка'
@@ -88,7 +102,7 @@ class Thread(Model):
     parent_forum = models.ForeignKey('Forum', default='1', related_name='children_threads', on_delete=models.CASCADE,
                                      verbose_name='родительский форум')
     parent_branch = models.ForeignKey('Branch', default='1', related_name='children', on_delete=models.CASCADE,
-                                     verbose_name='родительская ветка')
+                                      verbose_name='родительская ветка')
     likes = models.ManyToManyField(
         CustomUser,
         through='ThreadLike',
@@ -101,6 +115,7 @@ class Thread(Model):
         through_fields=('thread', 'user'),
         related_name='threadViewer'
     )
+
     def __str__(self):
         if (len(self.text) >= 30):
             return self.text[:30] + '...'
@@ -118,6 +133,7 @@ class ThreadViewer(Model):
     thread = models.ForeignKey(Thread, verbose_name='Тема', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
     counter = models.SmallIntegerField(default=0, verbose_name='Счетчик просмотров')
+
     class Meta:
         unique_together = ['thread', 'user']
         verbose_name = 'просмотр'
@@ -144,7 +160,7 @@ class Post(Model):
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
     parent_thread = models.ForeignKey('Thread', default='1', related_name='children', on_delete=models.CASCADE,
-                               verbose_name='родительский элемент')
+                                      verbose_name='родительский элемент')
     parent_forum = models.ForeignKey('Forum', default='1', related_name='children_posts', on_delete=models.CASCADE,
                                      verbose_name='родительский форум')
     parent_branch = models.ForeignKey('Branch', default='1', related_name='children_posts', on_delete=models.CASCADE,
@@ -161,6 +177,7 @@ class Post(Model):
         through_fields=('post', 'user'),
         related_name='viewers'
     )
+
     def __str__(self):
         if (len(self.text) >= 30):
             return self.text[:30] + '...'
@@ -184,16 +201,15 @@ class PostViewer(Model):
         verbose_name = 'просмотр'
         verbose_name_plural = 'просмотры'
 
+
 class PostLike(Model):
     """ Model for collecting users opinions of the post. """
 
     post = models.ForeignKey(Post, verbose_name='Пост', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
-    like = models.BooleanField(default= True, verbose_name='Нравится')
+    like = models.BooleanField(default=True, verbose_name='Нравится')
 
     class Meta:
         unique_together = ['post', 'user']
         verbose_name = 'лайк'
         verbose_name_plural = 'лайки'
-
-

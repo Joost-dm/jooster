@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="forum-create__form-bottom"></div>
-      <v-checkbox dense hide-details class="forum-create__private-checkbox" label="Приватный"></v-checkbox>
+      <v-checkbox dense v-model="newForum.is_private" hide-details class="forum-create__private-checkbox" label="Приватный"></v-checkbox>
     </div>
       </v-container>
 </template>
@@ -22,7 +22,8 @@ export default {
   data () {
     return {
       newForum: {
-        title: null
+        title: null,
+        is_private: false
       }
     }
   },

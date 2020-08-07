@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from main.settings import USER_SETTINGS
 from django.db.models import ObjectDoesNotExist
 
+
 def generate_avatar_path(obj, filename):
     """ Generates an unique path to user's avatar dir according to user's id. """
 
@@ -65,16 +66,18 @@ class CustomUser(AbstractUser):
         """ Compresses user's avatar image. New sizes declared at project settings. """
 
         user_avatar = Image.open(self.avatar)
-        AVATAR_SETTINGS = USER_SETTINGS['USER_AVATAR_SETTINGS']
+        avatar_settings = USER_SETTINGS['USER_AVATAR_SETTINGS']
         new_user_avatar = resizeimage.resize_cover(
             user_avatar,
-            [AVATAR_SETTINGS['COMPRESSED_WIDTH'], AVATAR_SETTINGS['COMPRESSED_HEIGHT']]
+            [avatar_settings['COMPRESSED_WIDTH'], avatar_settings['COMPRESSED_HEIGHT']]
         )
         new_user_avatar_io = BytesIO()
         new_user_avatar.save(new_user_avatar_io, format=self.user_avatar_ext)
 
         self.avatar = InMemoryUploadedFile(new_user_avatar_io, None, self.avatar.name, 'image/' + self.user_avatar_ext,
                                            new_user_avatar_io.tell(), None)
+
+    # For using with local storage
     """
     def delete_current_avatar(self):
       
@@ -87,12 +90,12 @@ class CustomUser(AbstractUser):
 
         if self.avatar.name in path:
             storage.delete(path)"""
+
     def generate_avatar_name(self):
         """ Generates an user's avatar image name according project settings."""
 
-        AVATAR_SETTINGS = USER_SETTINGS['USER_AVATAR_SETTINGS']
-        self.avatar.name = AVATAR_SETTINGS['AVATAR_IMAGE_NAME'] + '.' + self.user_avatar_ext
-
+        avatar_settings = USER_SETTINGS['USER_AVATAR_SETTINGS']
+        self.avatar.name = avatar_settings['AVATAR_IMAGE_NAME'] + '.' + self.user_avatar_ext
 
     AVATAR_FIELD = 'avatar'
     REQUIRED_FIELDS = ['email', 'avatar', 'displayed', 'foreign_avatar_url']
