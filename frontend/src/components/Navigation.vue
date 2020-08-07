@@ -12,7 +12,6 @@
     >
       <branches></branches>
     </v-navigation-drawer>
-
     <v-app-bar
       id="v-app-bar"
       :clipped-left="primaryDrawer.clipped"
@@ -45,6 +44,7 @@
 <script>
 import Branches from './forum/ForumDrawer'
 import AccountSettings from './forum/AccountSettings'
+
 export default {
   components: {
     branches: Branches,

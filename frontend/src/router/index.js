@@ -6,7 +6,7 @@ import TrainingView from '../views/TrainingView'
 import ForumCreate from '../views/forum/ForumCreate'
 import BranchCreate from '../views/forum/BranchCreate'
 import Forum from '../views/forum/Forum'
-import UsersList from '../views/auth/UsersList'
+import UsersList from '../components/forum/UsersList'
 
 Vue.use(VueRouter)
 
