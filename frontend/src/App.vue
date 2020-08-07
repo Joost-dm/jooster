@@ -66,11 +66,13 @@ export default {
 <style lang="scss">
 @import "styles/variables.scss";
 
+#app {
+  min-height: 100vh;
+}
 html {
   overflow: hidden !important;
 }
 body {
-  max-height: 50vh;
   .primary-view__main {
     max-height: 100%;
   }
