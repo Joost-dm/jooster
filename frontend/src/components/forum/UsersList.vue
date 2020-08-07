@@ -3,7 +3,7 @@
     <div class="users_list__search">
       <div class="users_list__search_area">
         <input class="users_list__search_input" type="text" placeholder="Начните ввод имени пользователя">
-        <div class="users_list__search_icon">
+        <div class="users_list__search_icon" @click="search">
           <v-icon>mdi-magnify</v-icon>
         </div>
       </div>
