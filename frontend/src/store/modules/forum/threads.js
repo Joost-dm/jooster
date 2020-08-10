@@ -99,7 +99,7 @@ export default {
       }
       if (getters.getBranchInPrimary && !payload.lazy) {
         commit('setSecondaryLoading', true)
-      } else {
+      } else if (!payload.lazy) {
         commit('setPrimaryLoading', true)
       }
       var url
