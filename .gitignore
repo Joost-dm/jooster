@@ -13,3 +13,4 @@ db.sqlite3
 /forum/test.py
 yes
 yes.pub
+Dockerfile
