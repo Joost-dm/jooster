@@ -77,15 +77,12 @@ export default {
       }
     },
     async getBranchChildren ({ commit, dispatch }, payload) {
-      function timeout (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
-      }
       if (!payload.lazy) {
         commit('setPrimaryLoading', true)
       }
       var url
       if (payload.url) {
-        url = payload.url
+        url = API.URL + payload.url.split(':')[2].substr(5)
         dispatch('setCurrentBranchScrollStart', false)
       } else {
         url = API.URL + 'api/v1/branch/' + payload.branch.id + '/children/'
@@ -93,7 +90,6 @@ export default {
       commit('clearError')
       try {
         const childrenList = await axios.get(url)
-        await timeout(1500)
         if (childrenList.data.next) {
           commit('setBranchNextPageUrl', childrenList.data.next)
         } else {

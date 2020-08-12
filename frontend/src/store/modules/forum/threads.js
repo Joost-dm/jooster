@@ -94,9 +94,6 @@ export default {
       }
     },
     async getThreadChildren ({ commit, dispatch, getters }, payload) {
-      function timeout (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
-      }
       if (getters.getBranchInPrimary && !payload.lazy) {
         commit('setSecondaryLoading', true)
       } else if (!payload.lazy) {
@@ -106,13 +103,12 @@ export default {
       if (!payload.url) {
         url = API.URL + 'api/v1/thread/' + payload.thread.id + '/children/'
       } else {
-        url = payload.url
+        url = API.URL + payload.url.split(':')[2].substr(5)
         dispatch('setCurrentThreadScrollStart', false)
       }
       commit('clearError')
       try {
         const childrenList = await axios.get(url)
-        await timeout(1500)
         if (childrenList.data.next) {
           commit('setThreadNextPageUrl', childrenList.data.next)
         } else {
@@ -132,6 +128,8 @@ export default {
         commit('setThreadChildren', reversedChildrenList)
         getters.getBranchInPrimary ? commit('setSecondaryLoading', false) : commit('setPrimaryLoading', false)
       } catch (error) {
+        commit('setSecondaryLoading', false)
+        commit('setPrimaryLoading', false)
         errorMixin(error, commit)
         getters.getBranchInPrimary ? commit('setSecondaryLoading', false) : commit('setPrimaryLoading', false)
         throw error
