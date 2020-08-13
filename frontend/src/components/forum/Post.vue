@@ -95,7 +95,13 @@ export default {
       return 'post-' + this.post.id
     },
     postTextClass () {
-      return 'post-' + this.post.id + '-text'
+      if (this.type === 'thread') {
+        return 'thread-' + this.post.id + '-text'
+      } else if (this.threadStarter) {
+        return 'thread-' + this.post.id + '-text'
+      } else {
+        return 'post-' + this.post.id + '-text'
+      }
     }
   },
   methods: {

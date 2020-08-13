@@ -28,7 +28,6 @@ export default {
         await axios.post(API.URL + 'api/v1/post/add/', post)
         commit('setCurrentThreadBottomScroll', 0)
         const currentThreadChildren = getters.getCurrentThreadChildren
-        alert(currentThreadChildren.lenth)
         commit('setThreadChildren', null)
         commit('setThreadChildren', currentThreadChildren)
         await dispatch('getThreadChildren', { thread: getters.getCurrentThread, lazy: true })

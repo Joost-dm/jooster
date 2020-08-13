@@ -63,7 +63,7 @@
     <v-col
       cols="12"
       class="primary-view__body" id="primary-view__posts-body" @scroll="postsScrollHandler">
-        <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" :type="'post'"></forum-post>
+        <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" threadStarter="true" :type="'post'"></forum-post>
        <div id="primary__posts" v-if="currentThreadPosts">
          <local-loader v-if="primaryLoading"></local-loader>
          <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'"></forum-post>
