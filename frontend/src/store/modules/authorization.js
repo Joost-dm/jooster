@@ -9,7 +9,8 @@ export default {
   state: {
     user: null,
     usersList: null,
-    auth_token: null
+    auth_token: null,
+    usersOnline: []
   },
   mutations: {
     createAuthToken (state, token) {
@@ -32,17 +33,21 @@ export default {
     },
     updateUser (state, updatedUser) {
       state.user = updatedUser
+    },
+    setUsersOnline (state, usersList) {
+      state.usersOnline = usersList
     }
   },
   actions: {
-    async loginUser ({ commit }, payload) {
+    async loginUser ({ commit, dispatch }, payload) {
       commit('clearError')
       try {
-        var token = await axios.post(API.URL + 'api/v1/auth_token/token/login/',
+        const token = await axios.post(API.URL + 'api/v1/auth_token/token/login/',
           payload)
         commit('createAuthToken', token.data.auth_token)
-        var currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
+        const currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
         commit('loginUser', currentUser.data)
+        dispatch('getUsersOnline')
         commit('setCurrentForum', null)
         await router.push('/forum/1/1')
       } catch (error) {
@@ -158,13 +163,21 @@ export default {
         })
         commit('setGlobalLoading', false)
       } catch (error) {
-        errorMixin(error, commit)
         commit('setGlobalLoading', false)
+        errorMixin(error, commit)
         throw error
       }
     },
     updateUserProfile ({ commit }, updatedUser) {
       commit('updateUser', updatedUser)
+    },
+    async getUsersOnline ({ commit }) {
+      try {
+        const usersList = await axios.get(API.URL + 'api/v1/auth/online/')
+        commit('setUsersOnline', usersList.data.users_online)
+      } catch (error) {
+        error.message = null
+      }
     }
   },
   getters: {
@@ -176,6 +189,9 @@ export default {
     },
     getUsersList (state) {
       return state.usersList
+    },
+    getUsersOnline (state) {
+      return state.usersOnline
     }
   }
 }

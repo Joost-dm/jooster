@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'storages',
 ]
 
-
 # Middleware
 
 MIDDLEWARE = [
@@ -56,7 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'forum.middleware.ResponseTimeCounter'
+    'main.middleware.ResponseTimeCounter',
+    'main.middleware.UsersOnlineChecker'
 ]
 
 # Database
@@ -68,8 +68,20 @@ DATABASES = {
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config("DB_HOST", "127.0.0.1"),
-        'PORT': config("DB_PORT", 5432),
+        'HOST': config('DB_HOST', '127.0.0.1'),
+        'PORT': config('DB_PORT', '5432'),
+    }
+}
+
+# Redis settings
+
+REDIS_SETTINGS = {
+    'users_online': {
+        'HOST': config('REDIS_HOST', '127.0.0.1'),
+        'PORT': config('REDIS_PORT', '6379'),
+        'DB': config('REDIS_USERS_ONLINE_BD', 2),
+        'PASSWORD': config('REDIS_PASSWORD'),
+        'SESSION_LENGTH': 120  # seconds
     }
 }
 

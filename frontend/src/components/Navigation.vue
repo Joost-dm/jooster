@@ -30,6 +30,7 @@
       </button>
       <span v-if="user"> <b>{{user.displayed}}</b></span>
       <v-icon class="app-bar__icon" @click="toggleAccountSettings">mdi-account-cog</v-icon>
+      <span class="app-bar__online_counter">online: {{usersOnline.length}}</span> <!-- todo  -->
       <v-spacer></v-spacer>
       <v-icon class="app-bar__icon">mdi-api</v-icon>
       <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
@@ -74,6 +75,12 @@ export default {
       } else {
         this.$store.dispatch('setAccountSettingsWindowStatus', true)
       }
+    },
+    async onlineChecker () {
+      function checker () {
+        this.$store.dispatch('getUsersOnline')
+      }
+      await setInterval(checker.bind(this), 60000)
     }
   },
   computed: {
@@ -82,12 +89,18 @@ export default {
     },
     accountSettingsIsShown () {
       return this.$store.getters.accountSettingsIsShown
+    },
+    usersOnline () {
+      return this.$store.getters.getUsersOnline
     }
   },
   mounted () {
     if (document.documentElement.clientWidth < 595) {
       document.getElementById('hamburger').classList.toggle('is-active')
     }
+  },
+  created () {
+    this.onlineChecker()
   }
 }
 </script>
@@ -110,9 +123,16 @@ export default {
   color: $app-bar__link__font-color-hover;
 }
 .app-bar__icon {
-  margin-left: 15px;
+  margin: 0 3px 0 10px;
   color: $secondary;
   cursor: pointer;
+}
+
+.app-bar__online_counter {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: default;
 }
 .app-bar__icon:hover {
   color: $extra;

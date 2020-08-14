@@ -1,7 +1,11 @@
+from abc import ABC
+
+import redis
 from rest_framework import serializers
 from authorization.models import CustomUser
 from forum.models import Post, Thread, PostLike, ThreadLike
 from authorization.validators import DownloadedAvatarValidator
+from main.settings import REDIS_SETTINGS
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -44,3 +48,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ["id", "email", "is_staff", "displayed", "avatar_url", "messages_count", "carma", "avatar"]
+
+
+class UsersOnlineSerializer(serializers.Serializer):
+    users_online = serializers.ListField(child=UserDetailSerializer())

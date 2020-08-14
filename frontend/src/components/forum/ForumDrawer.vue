@@ -25,7 +25,7 @@
               </v-list-item>
             </router-link>
           </v-list-group>
-          <v-list-group v-if="currentForumBranches && currentForumBranches.length > 0"
+          <v-list-group v-if="currentForum && currentForumBranches && currentForumBranches.length > 0"
                         value="true"
                         class="drawer-menu__group">
             <template v-slot:activator>

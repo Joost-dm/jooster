@@ -1,34 +1,26 @@
 """ Forum views."""
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist
+import redis
+import json
 from django.core.files.images import get_image_dimensions
-from django.db import IntegrityError
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
-from rest_framework.exceptions import ValidationError
-from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from djoser.serializers import UserCreateSerializer
-
 from authorization import serializers
 from authorization.models import CustomUser
-from rest_framework.permissions import AllowAny
-from rest_framework.authentication import BaseAuthentication
-
-from django.contrib.auth import  get_user_model
+from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
-from djoser.compat import get_user_email, get_user_email_field_name
-from djoser.conf import settings
-
-from forum import permissions
+from main.settings import REDIS_SETTINGS
 
 User = get_user_model()
 
-#todo PERMISSIONS!!!
+
+# todo PERMISSIONS!!!
 class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """User's profile details view"""
 
@@ -58,3 +50,24 @@ class SetAvatar(APIView):
             return user
         except ValidationError:
             return CustomUser.objects.get(user_id=request.user.id)
+
+
+class UsersOnline(APIView):
+    serializer_class = serializers.UsersOnlineSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
+
+    def get(self, request):
+        users_online = redis.StrictRedis(
+            host=REDIS_SETTINGS['users_online']['HOST'],
+            port=REDIS_SETTINGS['users_online']['PORT'],
+            db=REDIS_SETTINGS['users_online']['DB'],
+            password=REDIS_SETTINGS['users_online']['PASSWORD'],
+            decode_responses=True
+        )
+        users = users_online.keys()
+        users_list = []
+        for user in users:
+            users_list.append(CustomUser.objects.get(displayed=user))
+        users_list = serializers.UsersOnlineSerializer({'users_online': users_list}).data
+        return Response(users_list)

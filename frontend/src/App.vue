@@ -60,6 +60,7 @@ export default {
   },
   created () {
     this.$store.dispatch('checkForLocalAuthToken')
+    this.$store.dispatch('getUsersOnline')
   }
 }
 </script>

@@ -3,6 +3,7 @@
     <div class="post__left-side">
       <v-avatar class="post__avatar">
         <v-img :src=post.author.avatar_url></v-img>
+        <div class="post_online_indicator" v-if="usersOnlineIds.indexOf(post.author.id) !== -1"></div>
       </v-avatar>
       <span class="post__user_rating">{{post.author.carma}}</span>
       <div  class="post__rating_options">
@@ -102,6 +103,13 @@ export default {
       } else {
         return 'post-' + this.post.id + '-text'
       }
+    },
+    usersOnlineIds () {
+      const ids = []
+      this.$store.getters.getUsersOnline.forEach(user => {
+        ids.push(+user.id)
+      })
+      return ids
     }
   },
   methods: {
@@ -260,6 +268,7 @@ export default {
 }
 
 .post__avatar {
+  position: relative;
   overflow: hidden;
   border-radius: 6px;
   height: $post__avatar__size;
@@ -268,6 +277,16 @@ export default {
   background-color: white;
 }
 
+.post_online_indicator {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  background-color: greenyellow;
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  box-shadow: $shadow 1px 1px 1px;
+}
 .post__user_rating {
   color: $third-party;
   text-align: center;
