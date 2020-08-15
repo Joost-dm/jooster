@@ -1,20 +1,34 @@
 <template>
   <div class="forum-drawer-header">
     <v-row class="forum-drawer-header__top">
-      <div class="forum-drawer-header__switch">
-        <span v-if="currentForum" class="forum-drawer-header__forum-title">{{currentForum.title}}</span>
-        <div  class="forum-drawer-header__switch-button" @click="toggleForumsList">
-          <v-icon v-if="!showForumsChoice" class="forum-drawer-header__button-icon">mdi-chevron-down</v-icon>
-          <v-icon v-else class="forum-drawer-header__button-icon">mdi-chevron-up</v-icon>
-        </div>
-        <div class="forum-drawer-header__forums-list">
-          <div v-for="forum in allForums" :key="forum.id" @click="setCurrentForum(forum)">
-            <div v-if="forum !== currentForum" class="forum-drawer-header__forums-list-item">
-              <span>{{forum.title}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <v-menu
+        class="forum-drawer-header__switch"
+        v-if="currentForum && allForums"
+        v-model="value"
+        close-on-click
+        close-on-content-click
+        offset-y
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="forum-drawer-header__switch-button"
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+          >
+            {{ currentForum.title }}
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="forum in allForums"
+            :key="forum.id"
+            @click="setCurrentForum(forum)"
+          >
+            <v-list-item-title class="forum-drawer-header__switch-item">{{ forum.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <div class="forum-drawer-header__create-forum">
         <div class="forum-drawer-header__create-forum-button" @click="toggleForumCreateForm">
           <v-icon class="create-forum-button__icon">mdi-plus</v-icon>
@@ -28,7 +42,7 @@
 </template>
 
 <script>
-import ForumCreate from '../../views/forum/ForumCreate'
+import ForumCreate from './ForumCreate'
 export default {
   name: 'ForumDrawerHeader',
   components: {
@@ -36,7 +50,7 @@ export default {
   },
   data () {
     return {
-      showForumsChoice: false
+      value: false
     }
   },
   computed: {
@@ -56,20 +70,7 @@ export default {
         createForm.style.display = 'none'
       }
     },
-    toggleForumsList () {
-      const forumsList = document.getElementsByClassName('forum-drawer-header__forums-list')[0]
-      const forumsListElementHeight =
-        document.getElementsByClassName('forum-drawer-header__switch')[0].offsetHeight + 1
-      if (forumsList.style.height === '0px' || !forumsList.style.height) {
-        forumsList.style.height = (forumsListElementHeight * (this.allForums.length - 1)) + 1 + 'px'
-        this.showForumsChoice = true
-      } else {
-        forumsList.style.height = 0
-        this.showForumsChoice = false
-      }
-    },
     async setCurrentForum (forum) {
-      this.toggleForumsList()
       await this.$store.dispatch('setCurrentForum', forum)
       this.$store.dispatch('getForumValues', { currentForumId: forum.id })
     }
@@ -86,43 +87,36 @@ export default {
     color: $drawer__header__font-color;
   }
   .forum-drawer-header__top {
+    padding: 0 1rem 0 1rem;
     margin: 0;
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
-    padding: 0 1em 0 1em ;
+    align-items: center;
     align-content: center;
     height: 100%;
   }
   .forum-drawer-header__switch {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-    padding-left: 1em;
-    background-color: $secondary;
-    width: 85%;
   }
   .forum-drawer-header__title {
     color: $drawer__header__font-color;
   }
   .forum-drawer-header__switch-button {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    transition: 0.1s;
-    cursor: pointer;
+    overflow: hidden;
+    width: calc(100% - 3rem);
+    font-size: 11px !important;
   }
   .forum-drawer-header__switch-button:hover {
     background-color: $hover;
+  }
+  .forum-drawer-header__switch-item {
+    font-size: 14px;
   }
   .forum-drawer-header__create-forum {
     position: relative;
   }
   .forum-drawer-header__create-forum-button {
-    margin-top: 3px;
     display: flex;
     justify-content: center;
     align-content: center;

@@ -3,7 +3,7 @@
     <div class="forum-create__form">
       <div class="forum-create__form-top">
         <v-text-field
-          counter="30"
+          counter="20"
           v-model="newForum.title" label="Новый форум">
         </v-text-field>
         <div @click="createForum" class="forum-create__send-button-wrapper" >

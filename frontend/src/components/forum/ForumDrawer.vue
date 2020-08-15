@@ -1,5 +1,18 @@
 <template>
   <v-container fluid class="pa-0">
+    <v-dialog class="v-dialog" v-model="addUsersList">
+      <div class="dialog__content">
+        <div class="dialog__header">
+          <div class="dialog__title">
+            <span>заголовок окна</span>
+          </div>
+          <v-icon class="dialog__close_icon" @click="addUsersList=false">mdi-close</v-icon>
+        </div>
+        <div class="dialog__body">
+          <add-user></add-user>
+        </div>
+      </div>
+    </v-dialog>
     <div class="forum-drawer__main">
       <drawer-header ></drawer-header>
       <div class="forum-drawer__body" >
@@ -7,10 +20,18 @@
           <v-list-group class="drawer-menu__group" >
             <template v-slot:activator>
               <v-list-item-icon>
-                <v-icon>mdi-file-tree-outline</v-icon>
+                <v-icon>mdi-wrench-outline</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>Разделы</v-list-item-title>
+              <v-list-item-title>Настройки</v-list-item-title>
             </template>
+            <div class="drawer-menu__item">
+              <v-list-item link @click="addUsersList=true">
+                <v-list-item-icon>
+                  <v-icon>mdi-plus</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Добавить участников</v-list-item-title>
+              </v-list-item>
+            </div>
             <router-link
               active-class="drawer-menu__branch-link__active"
               class="drawer-menu__item"
@@ -29,8 +50,8 @@
                         value="true"
                         class="drawer-menu__group">
             <template v-slot:activator>
-              <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
-              <v-list-item-title>{{currentForum.title}}</v-list-item-title>
+              <v-list-item-icon><v-icon>mdi-file-tree</v-icon></v-list-item-icon>
+              <v-list-item-title>Ветки</v-list-item-title>
             </template>
             <div v-if="currentForumBranches">
               <div v-for="branch in currentForumBranches"
@@ -68,10 +89,12 @@
 
 <script>
 import ForumDrawerHeader from './ForumDrawerHeader'
+import UsersList from '@/components/forum/UsersList'
 export default {
   name: 'ForumDrawer',
   components: {
-    'drawer-header': ForumDrawerHeader
+    'drawer-header': ForumDrawerHeader,
+    'add-user': UsersList
   },
   data () {
     return {
@@ -82,7 +105,8 @@ export default {
         { link: '/users/', title: 'Пользователи', icon: 'mdi-alpha-c' },
         { link: '/forum/', title: 'Форум', icon: 'mdi-alpha-d' },
         { link: '/forum/branch/add/', title: 'Новая ветка', icon: 'mdi-alpha-f' }
-      ]
+      ],
+      addUsersList: false
     }
   },
   computed: {

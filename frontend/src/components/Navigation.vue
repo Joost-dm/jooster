@@ -101,6 +101,9 @@ export default {
   },
   created () {
     this.onlineChecker()
+  },
+  updated () {
+    this.$store.dispatch('getUsersOnline')
   }
 }
 </script>

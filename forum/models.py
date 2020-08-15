@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token
 class Forum(Model):
     """ Forum model. """
 
-    title = models.CharField(max_length=30, verbose_name='название', unique=True)
+    title = models.CharField(max_length=20, verbose_name='название', unique=True)
     description = models.TextField(max_length=10000, verbose_name='описание', blank=True)
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
@@ -55,7 +55,7 @@ class ForumMembership(Model):
 
 class Branch(Model):
     """ Branch model. """
-    title = models.CharField(max_length=30, verbose_name='заголовок')
+    title = models.CharField(max_length=20, verbose_name='заголовок')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     author = models.ForeignKey(CustomUser, verbose_name='Автор', on_delete=models.CASCADE)
     is_private = models.BooleanField(default=False, verbose_name='Приватный')
