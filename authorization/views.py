@@ -1,6 +1,8 @@
 """ Forum views."""
 
 import redis
+from rest_framework.authtoken.models import Token
+from redis.exceptions import ResponseError
 import json
 from django.core.files.images import get_image_dimensions
 from django.http import HttpResponse
@@ -55,19 +57,30 @@ class SetAvatar(APIView):
 class UsersOnline(APIView):
     serializer_class = serializers.UsersOnlineSerializer
     permission_classes = [AllowAny]
-    http_method_names = ['get']
+    http_method_names = ['get', 'delete']
+
+    users_online = redis.StrictRedis(
+        host=REDIS_SETTINGS['users_online']['HOST'],
+        port=REDIS_SETTINGS['users_online']['PORT'],
+        db=REDIS_SETTINGS['users_online']['DB'],
+        password=REDIS_SETTINGS['users_online']['PASSWORD'],
+        decode_responses=True
+    )
 
     def get(self, request):
-        users_online = redis.StrictRedis(
-            host=REDIS_SETTINGS['users_online']['HOST'],
-            port=REDIS_SETTINGS['users_online']['PORT'],
-            db=REDIS_SETTINGS['users_online']['DB'],
-            password=REDIS_SETTINGS['users_online']['PASSWORD'],
-            decode_responses=True
-        )
-        users = users_online.keys()
+        users = self.users_online.keys()
         users_list = []
         for user in users:
             users_list.append(CustomUser.objects.get(displayed=user))
         users_list = serializers.UsersOnlineSerializer({'users_online': users_list}).data
         return Response(users_list)
+
+    def delete(self, request):
+        auth_token = request.headers['Authorization'].split(' ')[1]
+        user = Token.objects.get(key=auth_token).user
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print(self.users_online.keys())
+        self.users_online.delete(user.displayed)
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print(self.users_online.keys())
+        self.get(request)

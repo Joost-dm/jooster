@@ -40,6 +40,10 @@ export default {
   },
   actions: {
     async loginUser ({ commit, dispatch }, payload) {
+      function getOnline () {
+        dispatch('getUsersOnline')
+      }
+      alert('login')
       commit('clearError')
       try {
         const token = await axios.post(API.URL + 'api/v1/auth_token/token/login/',
@@ -47,7 +51,7 @@ export default {
         commit('createAuthToken', token.data.auth_token)
         const currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')
         commit('loginUser', currentUser.data)
-        dispatch('getUsersOnline')
+        setTimeout(getOnline.bind(this), 200)
         commit('setCurrentForum', null)
         await router.push('/forum/1/1')
       } catch (error) {
@@ -56,7 +60,12 @@ export default {
       }
     },
     logoutUser ({ commit }) {
-      commit('logoutUser')
+      try { //todo !!!!!!!!!!!!!!!!!
+        axios.delete(API.URL + 'api/v1/auth/online/')
+        commit('logoutUser')
+      } catch (error) {
+        error.message = null
+      }
     },
     async destroyAuthToken ({ commit }, authToken) {
       commit('clearError')
