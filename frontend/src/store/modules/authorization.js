@@ -43,7 +43,6 @@ export default {
       function getOnline () {
         dispatch('getUsersOnline')
       }
-      alert('login')
       commit('clearError')
       try {
         const token = await axios.post(API.URL + 'api/v1/auth_token/token/login/',
@@ -59,9 +58,9 @@ export default {
         throw error
       }
     },
-    logoutUser ({ commit }) {
-      try { //todo !!!!!!!!!!!!!!!!!
-        axios.delete(API.URL + 'api/v1/auth/online/')
+    async logoutUser ({ commit }) {
+      try {
+        await axios.delete(API.URL + 'api/v1/auth/online/')
         commit('logoutUser')
       } catch (error) {
         error.message = null

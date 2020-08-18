@@ -15,8 +15,20 @@
           <img class="users_list__user_avatar" :src="user.avatar_url" alt="">
           <span class="users_list__user_name">{{user.displayed}}</span>
         </div>
-        <div @click="addMemberToCurrentForum(user)" class="users_list__add_button">
+        <div v-if="currentObject.members.indexOf(user.id) === -1
+              && currentObject.is_private
+              && user.id !== currentObject.author.id
+              && currentUser.id === currentObject.author.id"
+             @click="addMember(user)"
+             class="users_list__add_button">
           <v-icon>mdi-plus</v-icon>
+        </div>
+        <div v-else-if="currentObject.is_private
+              && user.id !== currentObject.author.id
+              && currentUser.id === currentObject.author.id"
+             @click="removeMember(user)"
+             class="users_list__remove_button">
+          <v-icon>mdi-close</v-icon>
         </div>
       </div>
       <div class="users_list__no_search_results" v-if="filteredList && !filteredList[0]">
@@ -29,29 +41,77 @@
 <script>
 export default {
   name: 'UsersList',
+  props: ['type', 'action'],
   data () {
     return {
-      filteredList: null
+      filteredList: false
     }
   },
   computed: {
-    usersList () {
-      return this.$store.getters.getUsersList
+    currentUser () {
+      return this.$store.getters.getCurrentUser
+    },
+    targetList () {
+      if (this.action === 'addUsers') {
+        const allUsersList = this.$store.getters.getUsersList
+        var targetList = []
+        const otherUsers = []
+        allUsersList.forEach(user => {
+          if (this.currentObject.members.indexOf(user.id) !== -1) {
+            targetList.push(user)
+          } else {
+            otherUsers.push(user)
+          }
+        })
+        targetList = targetList.concat(otherUsers)
+        return targetList
+      } else if (this.action === 'listUsers') {
+        const allUsersList = this.$store.getters.getUsersList
+        const targetList = []
+        allUsersList.forEach(user => {
+          if (this.currentObject.members.indexOf(user.id) !== -1) {
+            targetList.push(user)
+          }
+        })
+        return targetList
+      } else {
+        return []
+      }
+    },
+    currentObject () {
+      if (this.type === 'forum') {
+        return this.$store.getters.getCurrentForum
+      } else if (this.type === 'branch') {
+        return this.$store.getters.getCurrentBranch
+      } else {
+        return {}
+      }
     }
   },
   methods: {
-    addMemberToCurrentForum (user) {
-      this.$store.dispatch('addForumMember', { user: user, forum: this.$store.getters.getCurrentForum })
+    addMember (user) {
+      if (this.type === 'forum') {
+        this.$store.dispatch('addForumMember', { user: user, forum: this.$store.getters.getCurrentForum })
+      } else if (this.type === 'branch') {
+        this.$store.dispatch('addBranchMember', { user: user, forum: this.$store.getters.getCurrentBranch })
+      }
+    },
+    removeMember (user) {
+      if (this.type === 'forum') {
+        this.$store.dispatch('removeForumMember', { user: user, forum: this.$store.getters.getCurrentForum })
+      } else if (this.type === 'branch') {
+        this.$store.dispatch('removeBranchMember', { user: user, forum: this.$store.getters.getCurrentBranch })
+      }
     },
     search () {
-      this.filteredList = this.usersList
+      this.filteredList = this.targetList
       const searchValue = document.getElementsByClassName('users_list__search_input')[0].value.toUpperCase()
       this.filteredList = this.filteredList.filter(user => user.displayed.toUpperCase().startsWith(searchValue))
     }
   },
   async created () {
     await this.$store.dispatch('getUsersList')
-    this.filteredList = this.usersList
+    this.filteredList = this.targetList
   },
   mounted () {
     const searchInput = document.getElementsByClassName('users_list__search_input')[0]
@@ -162,4 +222,11 @@ export default {
 .users_list__add_button i:hover {
   transform: scale(1.2);
 }
+.users_list__remove_button i {
+  color: $error;
+}
+.users_list__remove_button i:hover {
+  transform: scale(1.2);
+}
+
 </style>

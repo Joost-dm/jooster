@@ -68,6 +68,10 @@ class UsersOnline(APIView):
     )
 
     def get(self, request):
+        try:
+            self.users_online.set(request.user.displayed, 'online', ex=REDIS_SETTINGS['users_online']['SESSION_LENGTH'])
+        except AttributeError:
+            pass
         users = self.users_online.keys()
         users_list = []
         for user in users:
@@ -78,9 +82,5 @@ class UsersOnline(APIView):
     def delete(self, request):
         auth_token = request.headers['Authorization'].split(' ')[1]
         user = Token.objects.get(key=auth_token).user
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        print(self.users_online.keys())
         self.users_online.delete(user.displayed)
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        print(self.users_online.keys())
-        self.get(request)
+        return self.get(request)

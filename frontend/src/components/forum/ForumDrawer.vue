@@ -4,12 +4,12 @@
       <div class="dialog__content">
         <div class="dialog__header">
           <div class="dialog__title">
-            <span>заголовок окна</span>
+            <span>Пользователи</span>
           </div>
           <v-icon class="dialog__close_icon" @click="addUsersList=false">mdi-close</v-icon>
         </div>
         <div class="dialog__body">
-          <add-user></add-user>
+          <add-user :type="'forum'" :action="'addUsers'"></add-user>
         </div>
       </div>
     </v-dialog>

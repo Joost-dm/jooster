@@ -22,7 +22,8 @@ class UsersOnlineChecker:
         try:
             auth_token = request.headers['Authorization'].split(' ')[1]
             user = Token.objects.get(key=auth_token).user
-            self.users_online.set(user.displayed, 'online', ex=REDIS_SETTINGS['users_online']['SESSION_LENGTH'])
+            if not (request.path[-7:] == 'online/' and request.method == 'DELETE'):
+                self.users_online.set(user.displayed, 'online', ex=REDIS_SETTINGS['users_online']['SESSION_LENGTH'])
             print('user: ' + user.displayed)
         except (ObjectDoesNotExist, KeyError):
             print('unknown user')

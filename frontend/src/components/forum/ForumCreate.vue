@@ -19,6 +19,7 @@
 <script>
 export default {
   name: 'ForumCreate',
+  props: ['type'],
   data () {
     return {
       newForum: {

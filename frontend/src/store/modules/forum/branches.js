@@ -114,10 +114,26 @@ export default {
         throw error
       }
     },
-    async addBranchMember ({ commit }, payload) {
+    async addBranchMember ({ commit, getters }, payload) {
       commit('clearError')
       try {
         await axios.post(API.URL + 'api/v1/branch/' + payload.branch.id + '/membership/' + payload.user.id + '/')
+        const branch = getters.getCurrentBranch
+        branch.members.push(payload.user.id)
+        commit('setCurrentBranch', branch)
+      } catch (error) {
+        errorMixin(error, commit)
+        throw error
+      }
+    },
+    async removeBranchMember ({ commit, getters }, payload) {
+      commit('clearError')
+      try {
+        await axios.delete(API.URL + 'api/v1/branch/' + payload.branch.id + '/membership/' + payload.user.id + '/')
+        const branch = getters.getCurrentBranch
+        const userIndex = branch.members.indexOf(payload.user.id)
+        branch.members.splice(userIndex, 1)
+        commit('setCurrentBranch', branch)
       } catch (error) {
         errorMixin(error, commit)
         throw error

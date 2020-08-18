@@ -74,10 +74,26 @@ export default {
         throw error
       }
     },
-    async addForumMember ({ commit }, payload) {
+    async addForumMember ({ commit, getters }, payload) {
       commit('clearError')
       try {
         await axios.post(API.URL + 'api/v1/forum/' + payload.forum.id + '/membership/' + payload.user.id + '/')
+        const forum = getters.getCurrentForum
+        forum.members.push(payload.user.id)
+        commit('setCurrentForum', forum)
+      } catch (error) {
+        errorMixin(error, commit)
+        throw error
+      }
+    },
+    async removeForumMember ({ commit, getters }, payload) {
+      commit('clearError')
+      try {
+        await axios.delete(API.URL + 'api/v1/forum/' + payload.forum.id + '/membership/' + payload.user.id + '/')
+        const forum = getters.getCurrentForum
+        const userIndex = forum.members.indexOf(payload.user.id)
+        forum.members.splice(userIndex, 1)
+        commit('setCurrentForum', forum)
       } catch (error) {
         errorMixin(error, commit)
         throw error
