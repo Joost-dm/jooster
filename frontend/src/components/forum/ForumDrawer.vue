@@ -26,7 +26,7 @@
         </div>
       </div>
     </v-dialog>
-    <v-dialog class="v-dialog" v-model="branchCreation">
+    <v-dialog class="v-dialog"  v-model="branchCreation">
       <div class="dialog__content">
         <div class="dialog__header">
           <div class="dialog__title">
@@ -55,7 +55,7 @@
                 <v-list-item-icon>
                   <v-icon>mdi-plus</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>Новая ветка</v-list-item-title>
+                <v-list-item-title>Создать ветку</v-list-item-title>
               </v-list-item>
             </div>
             <div class="drawer-menu__item">
@@ -88,19 +88,6 @@
                 <v-list-item-title>Удалить форум</v-list-item-title>
               </v-list-item>
             </div>
-            <router-link
-              active-class="drawer-menu__branch-link__active"
-              class="drawer-menu__item"
-              v-for="(link, i) in navigationLinks"
-              :to="link.link"
-              :key="i">
-              <v-list-item link>
-                <v-list-item-icon>
-                  <v-icon>{{link.icon}}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>{{link.title}}</v-list-item-title>
-              </v-list-item>
-            </router-link>
           </v-list-group>
           <v-list-group v-if="currentForum && currentForumBranches && currentForumBranches.length > 0"
                         value="true"
@@ -114,20 +101,21 @@
                    :key="branch.id"
                    class="drawer-menu__branch-link"
                    @click="clearUnread(branch)">
-                <div class="drawer-menu__branch-link__disabled" v-if="branch.is_private &&
-                branch.members.indexOf(user.id) === -1 &&
-                !user.is_staff">
+                <div class="drawer-menu__branch-link__disabled"
+                     v-if="branch.is_private &&
+                     branch.members.indexOf(user.id) === -1 &&
+                     !user.is_staff">
                   <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
-                  <span>{{branch.title}} [{{branch.children_count}}] </span>
-              </div>
-              <router-link v-else active-class="drawer-menu__branch-link__active"
+                  <span>{{branch.title}}</span>
+                </div>
+              <router-link v-else class="drawer-menu__branch-link__passive" active-class="drawer-menu__branch-link__active"
                 :to="{ name: 'Forum', params: { forumId: currentForum.id, branchId: branch.id }}">
                 <div @click="setBranchInPrimary(true)" >
                   <v-icon v-if="!branch.is_private" class="drawer-menu__branch-link-icon">mdi-text</v-icon>
                   <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || user.is_staff"
                           class="drawer-menu__branch-link-icon">mdi-lock-open-variant
                   </v-icon>
-                  <span>{{branch.title}} [{{branch.children_count}}] </span>
+                  <span>{{branch.title}}</span>
                 </div>
                 <div v-if="branch.is_unread" class="branch-link-badge">
                   <span class="branch-link-badge__counter">{{branch.is_unread}}</span>
@@ -158,14 +146,6 @@ export default {
   },
   data () {
     return {
-      navigationLinks: [
-        { link: '/login/', title: 'Авторизация', icon: 'mdi-login' },
-        { link: '/register/', title: 'Регистрация', icon: 'mdi-alpha-a' },
-        { link: '/training/', title: 'Тренировка', icon: 'mdi-alpha-b' },
-        { link: '/users/', title: 'Пользователи', icon: 'mdi-alpha-c' },
-        { link: '/forum/', title: 'Форум', icon: 'mdi-alpha-d' },
-        { link: '/forum/branch/add/', title: 'Новая ветка', icon: 'mdi-alpha-f' }
-      ],
       addUsersList: false,
       usersList: false,
       branchCreation: false
@@ -211,6 +191,57 @@ export default {
   top: $navigation-app-bar-height !important;
   height: calc(100vh - #{$navigation-app-bar-height}) !important;
 }
+.v-dialog {
+  position: relative;
+  max-width: 500px;
+  max-height: 80%;
+  background-color: $secondary;
+  overflow: hidden;
+}
+
+.dialog__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+.dialog__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 45px;
+  width: 100%;
+  background-color: $primary;
+}
+
+.dialog__title {
+  color: $secondary;
+  font-size: 15px;
+  margin-left: 0.7rem;
+}
+.dialog__close_icon {
+  font-size: 20px !important;
+  color: $extra !important;
+  cursor: pointer;
+  margin-right: 0.7rem;
+}
+.dialog__close_icon:hover {
+  transition: 0.1s;
+  transform: scale(1.3);
+}
+.dialog__body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - 45px);
+  overflow: hidden;
+
+}
+
 </style>
 <style scoped lang="scss">
   @import '../../styles/variables';
@@ -245,19 +276,26 @@ export default {
 }
 .drawer-menu__branch-link {
   width: 100%;
-  display: inline-block;
-  height: 30px;
+  display: flex;
+  align-items: center;
+  height: 35px;
+  font-size: 13px;
+  cursor: pointer;
 }
 .drawer-menu__branch-link:hover {
   background-color: $hover;
   transition: 0.2s;
 }
+.drawer-menu__branch-link__passive {
+  width: 100%;
+  padding-left: 1rem;
+}
 .drawer-menu__branch-link__active {
   background-color: $hover;
   width: 100%;
-  padding: 0;
 }
 .drawer-menu__branch-link__disabled {
+  padding-left: 1rem;
   cursor: pointer;
 }
 .drawer-menu__branch-link-icon {

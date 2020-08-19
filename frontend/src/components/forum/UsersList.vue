@@ -140,7 +140,7 @@ export default {
   flex-wrap: nowrap;
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  height: 70vh;
 }
 
 .users_list__search {
