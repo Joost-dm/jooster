@@ -4,7 +4,7 @@ import Login from '../views/auth/Login'
 import Register from '../views/auth/Register'
 import TrainingView from '../views/TrainingView'
 import ForumCreate from '../components/forum/ForumCreate'
-import BranchCreate from '../views/forum/BranchCreate'
+import BranchCreate from '../components/forum/BranchCreate'
 import Forum from '../views/forum/Forum'
 import UsersList from '../components/forum/UsersList'
 

@@ -18,14 +18,18 @@
         <div v-if="currentObject.members.indexOf(user.id) === -1
               && currentObject.is_private
               && user.id !== currentObject.author.id
-              && currentUser.id === currentObject.author.id"
+              && (currentUser.id === currentObject.author.id
+              || currentUser.is_staff)
+              && action === 'addUsers'"
              @click="addMember(user)"
              class="users_list__add_button">
           <v-icon>mdi-plus</v-icon>
         </div>
         <div v-else-if="currentObject.is_private
               && user.id !== currentObject.author.id
-              && currentUser.id === currentObject.author.id"
+              && (currentUser.id === currentObject.author.id
+              || currentUser.is_staff)
+              && action === 'addUsers'"
              @click="removeMember(user)"
              class="users_list__remove_button">
           <v-icon>mdi-close</v-icon>
@@ -51,12 +55,14 @@ export default {
     currentUser () {
       return this.$store.getters.getCurrentUser
     },
+    allUsersList () {
+      return this.$store.getters.getUsersList
+    },
     targetList () {
-      if (this.action === 'addUsers') {
-        const allUsersList = this.$store.getters.getUsersList
+      if (this.action === 'addUsers' && this.allUsersList) {
         var targetList = []
         const otherUsers = []
-        allUsersList.forEach(user => {
+        this.allUsersList.forEach(user => {
           if (this.currentObject.members.indexOf(user.id) !== -1) {
             targetList.push(user)
           } else {
@@ -65,10 +71,9 @@ export default {
         })
         targetList = targetList.concat(otherUsers)
         return targetList
-      } else if (this.action === 'listUsers') {
-        const allUsersList = this.$store.getters.getUsersList
+      } else if (this.action === 'listUsers' && this.allUsersList) {
         const targetList = []
-        allUsersList.forEach(user => {
+        this.allUsersList.forEach(user => {
           if (this.currentObject.members.indexOf(user.id) !== -1) {
             targetList.push(user)
           }
@@ -91,16 +96,20 @@ export default {
   methods: {
     addMember (user) {
       if (this.type === 'forum') {
-        this.$store.dispatch('addForumMember', { user: user, forum: this.$store.getters.getCurrentForum })
+        this.$store.dispatch('addForumMember',
+          { user: user, forum: this.$store.getters.getCurrentForum })
       } else if (this.type === 'branch') {
-        this.$store.dispatch('addBranchMember', { user: user, forum: this.$store.getters.getCurrentBranch })
+        this.$store.dispatch('addBranchMember',
+          { user: user, branch: this.$store.getters.getCurrentBranch })
       }
     },
     removeMember (user) {
       if (this.type === 'forum') {
-        this.$store.dispatch('removeForumMember', { user: user, forum: this.$store.getters.getCurrentForum })
+        this.$store.dispatch('removeForumMember',
+          { user: user, forum: this.$store.getters.getCurrentForum })
       } else if (this.type === 'branch') {
-        this.$store.dispatch('removeBranchMember', { user: user, forum: this.$store.getters.getCurrentBranch })
+        this.$store.dispatch('removeBranchMember',
+          { user: user, branch: this.$store.getters.getCurrentBranch })
       }
     },
     search () {
@@ -116,6 +125,7 @@ export default {
   mounted () {
     const searchInput = document.getElementsByClassName('users_list__search_input')[0]
     searchInput.addEventListener('keyup', this.search)
+    this.filteredList = this.targetList
   }
 }
 </script>

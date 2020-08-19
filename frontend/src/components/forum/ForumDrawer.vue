@@ -1,15 +1,41 @@
 <template>
   <v-container fluid class="pa-0">
+    <v-dialog class="v-dialog" v-model="usersList">
+      <div class="dialog__content">
+        <div class="dialog__header">
+          <div class="dialog__title">
+            <span>Участники форума</span>
+          </div>
+          <v-icon class="dialog__close_icon" @click="usersList=false">mdi-close</v-icon>
+        </div>
+        <div class="dialog__body">
+          <users-list :type="'forum'" :action="'listUsers'"></users-list>
+        </div>
+      </div>
+    </v-dialog>
     <v-dialog class="v-dialog" v-model="addUsersList">
       <div class="dialog__content">
         <div class="dialog__header">
           <div class="dialog__title">
-            <span>Пользователи</span>
+            <span>Добавить участников</span>
           </div>
           <v-icon class="dialog__close_icon" @click="addUsersList=false">mdi-close</v-icon>
         </div>
         <div class="dialog__body">
-          <add-user :type="'forum'" :action="'addUsers'"></add-user>
+          <users-list :type="'forum'" :action="'addUsers'"></users-list>
+        </div>
+      </div>
+    </v-dialog>
+    <v-dialog class="v-dialog" v-model="branchCreation">
+      <div class="dialog__content">
+        <div class="dialog__header">
+          <div class="dialog__title">
+            <span>Новая ветка</span>
+          </div>
+          <v-icon class="dialog__close_icon" @click="branchCreation=false">mdi-close</v-icon>
+        </div>
+        <div class="dialog__body">
+          <create-branch></create-branch>
         </div>
       </div>
     </v-dialog>
@@ -22,14 +48,44 @@
               <v-list-item-icon>
                 <v-icon>mdi-wrench-outline</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>Настройки</v-list-item-title>
+              <v-list-item-title>Действия</v-list-item-title>
             </template>
             <div class="drawer-menu__item">
-              <v-list-item link @click="addUsersList=true">
+              <v-list-item @click="branchCreation=true">
                 <v-list-item-icon>
                   <v-icon>mdi-plus</v-icon>
                 </v-list-item-icon>
+                <v-list-item-title>Новая ветка</v-list-item-title>
+              </v-list-item>
+            </div>
+            <div class="drawer-menu__item">
+              <v-list-item v-if="currentForum
+                                && (currentForum.author.id === user.id
+                                || user.is_staff)"
+                           link
+                           @click="addUsersList=true">
+                <v-list-item-icon>
+                  <v-icon>mdi-account-multiple-plus</v-icon>
+                </v-list-item-icon>
                 <v-list-item-title>Добавить участников</v-list-item-title>
+              </v-list-item>
+              <v-list-item v-else-if="currentForum && currentForum.is_private" link @click="usersList=true">
+                <v-list-item-icon>
+                  <v-icon>mdi-account-multiple</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Участники</v-list-item-title>
+              </v-list-item>
+            </div>
+            <div class="drawer-menu__item">
+              <v-list-item v-if="currentForum
+                                && (currentForum.author.id === user.id
+                                || user.is_staff)"
+                           link
+                           @click="deleteCurrentForum">
+                <v-list-item-icon>
+                  <v-icon>mdi-delete</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Удалить форум</v-list-item-title>
               </v-list-item>
             </div>
             <router-link
@@ -42,7 +98,7 @@
                 <v-list-item-icon>
                   <v-icon>{{link.icon}}</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title @click="toggleHamburger">{{link.title}}</v-list-item-title>
+                <v-list-item-title>{{link.title}}</v-list-item-title>
               </v-list-item>
             </router-link>
           </v-list-group>
@@ -58,7 +114,9 @@
                    :key="branch.id"
                    class="drawer-menu__branch-link"
                    @click="clearUnread(branch)">
-                <div v-if="branch.is_private && branch.members.indexOf(user.id) === -1 && !user.is_staff">
+                <div class="drawer-menu__branch-link__disabled" v-if="branch.is_private &&
+                branch.members.indexOf(user.id) === -1 &&
+                !user.is_staff">
                   <v-icon class="drawer-menu__branch-link-icon">mdi-lock</v-icon>
                   <span>{{branch.title}} [{{branch.children_count}}] </span>
               </div>
@@ -69,7 +127,7 @@
                   <v-icon v-else-if="branch.members.indexOf(user.id) !== -1 || user.is_staff"
                           class="drawer-menu__branch-link-icon">mdi-lock-open-variant
                   </v-icon>
-                  <span @click="toggleHamburger">{{branch.title}} [{{branch.children_count}}] </span>
+                  <span>{{branch.title}} [{{branch.children_count}}] </span>
                 </div>
                 <div v-if="branch.is_unread" class="branch-link-badge">
                   <span class="branch-link-badge__counter">{{branch.is_unread}}</span>
@@ -90,11 +148,13 @@
 <script>
 import ForumDrawerHeader from './ForumDrawerHeader'
 import UsersList from '@/components/forum/UsersList'
+import BranchCreate from '@/components/forum/BranchCreate'
 export default {
   name: 'ForumDrawer',
   components: {
     'drawer-header': ForumDrawerHeader,
-    'add-user': UsersList
+    'users-list': UsersList,
+    'create-branch': BranchCreate
   },
   data () {
     return {
@@ -106,7 +166,9 @@ export default {
         { link: '/forum/', title: 'Форум', icon: 'mdi-alpha-d' },
         { link: '/forum/branch/add/', title: 'Новая ветка', icon: 'mdi-alpha-f' }
       ],
-      addUsersList: false
+      addUsersList: false,
+      usersList: false,
+      branchCreation: false
     }
   },
   computed: {
@@ -133,13 +195,11 @@ export default {
     setBranchInPrimary (status) {
       this.$store.dispatch('setBranchInPrimary', status)
     },
-    toggleHamburger () {
-      if (document.documentElement.clientWidth < 595) {
-        document.getElementById('hamburger').classList.toggle('is-active')
-      }
-    },
     clearUnread (branch) {
       branch.is_unread = null
+    },
+    deleteCurrentForum () {
+      this.$store.dispatch('deleteForum', this.currentForum)
     }
   }
 }
@@ -196,6 +256,9 @@ export default {
   background-color: $hover;
   width: 100%;
   padding: 0;
+}
+.drawer-menu__branch-link__disabled {
+  cursor: pointer;
 }
 .drawer-menu__branch-link-icon {
   margin-left: 20px;

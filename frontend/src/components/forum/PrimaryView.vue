@@ -1,5 +1,31 @@
 <template>
   <v-container class="pa-0" >
+    <v-dialog class="v-dialog" v-model="usersList">
+      <div class="dialog__content">
+        <div class="dialog__header">
+          <div class="dialog__title">
+            <span>Участники ветки</span>
+          </div>
+          <v-icon class="dialog__close_icon" @click="usersList=false">mdi-close</v-icon>
+        </div>
+        <div class="dialog__body">
+          <users-list :type="'branch'" :action="'listUsers'"></users-list>
+        </div>
+      </div>
+    </v-dialog>
+    <v-dialog class="v-dialog" v-model="addUsersList">
+      <div class="dialog__content">
+        <div class="dialog__header">
+          <div class="dialog__title">
+            <span>Добавить участника</span>
+          </div>
+          <v-icon class="dialog__close_icon" @click="addUsersList=false">mdi-close</v-icon>
+        </div>
+        <div class="dialog__body">
+          <users-list :type="'branch'" :action="'addUsers'"></users-list>
+        </div>
+      </div>
+    </v-dialog>
   <!----------------------------------------------------------------->
     <v-row
     v-if="branchInPrimary"
@@ -14,8 +40,23 @@
           <span v-if="currentBranch" >#{{currentBranch.title.toLowerCase()}}</span>
         </div>
         <div v-if="currentBranch" class="header__subtitle">
-          <span v-if="currentBranch.is_private">закрытая ветка</span>
-          <span v-else>открытая ветка</span>
+          <div v-if="currentBranch.is_private" class="header__subtitle-content">
+             <span>закрытая ветка</span>
+            <div v-if="user && currentBranch && (user.id === currentBranch.author.id || user.is_staff)"
+                 class="subtitle-members-counter"
+                 @click="addUsersList=true">
+              <v-icon class="subtitle-members-counter__icon">mdi-account-multiple</v-icon>
+              <span class="subtitle-members-counter__count">{{currentBranch.members.length}}</span>
+              <v-icon class="subtitle-members-counter__icon subtitle-members-counter__add-member-button">mdi-plus
+              </v-icon>
+            </div>
+            <div v-else class="subtitle-members-counter" @click="usersList=true">
+              <v-icon class="subtitle-members-counter__icon">mdi-account-multiple</v-icon>
+              <span class="subtitle-members-counter__count">{{currentBranch.members.length}}</span>
+            </div>
+
+          </div>
+          <div class="header__subtitle-content" v-else>открытая ветка</div>
         </div>
       </div>
       <div @click="refreshBranch" class="primary-view__header-refresh-button">
@@ -79,21 +120,28 @@
 import ForumPost from './Post'
 import LocalLoader from '../loaders/LocalLoader'
 import PostForm from './PostForm'
+import UsersList from '@/components/forum/UsersList'
 
 export default {
   name: 'PrimaryView',
   components: {
     'forum-post': ForumPost,
     'local-loader': LocalLoader,
-    'post-form': PostForm
+    'post-form': PostForm,
+    'users-list': UsersList
   },
   data () {
     return {
       preventBranchScrollTrigger: false,
-      preventThreadScrollTrigger: false
+      preventThreadScrollTrigger: false,
+      usersList: false,
+      addUsersList: false
     }
   },
   computed: {
+    user () {
+      return this.$store.getters.getCurrentUser
+    },
     branchInPrimary () {
       return this.$store.getters.getBranchInPrimary
     },
@@ -211,14 +259,14 @@ export default {
       this.$store.dispatch('getCurrentBranchById', this.currentThread.parent_branch)
     },
     mobileScreenHeightController () {
-      var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-      var appBarHeight = document.getElementById('v-app-bar').offsetHeight
-      var headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
-      var bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
-      var primaryBody = document.getElementsByClassName('primary-view__body')[0]
-      var mobileForumDrawer = document.getElementsByClassName('v-navigation-drawer--is-mobile')[0]
-      primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight) + 'px'
       try {
+        const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+        const appBarHeight = document.getElementById('v-app-bar').offsetHeight
+        const headerHeight = document.getElementsByClassName('primary-view__header')[0].offsetHeight
+        const bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
+        const primaryBody = document.getElementsByClassName('primary-view__body')[0]
+        const mobileForumDrawer = document.getElementsByClassName('v-navigation-drawer--is-mobile')[0]
+        primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight) + 'px'
         mobileForumDrawer.style.height = (viewportHeight - appBarHeight) + 'px'
       } catch (error) {
         error.message = null
@@ -269,18 +317,43 @@ export default {
 }
 .header__subtitle {
   display: flex;
+  flex-direction: row;
   justify-content: flex-start;
   padding-left: 2rem;
   font-size: 14px;
   color: $third-party;
 }
 
+.header__subtitle-content {
+  display: flex;
+  flex-direction: row;
+}
 .header__subtitle__link span:hover {
   transition: 0.3s;
   cursor: pointer;
   color: $extra;
 }
-
+.subtitle-members-counter {
+  color: $third-party;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+.subtitle-members-counter:hover {
+  color: $extra;
+}
+.subtitle-members-counter__icon {
+  color: inherit;
+  font-size: 18px;
+}
+.subtitle-members-counter__count {
+  font-size: 12px;
+}
+.subtitle-members-counter__add-member-button {
+  cursor: pointer;
+}
+.subtitle-members-counter__add-member-button:hover {
+  color: $extra;
+}
 .header__back-button {
   display: flex;
   align-content: center;

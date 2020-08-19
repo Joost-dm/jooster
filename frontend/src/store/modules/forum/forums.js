@@ -1,6 +1,7 @@
 import axios from 'axios'
 import API from '../../APIsettings'
 import errorMixin from '../../../mixins/APIErrorMixin'
+import router from '@/router'
 
 export default {
   state: {
@@ -54,11 +55,15 @@ export default {
         throw error
       }
     },
-    async deleteForum ({ commit, dispatch }, forum) {
+    async deleteForum ({ commit, dispatch, getters }, forum) {
       commit('clearError')
       try {
         await axios.delete(API.URL + 'api/v1/forum/' + forum.id + '/')
-        await dispatch('getAllForums')
+        const forums = getters.getAllForumsList
+        const forumIndex = forums.indexOf(forum)
+        forums.splice(forumIndex, 1)
+        await router.push('/forum/1/1/1/')
+        commit('getAllForums', forums)
       } catch (error) {
         errorMixin(error, commit)
         throw error

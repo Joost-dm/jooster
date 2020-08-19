@@ -19,7 +19,6 @@
       app>
        <button
          id="hamburger"
-         @click="toggleHamburger"
          @click.stop="primaryDrawer.model = !primaryDrawer.model"
          class="hamburger hamburger--elastic is-active"
          type="button"
@@ -66,9 +65,6 @@ export default {
     logout () {
       this.$store.dispatch('logoutUser', this.loginData)
     },
-    toggleHamburger () {
-      document.getElementById('hamburger').classList.toggle('is-active')
-    },
     toggleAccountSettings () {
       if (this.accountSettingsIsShown) {
         this.$store.dispatch('setAccountSettingsWindowStatus', false)
@@ -81,6 +77,14 @@ export default {
         this.$store.dispatch('getUsersOnline')
       }
       await setInterval(checker.bind(this), 60000)
+    },
+    hamburgerController () {
+      const hamburger = document.getElementById('hamburger')
+      if (document.querySelector('nav').style.transform === 'translateX(0%)') {
+        hamburger.classList.add('is-active')
+      } else {
+        hamburger.classList.remove('is-active')
+      }
     }
   },
   computed: {
@@ -94,10 +98,8 @@ export default {
       return this.$store.getters.getUsersOnline
     }
   },
-  mounted () {
-    if (document.documentElement.clientWidth < 595) {
-      document.getElementById('hamburger').classList.toggle('is-active')
-    }
+  updated () {
+    this.hamburgerController()
   },
   created () {
     this.onlineChecker()

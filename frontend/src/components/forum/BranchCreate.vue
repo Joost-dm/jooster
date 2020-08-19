@@ -13,9 +13,17 @@ export default {
     return {
       newBranch: {
         title: null,
-        is_private: null,
+        is_private: false,
         parent_forum: null
       }
+    }
+  },
+  computed: {
+    currentForum () {
+      return this.$store.getters.getCurrentForum
+    },
+    currentBranch () {
+      return this.$store.getters.getCurrentBranch
     }
   },
   methods: {
@@ -23,6 +31,7 @@ export default {
       this.newBranch.parent_forum = this.$store.getters.getCurrentForum.id
       await this.$store.dispatch('createBranch', this.newBranch)
       await this.$store.dispatch('getForumChildren', this.$store.getters.getCurrentForum)
+      await this.$router.push('/forum/' + this.currentForum.id + '/' + this.currentBranch.id + '/')
     }
   }
 }

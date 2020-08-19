@@ -16,6 +16,16 @@
             v-bind="attrs"
             v-on="on"
           >
+            <v-icon class="forum-drawer-header__lock-icon"
+                    v-if="user
+                    && currentForum
+                    && currentForum.is_private
+                    && (currentForum.members.indexOf(user.id) !== -1
+                    || user.is_staff)">
+              mdi-lock-open-variant
+            </v-icon>
+            <v-icon class="forum-drawer-header__lock-icon"
+                    v-else-if="currentForum && currentForum.is_private">mdi-lock</v-icon>
             {{ currentForum.title }}
           </v-btn>
         </template>
@@ -25,6 +35,15 @@
             :key="forum.id"
             @click="setCurrentForum(forum)"
           >
+            <v-icon class="forum-drawer-header__lock-icon"
+                    v-if="user
+                    && forum
+                    && forum.is_private
+                    && (forum.members.indexOf(user.id) !== -1
+                    || user.is_staff)">
+              mdi-lock-open-variant
+            </v-icon>
+            <v-icon class="forum-drawer-header__lock-icon" v-else-if="user && forum && forum.is_private">mdi-lock</v-icon>
             <v-list-item-title class="forum-drawer-header__switch-item">{{ forum.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -54,6 +73,9 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.getters.getCurrentUser
+    },
     allForums () {
       return this.$store.getters.getAllForumsList
     },
@@ -71,8 +93,13 @@ export default {
       }
     },
     async setCurrentForum (forum) {
-      await this.$store.dispatch('setCurrentForum', forum)
-      this.$store.dispatch('getForumValues', { currentForumId: forum.id })
+      if (!forum.is_private ||
+          forum.members.indexOf(this.user.id) !== -1 ||
+          this.user.is_staff ||
+          this.user.id === forum.author.id) {
+        await this.$store.dispatch('setCurrentForum', forum)
+        await this.$store.dispatch('getForumValues', { currentForumId: forum.id })
+      }
     }
   }
 }
@@ -154,6 +181,10 @@ export default {
     overflow: hidden;
     height: 0;
     transition: 0.3s;
+  }
+  .forum-drawer-header__lock-icon {
+    font-size: 1rem;
+    margin-right: 0.3rem;
   }
   .forum-drawer-header__forums-list-item {
     padding-left: 1em;
