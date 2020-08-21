@@ -15,7 +15,7 @@
           text
           @click="closeError"
         >
-          Close
+          Закрыть
         </v-btn>
       </v-snackbar>
   </template>

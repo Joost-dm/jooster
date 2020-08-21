@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="api-info" >
+      <api_info></api_info>
+    </div>
     <v-navigation-drawer
       id="nav-drawer"
       v-model="primaryDrawer.model"
@@ -20,6 +23,7 @@
        <button
          id="hamburger"
          @click.stop="primaryDrawer.model = !primaryDrawer.model"
+         @click="hideAPIInfo"
          class="hamburger hamburger--elastic is-active"
          type="button"
          title="Переключить меню навигации">
@@ -31,7 +35,7 @@
       <v-icon class="app-bar__icon" @click="toggleAccountSettings">mdi-account-cog</v-icon>
       <span class="app-bar__online_counter">online: {{usersOnline.length}}</span> <!-- todo  -->
       <v-spacer></v-spacer>
-      <v-icon class="app-bar__icon">mdi-api</v-icon>
+      <v-icon class="app-bar__icon" @click="toggleAPIInfo">mdi-api</v-icon>
       <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
     </v-app-bar>
     <account_settings></account_settings>
@@ -44,11 +48,13 @@
 <script>
 import Branches from './forum/ForumDrawer'
 import AccountSettings from './forum/AccountSettings'
+import APIInfo from '@/views/forum/APIInfo'
 
 export default {
   components: {
     branches: Branches,
-    account_settings: AccountSettings
+    account_settings: AccountSettings,
+    api_info: APIInfo
   },
   name: 'Navigation',
   data: () => ({
@@ -85,6 +91,21 @@ export default {
       } else {
         hamburger.classList.remove('is-active')
       }
+    },
+    toggleAPIInfo () {
+      const APIInfo = document.getElementsByClassName('api-info')[0]
+      if (APIInfo.style.transform === 'translateX(0px)') {
+        APIInfo.style.transform = 'translateX(-100%)'
+      } else {
+        APIInfo.style.transform = 'translateX(0px)'
+      }
+    },
+    hideAPIInfo () {
+      const APIInfo = document.getElementsByClassName('api-info')[0]
+      if (APIInfo.style.transform === 'translateX(0px)') {
+        APIInfo.style.transform = 'translateX(-100%)'
+        this.primaryDrawer.model = true
+      }
     }
   },
   computed: {
@@ -101,7 +122,8 @@ export default {
   updated () {
     this.hamburgerController()
   },
-  created () {
+  mounted () {
+    this.hamburgerController()
     this.onlineChecker()
   }
 }
@@ -145,6 +167,18 @@ export default {
 }
 #hamburger {
   margin-left: -20px;
+}
+
+.api-info {
+  width: 100vw;
+  height: calc(100vh - #{$navigation-app-bar-height});
+  position: fixed;
+  left: 0;
+  top: $navigation-app-bar-height;
+  z-index: 7;
+  transition: 0.7s;
+  transform: translateX(-100%);
+  overflow-y: auto;
 }
 
 @media screen and (max-width: 595px){
