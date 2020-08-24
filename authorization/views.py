@@ -2,10 +2,7 @@
 
 import redis
 from rest_framework.authtoken.models import Token
-from redis.exceptions import ResponseError
-import json
 from django.core.files.images import get_image_dimensions
-from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics

@@ -2,6 +2,7 @@ from io import BytesIO
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.mail import send_mail
 from django.db import models
 from resizeimage import resizeimage
 from rest_framework.authtoken.models import Token
@@ -41,7 +42,8 @@ class CustomUser(AbstractUser):
         try:
             self.avatar_update_handler()
         except ObjectDoesNotExist:
-            pass
+            send_mail('Новый пользователь!', 'Зарегистрирован новый пользователь: ' + self.displayed,
+                      'joost.mail@gmail.com', ['vasiliishirokov@gmail.com'], fail_silently=True)
         super(CustomUser, self).save(*args, **kwargs)
 
     def avatar_update_handler(self):

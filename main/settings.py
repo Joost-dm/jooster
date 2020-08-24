@@ -73,6 +73,9 @@ DATABASES = {
     }
 }
 
+# db_from_env = dj_database_url.config()
+# DATABASES['default'].update(db_from_env)
+
 # Redis settings
 
 REDIS_SETTINGS = {
@@ -85,8 +88,17 @@ REDIS_SETTINGS = {
     }
 }
 
-#db_from_env = dj_database_url.config()
-#DATABASES['default'].update(db_from_env)
+# Celery settings
+
+CELERY_IMPORTS = ['main.tasks']
+CELERY_BROKER_URL = 'redis://:' + config('REDIS_PASSWORD') + '@' + config('REDIS_HOST', '127.0.0.1') +\
+                    ':' + config('REDIS_PORT', '6379') + '/' + config('REDIS_CELERY_BROKER_BD', 0)
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://:' + config('REDIS_PASSWORD') + '@' + config('REDIS_HOST', '127.0.0.1') +\
+                        ':' + config('REDIS_PORT', '6379') + '/' + config('REDIS_CELERY_BROKER_BD', 0)
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # CORS settings
 
@@ -156,6 +168,15 @@ sentry_sdk.init(
     send_default_pii=True
 )
 
+
+# E-mail settings
+
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Templates
 
