@@ -26,7 +26,6 @@ export default {
       localStorage.removeItem('auth_token')
       state.auth_token = null
       state.user = null
-      axios.defaults.headers.common.Authorization = null
     },
     setUsersList (state, usersList) {
       state.usersList = usersList
@@ -60,8 +59,9 @@ export default {
     },
     async logoutUser ({ commit }) {
       try {
-        await axios.delete(API.URL + 'api/v1/auth/online/')
         commit('logoutUser')
+        await axios.delete(API.URL + 'api/v1/auth/online/')
+        axios.defaults.headers.common.Authorization = null
       } catch (error) {
         error.message = null
       }

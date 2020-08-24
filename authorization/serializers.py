@@ -1,11 +1,7 @@
-from abc import ABC
-
-import redis
 from rest_framework import serializers
 from authorization.models import CustomUser
 from forum.models import Post, Thread, PostLike, ThreadLike
 from authorization.validators import DownloadedAvatarValidator
-from main.settings import REDIS_SETTINGS
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

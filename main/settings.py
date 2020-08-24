@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'main.middleware.ResponseTimeCounter',
-    'main.middleware.UsersOnlineChecker'
+    'main.middleware.UsersOnlineChecker',
 ]
 
 # Database
@@ -79,23 +79,22 @@ DATABASES = {
 # Redis settings
 
 REDIS_SETTINGS = {
-    'users_online': {
-        'HOST': config('REDIS_HOST', '127.0.0.1'),
-        'PORT': config('REDIS_PORT', '6379'),
-        'DB': config('REDIS_USERS_ONLINE_BD', 2),
-        'PASSWORD': config('REDIS_PASSWORD'),
-        'SESSION_LENGTH': 120  # seconds
-    }
+    'HOST': config('REDIS_HOST', '127.0.0.1'),
+    'PORT': config('REDIS_PORT', '6379'),
+    'USERS_ONLINE_DB': config('USERS_ONLINE_DB', 2),
+    'CELERY_BROKER_DB': config('CELERY_BROKER_DB', 0),
+    'PASSWORD': config('REDIS_PASSWORD'),
+    'SESSION_LENGTH': 120  # seconds
 }
 
 # Celery settings
 
 CELERY_IMPORTS = ['main.tasks']
 CELERY_BROKER_URL = 'redis://:' + config('REDIS_PASSWORD') + '@' + config('REDIS_HOST', '127.0.0.1') +\
-                    ':' + config('REDIS_PORT', '6379') + '/' + config('REDIS_CELERY_BROKER_BD', 0)
+                    ':' + config('REDIS_PORT', '6379') + '/' + config('REDIS_CELERY_BROKER_DB', 0)
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = 'redis://:' + config('REDIS_PASSWORD') + '@' + config('REDIS_HOST', '127.0.0.1') +\
-                        ':' + config('REDIS_PORT', '6379') + '/' + config('REDIS_CELERY_BROKER_BD', 0)
+                        ':' + config('REDIS_PORT', '6379') + '/' + config('REDIS_CELERY_BROKER_DB', 0)
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
