@@ -24,32 +24,10 @@ User = get_user_model()
 class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """User's profile details view"""
 
+    http_method_names = ['get']
     lookup_url_kwarg = 'id'
     serializer_class = serializers.UserDetailSerializer
     queryset = CustomUser.objects.all()
-
-
-class SetAvatar(APIView):
-    @method_decorator(csrf_exempt)
-    def post(self, request):
-        # Получение изображения.
-        image = request.FILES['avatar']
-        try:
-            # Валидация ширины и высоты изображения.
-            image_w, image_h = get_image_dimensions(image)
-            if image_w > 600 or image_h > 600:
-                raise ValidationError(detail='Размер изображения не должен превышать 600х600px', code='400')
-            # Удаления старого аватара и установка нового.
-            user = CustomUser.objects.get(user_id=request.user.id)
-            storage, path = user.avatar.storage, user.avatar.path
-            if "users" in path:
-                storage.delete(path)
-            user.avatar = image
-            # user.avatar_url = user.avatar.path
-            user.save()
-            return user
-        except ValidationError:
-            return CustomUser.objects.get(user_id=request.user.id)
 
 
 class UsersOnline(APIView):

@@ -206,7 +206,7 @@ class BranchDetailSerializer(serializers.ModelSerializer):
 
     author = UserDetailSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
-    is_unread = serializers.SerializerMethodField('check_unread')
+    unread_count = serializers.SerializerMethodField('check_unread')
 
     def count_children(self, branch):
         """ Returns the count of branch's children. """

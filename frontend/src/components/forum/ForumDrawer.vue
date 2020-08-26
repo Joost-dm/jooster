@@ -118,7 +118,7 @@
                   <span>{{branch.title}}</span>
                 </div>
                 <div v-if="branch.is_unread" class="branch-link-badge">
-                  <span class="branch-link-badge__counter">{{branch.is_unread}}</span>
+                  <span class="branch-link-badge__counter">{{branch.unread_count}}</span>
                 </div>
               </router-link>
               </div>

@@ -44,7 +44,7 @@ export default {
       }
       commit('clearError')
       try {
-        const token = await axios.post(API.URL + 'api/v1/auth_token/token/login/',
+        const token = await axios.post(API.URL + 'api/v1/auth/token/login/',
           payload)
         commit('createAuthToken', token.data.auth_token)
         const currentUser = await axios.get(API.URL + 'api/v1/auth/users/me/')

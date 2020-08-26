@@ -17,6 +17,7 @@ from forum.paginationclasses import StandardResultsSetPagination
 class ForumMemberView(generics.GenericAPIView):
     """ Private forum membership view. """
 
+    http_method_names = ['post', 'delete']
     serializer_class = serializers.ForumMembershipSerializer
 
     def post(self, request, **kwargs):
@@ -49,6 +50,7 @@ class ForumMemberView(generics.GenericAPIView):
 class BranchMemberView(generics.GenericAPIView):
     """ Private branch membership view. """
 
+    http_method_names = ['post', 'delete']
     serializer_class = serializers.BranchMembershipSerializer
 
     def post(self, request, **kwargs):
@@ -81,6 +83,7 @@ class BranchMemberView(generics.GenericAPIView):
 class PostLikeView(generics.GenericAPIView):
     """ Post carma managing view. """
 
+    http_method_names = ['post', 'delete']
     serializer_class = serializers.PostLikeSerializer
 
     def post(self, request, **kwargs):
@@ -119,6 +122,7 @@ class PostLikeView(generics.GenericAPIView):
 class ThreadLikeView(generics.GenericAPIView):
     """ Thread carma managing view. """
 
+    http_method_names = ['post', 'delete']
     serializer_class = serializers.ThreadLikeSerializer
 
     def post(self, request, **kwargs):
@@ -156,12 +160,14 @@ class ThreadLikeView(generics.GenericAPIView):
 class CreateForumView(generics.CreateAPIView):
     """ Forum creation view. """
 
+    http_method_names = ['post']
     serializer_class = serializers.ForumCreateSerializer
 
 
 class CreateBranchView(generics.CreateAPIView):
     """ Branch creation view. """
 
+    http_method_names = ['post']
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin]
     serializer_class = serializers.BranchCreateSerializer
 
@@ -169,6 +175,7 @@ class CreateBranchView(generics.CreateAPIView):
 class CreateThreadView(generics.CreateAPIView):
     """ Thread creation view. """
 
+    http_method_names = ['post']
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.ThreadCreateSerializer
@@ -181,6 +188,7 @@ class CreateThreadView(generics.CreateAPIView):
 class CreatePostView(generics.CreateAPIView):
     """ Post creation view. """
 
+    http_method_names = ['post']
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.PostCreateSerializer
@@ -200,42 +208,10 @@ class ListForumsView(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-# todo: permissions or delete
-class ListBranchesView(generics.ListAPIView):
-    serializer_class = serializers.BranchDetailSerializer
-
-    def get(self, request, *args, **kwargs):
-        self.queryset = Branch.objects.all().order_by('-pub_date')
-        return self.list(request, *args, **kwargs)
-
-
-# todo: permissions or delete
-class ListThreadsView(generics.ListAPIView):
-    serializer_class = serializers.ThreadDetailSerializer
-
-    def get(self, request, *args, **kwargs):
-        try:
-            self.queryset = Thread.objects.all().order_by('-pub_date')[:kwargs['key']]
-        except KeyError:
-            self.queryset = Thread.objects.all().order_by('-pub_date')
-        return self.list(request, *args, **kwargs)
-
-
-# todo: permissions or delete
-class ListPostsView(generics.ListAPIView):
-    serializer_class = serializers.PostDetailSerializer
-
-    def get(self, request, *args, **kwargs):
-        try:
-            self.queryset = Post.objects.all().order_by('-pub_date')[:kwargs['key']]
-        except KeyError:
-            self.queryset = Post.objects.all().order_by('-pub_date')
-        return self.list(request, *args, **kwargs)
-
-
 class ListForumChildren(generics.ListAPIView):
     """ Forum children (branches) view. """
 
+    http_method_names = ['get']
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin]
     serializer_class = serializers.BranchDetailSerializer
 
@@ -249,6 +225,7 @@ class ListForumChildren(generics.ListAPIView):
 class ListBranchChildren(generics.ListAPIView):
     """ Branch children (threads) view. """
 
+    http_method_names = ['get']
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.ThreadDetailSerializer
@@ -273,6 +250,7 @@ class ListBranchChildren(generics.ListAPIView):
 class ListThreadChildren(generics.ListAPIView):
     """ Thread children (posts) view. """
 
+    http_method_names = ['get']
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin]
     serializer_class = serializers.PostDetailSerializer
@@ -297,6 +275,7 @@ class ListThreadChildren(generics.ListAPIView):
 class ForumDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Forum detailed view. """
 
+    http_method_names = ['get', 'put', 'delete']
     lookup_url_kwarg = 'forum'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsAuthorOrReadOnlyOrAdmin]
@@ -307,6 +286,7 @@ class ForumDetailsView(generics.RetrieveUpdateDestroyAPIView):
 class BranchDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Branch detailed view. """
 
+    http_method_names = ['get', 'put', 'delete']
     lookup_url_kwarg = 'branch'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,
@@ -318,6 +298,7 @@ class BranchDetailsView(generics.RetrieveUpdateDestroyAPIView):
 class ThreadDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Thread detailed view. """
 
+    http_method_names = ['get', 'put', 'delete']
     lookup_url_kwarg = 'thread'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,
@@ -330,6 +311,7 @@ class ThreadDetailsView(generics.RetrieveUpdateDestroyAPIView):
 class PostDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Post detailed view. """
 
+    http_method_names = ['get', 'put', 'delete']
     lookup_url_kwarg = 'post'
     permission_classes = [permissions.IsPrivateForumMemberOrAdmin,
                           permissions.IsPrivateBranchMemberOrAdmin,

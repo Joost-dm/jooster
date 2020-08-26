@@ -24,7 +24,12 @@ celery_broker = redis.StrictRedis(
 @app.task()
 def check_activity():
     users_online_list = users_online.keys()
-    users_log_list = celery_broker.get('users_online_log').split(',')
+
+    try:
+        users_log_list = celery_broker.get('users_online_log').split(',')
+    except AttributeError:
+        users_log_list = []
+
     for user in users_log_list:
         if user not in users_online_list:
             send_activity_report(user)

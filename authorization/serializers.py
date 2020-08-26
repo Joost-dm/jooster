@@ -43,7 +43,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["id", "email", "is_staff", "displayed", "avatar_url", "messages_count", "carma", "avatar"]
+        fields = ["id", "is_staff", "displayed", "avatar_url", "messages_count", "carma", "avatar"]
 
 
 class UsersOnlineSerializer(serializers.Serializer):
