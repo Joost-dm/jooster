@@ -72,7 +72,6 @@
         <p>Создание нового форума:</p>
       </div>
       <div class="api-info__code">
-
 Запрос:
 <pre>
 /forum/add/ method: POST
@@ -160,7 +159,7 @@ Allowed methods: GET, PUT, DELETE
             "carma": 11
         },
         "children_count": 2,
-        "is_unread": 2,
+        "unread_count": 2,
         "title": "Ветка второго форума",
         "pub_date": "2020-08-26T00:32:43.389788+03:00",
         "is_private": false,
@@ -179,7 +178,7 @@ Allowed methods: GET, PUT, DELETE
             "carma": 11
         },
         "children_count": 0,
-        "is_unread": 0,
+        "unread_count": 0,
         "title": "Еще ветка",
         "pub_date": "2020-08-26T03:31:34.649334+03:00",
         "is_private": false,
@@ -208,6 +207,237 @@ HTTP 201 Created
 }
 
         </pre>
+      </div>
+      <div class="api-info__title">
+        <h1>Ветки</h1>
+      </div>
+      <div class="api-info__text">
+        <p>Создание новой ветки:</p>
+      </div>
+      <div class="api-info__code">
+Запрос:
+<pre>
+/branch/add/ POST
+</pre>
+Пример запроса:
+<pre>
+Content-Type: application/json
+{
+    "title": "Branch Title",
+    "is_private": false,
+    "parent_forum": 14
+}
+</pre>
+Пример ответа:
+<pre>
+201 Created
+{
+    "id": 5,
+    "title": "Branch Title",
+    "pub_date": "2020-08-26T02:28:59.775412+03:00",
+    "is_private": false,
+    "parent_forum": 1,
+    "members": []
+}
+        </pre>
+      </div>
+      <div class="api-info__text">
+        <p>Получение/редактирование/удаление ветки:</p>
+      </div>
+      <div class="api-info__code">
+Запрос:
+<pre>
+/branch/{Branch ID}/ Method: GET
+</pre>
+Пример ответа:
+<pre>
+200 OK
+{
+    "id": 3,
+    "author": {
+        "id": 2,
+        "is_staff": false,
+        "displayed": "Василий Широков",
+        "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/2/avatar.png",
+        "messages_count": 13,
+        "carma": 2
+    },
+    "children_count": 2,
+    "unread_count": 0,
+    "title": "Закрытая ветка",
+    "pub_date": "2020-08-18T23:47:01.333892+03:00",
+    "is_private": true,
+    "parent_forum": 1,
+    "members": [
+        1,
+        2
+    ]
+}
+</pre>
+      </div>
+      <div class="api-info__text">
+        <p>Получение тем ветки:</p>
+      </div>
+      <div class="api-info__code">
+Запрос:
+<pre>
+/branch/{Branch ID}/children/ Method: GET
+</pre>
+Пример ответа:
+<pre>
+200 OK
+{
+  "count": 32,
+  "next": "http://joost.su/api/v1/branch/1/children/?page=2",
+  "previous": null,
+  "results": [
+      {
+          "id": 41,
+          "author": {
+              "id": 1,
+              "is_staff": true,
+              "displayed": "Joost",
+              "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/1/avatar.jpeg",
+              "messages_count": 39,
+              "carma": 5
+          },
+          "children_count": 0,
+          "unread_count": 0,
+          "carma": 0,
+          "users_liked_list": [],
+          "users_disliked_list": [],
+          "text": "Thread Text",
+          "pub_date": "2020-08-26T02:41:58.536156+03:00",
+          "parent_forum": 1,
+          "parent_branch": 1,
+          "viewers": [
+              1,
+              2
+          ],
+          "parent_branch_title": "Первая ветка"
+      },
+      {
+          "id": 40,
+          "author": {
+              "id": 1,
+              "is_staff": true,
+              "displayed": "Joost",
+              "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/1/avatar.jpeg",
+              "messages_count": 39,
+              "carma": 5
+          },
+          "children_count": 0,
+          "unread_count": 0,
+          "carma": 0,
+          "users_liked_list": [],
+          "users_disliked_list": [],
+          "text": "123",
+          "pub_date": "2020-08-25T01:15:03.525682+03:00",
+          "parent_forum": 1,
+          "parent_branch": 1,
+          "viewers": [
+              1,
+              5,
+              2
+          ],
+          "parent_branch_title": "Первая ветка"
+      }
+  ]
+}
+</pre>
+      </div>
+      <div class="api-info__text">
+        <p>Добавление участника в закрытую ветку:</p>
+      </div>
+      <div class="api-info__code">
+        Запрос:
+        <pre>
+/branch/{Branch ID}/membership/{User ID}/ Method: POST, Body: Empty
+Content-Type: application/json
+</pre>
+Пример ответа:
+<pre>
+HTTP 201 Created
+{
+    "user": 1,
+    "branch": 1
+}
+</pre>
+      </div>
+      <div class="api-info__title">
+        <h1>Темы</h1>
+      </div>
+      <div class="api-info__text">
+        <p>Создание новой темы:</p>
+      </div>
+      <div class="api-info__code">
+Запрос:
+<pre>
+/thread/add/ Method: POST
+Content-Type: application/json
+</pre>
+Пример запроса:
+<pre>
+{
+    "text": "Thread Text",
+    "parent_branch": 1
+}
+</pre>
+Пример ответа:
+<pre>
+201 Created
+{
+    "id": 41,
+    "text": "Thread Text",
+    "pub_date": "2020-08-26T02:41:58.536156+03:00",
+    "parent_forum": 1,
+    "parent_branch": 1,
+    "likes": [],
+    "viewers": []
+}
+</pre>
+      </div>
+      <div class="api-info__text">
+        <p>Получение/удаление/редактирование темы:</p>
+      </div>
+      <div class="api-info__code">
+Запрос:
+<pre>
+/thread/{Thread ID}/ Method: GET
+</pre>
+Пример ответа:
+<pre>
+200 OK
+{
+    "id": 1,
+    "author": {
+        "id": 1,
+        "is_staff": true,
+        "displayed": "Joost",
+        "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/1/avatar.jpeg",
+        "messages_count": 39,
+        "carma": 5
+    },
+    "children_count": 1,
+    "unread_count": 1,
+    "carma": 1,
+    "users_liked_list": [
+        2
+    ],
+    "users_disliked_list": [],
+    "text": "1",
+    "pub_date": "2020-08-13T00:31:59.880739+03:00",
+    "parent_forum": 1,
+    "parent_branch": 1,
+    "viewers": [
+        4,
+        2,
+        1,
+        9
+    ],
+    "parent_branch_title": "Первая ветка"
+}
+</pre>
       </div>
     </div>
   </div>

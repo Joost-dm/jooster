@@ -3,7 +3,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from rest_framework import serializers
-from forum.models import Forum, Branch, Thread, Post, PostLike, ThreadLike, ForumMembership,\
+from forum.models import Forum, Branch, Thread, Post, PostLike, ThreadLike, ForumMembership, \
     BranchMembership, PostViewer, ThreadViewer
 from authorization.models import CustomUser
 from authorization.serializers import UserDetailSerializer
@@ -14,6 +14,7 @@ class ForumMembershipSerializer(serializers.Serializer):
 
     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
     forum = serializers.PrimaryKeyRelatedField(queryset=Forum.objects.all())
+
     def create(self, validated_data):
         user = validated_data['user']
         forum = validated_data['forum']
@@ -26,6 +27,7 @@ class BranchMembershipSerializer(serializers.Serializer):
 
     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
     branch = serializers.PrimaryKeyRelatedField(queryset=Branch.objects.all())
+
     def create(self, validated_data):
         user = validated_data['user']
         branch = validated_data['branch']
@@ -39,6 +41,7 @@ class PostLikeSerializer(serializers.Serializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
     like = serializers.BooleanField()
+
     def create(self, validated_data):
         user = validated_data['user']
         post = validated_data['post']
@@ -53,6 +56,7 @@ class ThreadLikeSerializer(serializers.Serializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     thread = serializers.PrimaryKeyRelatedField(queryset=Thread.objects.all())
     like = serializers.BooleanField()
+
     def create(self, validated_data):
         user = validated_data['user']
         thread = validated_data['thread']
@@ -65,6 +69,7 @@ class ForumCreateSerializer(serializers.ModelSerializer):
     """ Forum creation serializer. """
 
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Forum
         fields = '__all__'
@@ -74,6 +79,7 @@ class BranchCreateSerializer(serializers.ModelSerializer):
     """ Branch creation serializer. """
 
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Branch
         fields = '__all__'
@@ -83,6 +89,7 @@ class ThreadCreateSerializer(serializers.ModelSerializer):
     """ Thread creation serializer. """
 
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Thread
         fields = '__all__'
@@ -92,6 +99,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
     """ Post creation serializer. """
 
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Post
         fields = '__all__'
@@ -140,7 +148,7 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 
     author = UserDetailSerializer(CustomUser)
     children_count = serializers.SerializerMethodField('count_children')
-    is_unread = serializers.SerializerMethodField('check_unread')
+    unread_count = serializers.SerializerMethodField('check_unread')
     carma = serializers.SerializerMethodField('total_carma')
     users_liked_list = serializers.SerializerMethodField('users_liked')
     users_disliked_list = serializers.SerializerMethodField('users_disliked')
@@ -196,9 +204,9 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
         return unread_counter
 
     class Meta:
-            model = Thread
-            fields = ['id', 'author', 'children_count', 'is_unread', 'carma', 'users_liked_list', 'users_disliked_list',
-                      'text', 'pub_date', 'parent_forum', 'parent_branch', 'viewers', 'parent_branch_title']
+        model = Thread
+        fields = ['id', 'author', 'children_count', 'unread_count', 'carma', 'users_liked_list', 'users_disliked_list',
+                  'text', 'pub_date', 'parent_forum', 'parent_branch', 'viewers', 'parent_branch_title']
 
 
 class BranchDetailSerializer(serializers.ModelSerializer):
@@ -242,6 +250,5 @@ class ForumDetailSerializer(serializers.ModelSerializer):
         return forum.children.count()
 
     class Meta:
-            model = Forum
-            fields = '__all__'
-
+        model = Forum
+        fields = '__all__'
