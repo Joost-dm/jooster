@@ -199,7 +199,7 @@ class CreatePostView(generics.CreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
-# todo: permissions or delete
+# todo: permissions
 class ListForumsView(generics.ListAPIView):
     serializer_class = serializers.ForumDetailSerializer
 

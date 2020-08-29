@@ -1,32 +1,101 @@
 <template>
   <div class="api-info__body" >
     <div class="api-info__content">
-      <div class="api-info__title">
-        <h1>API Key</h1>
+      <div class="api-info__title"  id="api-navigation">
+        <h1>Навигация</h1>
+      </div>
+      <div class="api-info__navigation">
+        <ul class="api-info__links">
+          <li><a href="#auth-token"></a>Токен авторизации</li>
+          <li><a href="#authorization">Авторизация</a></li>
+          <li><a href="#forum">Форумы</a></li>
+          <li><a href="#forum-list">Получение списка всех форумов</a></li>
+          <li><a href="#forum-new">Создание нового форума</a></li>
+          <li><a href="#forum-details">Получение/редактирование/удаление форума</a></li>
+          <li><a href="#forum-children">Получение веток форума</a></li>
+          <li><a href="#forum-members">Добавление/удаление участника в закрытый форум</a></li>
+          <li><a href="#branch">Ветки</a></li>
+          <li><a href="#branch-new">Создание новой ветки</a></li>
+          <li><a href="#branch-details">Получение/редактирование/удаление ветки</a></li>
+          <li><a href="#branch-children">Получение тем ветки</a></li>
+          <li><a href="#branch-members">Добавление участника в закрытую ветку</a></li>
+          <li><a href="#thread">Темы</a></li>
+          <li><a href="#thread-new">Создание новой темы</a></li>
+          <li><a href="#thread-details">Получение/удаление/редактирование темы</a></li>
+          <li><a href="#thread-children">Получение списка сообщений в теме</a></li>
+          <li><a href="#thread-reaction">Установка реакции на тему</a></li>
+          <li><a href="#post">Сообщения</a></li>
+          <li><a href="#post-new">Создать новое сообщение</a></li>
+          <li><a href="#post-details">Получение/удаление/редактирование сообщения</a></li>
+          <li><a href="#post-reaction">Установка реакции на сообщение</a></li>
+        </ul>
+      </div>
+      <div class="api-info__title" id="auth-token">
+        <h1>Токен авторизации</h1>
+      </div>
+      <div class="api-info__subtitle">
+        <p>API приложения использует токен-авторизацию, для его использования вашим запросам понадобится
+          заголовок "Authorization" со значением формата "Token XXXXXXXXXXXXXXXXXXX", где вместо символов X
+          будет находиться ваш токен авторизации.</p>
       </div>
       <div v-if="apiKey" class="api-info__code">
-        Ваш уникальный ключ доступа к API:
+        {{user.displayed}}, ваш уникальный токен для доступа к API:
         <pre>
- {{apiKey}}
+{{apiKey}}
         </pre>
       </div>
-      <div class="api-info__title">
+      <div class="api-info__subtitle">
+        <p>Получить токен авторизации используя логин и пароль:</p>
+      </div>
+      <div class="api-info__code">
+Путь:
+<pre>
+/api/v1/auth/token/login/
+Allowed methods: POST
+Content-Type: application/json
+</pre>
+Привер запроса:
+<pre>
+request: /api/v1/auth/token/login/
+method: POST
+
+{
+    "password": "password",
+    "username": "username"
+}
+</pre>
+Пример ответа:
+<pre>
+response: Http 200 OK
+
+{
+    "auth_token": "##################################"
+}
+</pre>
+      </div>
+      <div class="api-info__title" id="authorization">
+      <h1>Авторизация</h1>
+      </div>
+      <div class="api-info__title"  id="forum">
         <h1>Форумы</h1>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="forum-list">
         <p>Получение списка всех форумов:</p><br>
       </div>
       <div class="api-info__code">
 
- Запрос:
+Путь:
 <pre>
- /forum/all/ method: GET
- Allowed methods: GET
+api/v1/forum/all/
+Allowed methods: GET
 </pre>
- Пример ответа:
+Пример:
 <pre>
- Http 200 OK
- [
+request: api/v1/forum/all/
+method: GET
+
+response: Http 200 OK
+[
   {
     "id": 1,
     "author": {
@@ -65,22 +134,24 @@
         9
     ]
   },
- ]
+]
         </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="forum-new">
         <p>Создание нового форума:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/forum/add/ method: POST
+api/v1/forum/add/
 Allowed methods: POST
-Content-Type: application/json
 </pre>
 Пример запроса:
 <pre>
-POST
+request: api/v1/forum/add/
+method: POST
+Content-Type: application/json
+
 {
     "title": "Forum Title",
     "is_private": false
@@ -88,7 +159,7 @@ POST
 </pre>
 Пример ответа:
 <pre>
-201 Created
+response: Http 201 Created
 {
     "id": 1,
     "title": "Forum Title",
@@ -99,19 +170,23 @@ POST
 }
         </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="forum-details">
         <p>Получение/редактирование/удаление форума:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/forum/{forum ID}/ Method: GET
+api/v1/forum/{forum ID}/
 Allowed methods: GET, PUT, DELETE
+Content-Type: application/json
 </pre>
 
-Пример ответа:
+Пример:
 <pre>
- 200 OK
+request: api/v1/forum/11/
+method: GET
+
+response: Http 200 OK
  {
     "id": 11,
     "author": {
@@ -135,17 +210,21 @@ Allowed methods: GET, PUT, DELETE
  }
         </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="forum-children">
         <p>Получение веток форума:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/forum/{forum ID}/children/ Method: GET
-  Allowed methods: GET
+api/v1/forum/{forum ID}/children/
+Allowed methods: GET
 </pre>
-Пример ответа:
+Пример:
 <pre>
+request: api/v1/forum/11/children/
+method: GET
+
+response: Http 200 OK
  [
     {
         "id": 8,
@@ -188,40 +267,48 @@ Allowed methods: GET, PUT, DELETE
  ]
         </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="forum-members">
         <p>Добавление/удаление участника в закрытый форум:</p>
       </div>
       <div class="api-info__code">
-Запрос:
-        <pre>
-/forum/{Forum ID}/membership/{User ID}/ Method: POST, Body: empty
+Путь:
+<pre>
+api/v1/forum/{Forum ID}/membership/{User ID}/
 Allowed methods: POST, DELETE
 Content-Type: application/json
+Body: Empty
 </pre>
-Привер ответа:
+Пример:
 <pre>
-HTTP 201 Created
+request: api/v1/forum/1/membership/1/
+Method: POST
+Body: Empty
+
+response: Http 201 Created
 {
     "user": 1,
     "forum": 1
 }
-
-        </pre>
+</pre>
       </div>
-      <div class="api-info__title">
+      <div class="api-info__title" id="branch">
         <h1>Ветки</h1>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="branch-new">
         <p>Создание новой ветки:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/branch/add/ POST
+api/v1/branch/add/
+Allowed methods: POST
+Content-Type: application/json
 </pre>
 Пример запроса:
 <pre>
-Content-Type: application/json
+request: api/v1/branch/add/
+method: POST
+
 {
     "title": "Branch Title",
     "is_private": false,
@@ -230,7 +317,7 @@ Content-Type: application/json
 </pre>
 Пример ответа:
 <pre>
-201 Created
+response: Http 201 Created
 {
     "id": 5,
     "title": "Branch Title",
@@ -239,19 +326,24 @@ Content-Type: application/json
     "parent_forum": 1,
     "members": []
 }
-        </pre>
+</pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle" id="branch-details">
         <p>Получение/редактирование/удаление ветки:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/branch/{Branch ID}/ Method: GET
+api/v1/branch/{Branch ID}/
+Allowed methods: GET, PUT, DELETE
+Content-Type: application/json
 </pre>
-Пример ответа:
+Пример:
 <pre>
-200 OK
+request api/v1/branch/3/
+method: GET
+
+response: Http 200 OK
 {
     "id": 3,
     "author": {
@@ -275,17 +367,21 @@ Content-Type: application/json
 }
 </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle"  id="branch-children">
         <p>Получение тем ветки:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/branch/{Branch ID}/children/ Method: GET
+api/v1/branch/{Branch ID}/children/
+Allowed methods: GET
 </pre>
-Пример ответа:
+Пример:
 <pre>
-200 OK
+request: api/v1/branch/1/children/
+method: GET
+
+response: Http 200 OK
 {
   "count": 32,
   "next": "http://joost.su/api/v1/branch/1/children/?page=2",
@@ -346,38 +442,47 @@ Content-Type: application/json
 }
 </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle"  id="branch-members">
         <p>Добавление участника в закрытую ветку:</p>
       </div>
       <div class="api-info__code">
-        Запрос:
-        <pre>
-/branch/{Branch ID}/membership/{User ID}/ Method: POST, Body: Empty
-Content-Type: application/json
-</pre>
-Пример ответа:
+Путь:
 <pre>
-HTTP 201 Created
+api/v1/branch/{Branch ID}/membership/{User ID}/
+Allowed methods: POST, DELETE
+Body: Empty
+</pre>
+Пример:
+<pre>
+request: api/v1/branch/1/membership/1/
+method: POST
+body: Empty
+
+response: HTTP 201 Created
 {
     "user": 1,
     "branch": 1
 }
 </pre>
       </div>
-      <div class="api-info__title">
+      <div class="api-info__title" id="thread">
         <h1>Темы</h1>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle"  id="thread-new">
         <p>Создание новой темы:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/thread/add/ Method: POST
+api/v1/thread/add/
+Allowed methods: POST
 Content-Type: application/json
 </pre>
 Пример запроса:
 <pre>
+request: api/v1/thread/add/
+method: POST
+
 {
     "text": "Thread Text",
     "parent_branch": 1
@@ -385,7 +490,7 @@ Content-Type: application/json
 </pre>
 Пример ответа:
 <pre>
-201 Created
+response: Http 201 Created
 {
     "id": 41,
     "text": "Thread Text",
@@ -397,17 +502,22 @@ Content-Type: application/json
 }
 </pre>
       </div>
-      <div class="api-info__text">
+      <div class="api-info__subtitle"  id="thread-details">
         <p>Получение/удаление/редактирование темы:</p>
       </div>
       <div class="api-info__code">
-Запрос:
+Путь:
 <pre>
-/thread/{Thread ID}/ Method: GET
+api/v1/thread/{Thread ID}/
+Allowed methods: GET, PUT, DELETE
+Content-Type: application/json
 </pre>
-Пример ответа:
+Пример:
 <pre>
-200 OK
+request: api/v1/thread/1/
+method: GET
+
+response: Http 200 OK
 {
     "id": 1,
     "author": {
@@ -439,6 +549,221 @@ Content-Type: application/json
 }
 </pre>
       </div>
+      <div class="api-info__subtitle" id="thread-children">
+        <p>Получение списка сообщений в теме:</p>
+      </div>
+      <div class="api-info__code">
+Путь:
+<pre>
+api/v1/thread/{Thread ID}/children/
+Allowed methods: GET
+</pre>
+Пример:
+<pre>
+request: api/v1/thread/43/children/
+method: GET
+
+response: Http 200 OK
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 60,
+            "author": {
+                "id": 10,
+                "email": "makiavelli@italy.ik",
+                "is_staff": false,
+                "displayed": "Никколо Макиавелли",
+                "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/10/avatar.jpeg",
+                "messages_count": 8,
+                "carma": 2
+            },
+            "carma": 0,
+            "users_liked_list": [],
+            "users_disliked_list": [],
+            "text": "Умы бывают трех родов: один все постигает сам; другой может понять то, что постиг первый; третий — сам ничего не постигает и постигнутого другим понять не может. Первый ум — выдающийся, второй — значительный, третий — негодный.",
+            "pub_date": "2020-08-26T01:10:06.445314+03:00",
+            "parent_forum": 1,
+            "parent_branch": 1,
+            "parent_thread": 43,
+            "viewers": [
+                1,
+                6,
+                10
+            ]
+        },
+        {
+            "id": 54,
+            "author": {
+                "id": 7,
+                "email": "conf@china.ch",
+                "is_staff": false,
+                "displayed": "Конфуций",
+                "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/7/avatar.jpeg",
+                "messages_count": 11,
+                "carma": 4
+            },
+            "carma": 0,
+            "users_liked_list": [],
+            "users_disliked_list": [],
+            "text": "Если вы самый умный человек в комнате, то вы не в той комнате, где должны находиться.",
+            "pub_date": "2020-08-26T01:03:41.067056+03:00",
+            "parent_forum": 1,
+            "parent_branch": 1,
+            "parent_thread": 43,
+            "viewers": [
+                1,
+                6,
+                7,
+                10
+            ]
+        }
+    ]
+}
+</pre>
+      </div>
+      <div class="api-info__subtitle" id="thread-reaction">
+      <p>Установка реакции на тему:</p>
+      </div>
+      <div class="api-info__code">
+Путь:
+<pre>
+api/v1/thread/{Thread ID}/like/
+Allowed methods: POST, DELETE
+Content-Type: application/json
+</pre>
+Пример запроса:
+<pre>
+request: api/v1/thread/2/like/
+method: POST
+
+{
+    "like": false
+  // False - для дизлайка, True - для лайка.
+  // При наличии дизлайка, первый лайк отменяет дизлайк, второй идёт в счёт лайка и наоборот.
+}
+</pre>
+Пример ответа:
+<pre>
+response: Http 201 Created
+{
+    "thread": 2,
+    "like": false
+}
+</pre>
+  </div>
+      <div class="api-info__title" id="post">
+        <h1>Сообщения</h1>
+      </div>
+      <div class="api-info__subtitle" id="post-new">
+        <p>Создать новое сообщение:</p>
+      </div>
+      <div class="api-info__code">
+Путь:
+<pre>
+api/v1/post/add/
+Allowed methods: POST
+Content-Type: application/json
+</pre>
+Пример запроса:
+<pre>
+request: api/v1/post/add/
+method: POST
+
+{
+    "text": "Post Text",
+    "parent_thread": 1
+}
+</pre>
+Пример ответа:
+<pre>
+response: Http 201 Created
+{
+    "id": 20,
+    "text": "Post Text",
+    "pub_date": "2020-08-26T02:43:56.605610+03:00",
+    "parent_thread": 1,
+    "parent_forum": 1,
+    "parent_branch": 1,
+    "likes": [],
+    "viewers": []
+}
+</pre>
+      </div>
+      <div class="api-info__subtitle" id="post-details">
+        <p>Получение/удаление/редактирование сообщения:</p>
+      </div>
+      <div class="api-info__code">
+Путь:
+<pre>
+api/v1/post/{Post ID}/
+Allowed methods: GET PUT DELETE
+Content-Type: application/json
+</pre>
+Пример:
+<pre>
+request: api/v1/post/1/
+method: GET
+
+response: Http 200 OK
+{
+    "id": 1,
+    "author": {
+        "id": 1,
+        "is_staff": true,
+        "displayed": "Joost",
+        "avatar_url": "https://jooster.s3.amazonaws.com/media/images/avatars/1/avatar.jpeg",
+        "messages_count": 39,
+        "carma": 5
+    },
+    "carma": 0,
+    "users_liked_list": [],
+    "users_disliked_list": [],
+    "text": "1",
+    "pub_date": "2020-08-13T00:33:03.186998+03:00",
+    "parent_forum": 1,
+    "parent_branch": 1,
+    "parent_thread": 21,
+    "viewers": [
+        1,
+        5,
+        2
+    ]
+}
+</pre>
+      </div>
+      <div class="api-info__subtitle" id="post-reaction">
+      <p>Установка реакции на сообщение:</p>
+    </div>
+      <div class="api-info__code">
+Путь:
+<pre>
+api/v1/post/{Post ID}/like/
+Allowed methods: POST, DELETE
+Content-Type: application/json
+</pre>
+Пример запроса:
+<pre>
+request: api/v1/post/1/like/
+method: POST
+
+{
+    "like": false
+  // False - для дизлайка, True - для лайка.
+  // При наличии дизлайка, первый лайк отменяет дизлайк, второй идёт в счёт лайка и наоборот.
+}
+</pre>
+Пример ответа:
+<pre>
+response: Http 201 Created
+{
+    "post": 1,
+    "like": false
+}
+</pre>
+  </div>
     </div>
   </div>
 </template>
@@ -449,11 +774,13 @@ export default {
   computed: {
     apiKey () {
       return this.$store.getters.getAuthToken
+    },
+    user () {
+      return this.$store.getters.getCurrentUser
     }
   }
 }
 </script>
-
 <style scoped lang="scss">
 
 @import 'src/styles/variables';
@@ -478,8 +805,25 @@ export default {
   min-width: 300px;
   max-width: 1000px;
   padding: 1rem;
+  scroll-behavior: smooth;
 }
-
+.api-info__up-button {
+  position: absolute;
+  top: 70px;
+  width: 100px;
+  height: 100%;
+  background-color: green;
+}
+.api-info__navigation {
+  width: 100%;
+  margin-bottom: 3rem;
+}
+.api-info__links li a{
+  text-decoration: none;
+}
+.api-info__links li a:hover{
+  color: $extra;
+}
 .api-info__title {
   display: flex;
   position: relative;
@@ -512,15 +856,17 @@ export default {
   border-bottom-right-radius: 2px;
 }
 
-.api-info__text {
+.api-info__subtitle {
+  margin-top: 1rem;
   display: flex;
   width: 100%;
-  margin-bottom: 1em;
+  font-weight: 600;
+  padding-left: 0;
+  max-width: 700px;
 }
-.api-info__text p {
+.api-info__subtitle p {
   font-size: 14px;
   text-align: justify;
-  text-indent: 1em;
 }
 
 .api-info__code {
@@ -531,10 +877,10 @@ export default {
 .api-info__code pre {
   overflow: scroll;
   background-color: $hover;
-  padding-top: 1em;
   min-width: 300px;
   max-width: 700px;
   font-size: 10px;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
+  padding: 1rem;
 }
 </style>

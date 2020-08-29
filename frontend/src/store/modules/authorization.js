@@ -69,7 +69,7 @@ export default {
     async destroyAuthToken ({ commit }, authToken) {
       commit('clearError')
       try {
-        await axios.post(API.URL + 'api/v1/auth_token/token/logout/',
+        await axios.post(API.URL + 'api/v1/token/logout/',
           {
             auth_token: authToken
           })

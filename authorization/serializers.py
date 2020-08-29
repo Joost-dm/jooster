@@ -10,7 +10,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     messages_count = serializers.SerializerMethodField('count_messages')
     carma = serializers.SerializerMethodField('user_carma')
     avatar_url = serializers.SerializerMethodField('actual_avatar_url_handler')
-    avatar = serializers.ImageField(write_only=True, validators=[DownloadedAvatarValidator])
+    avatar = serializers.ImageField(write_only=True, allow_null=True, allow_empty_file=True,  validators=[DownloadedAvatarValidator])
     is_staff = serializers.BooleanField(read_only=True)
 
     def count_messages(self, user):

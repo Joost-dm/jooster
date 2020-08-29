@@ -3,6 +3,9 @@
     <div class="api-info" >
       <api_info></api_info>
     </div>
+    <a href="#api-navigation"><div class="api-info__up-button">
+      <v-icon class="api-info__up-button-icon">mdi-arrow-up</v-icon>
+    </div></a>
     <v-navigation-drawer
       id="nav-drawer"
       v-model="primaryDrawer.model"
@@ -31,7 +34,7 @@
           <span class="hamburger-inner"></span>
         </span>
       </button>
-      <span v-if="user"> <b>{{user.displayed}}</b></span>
+      <span v-if="user" class="app-bar_username">{{user.displayed}}</span>
       <v-icon class="app-bar__icon" @click="toggleAccountSettings">mdi-account-cog</v-icon>
       <span class="app-bar__online_counter">online: {{usersOnline.length}}</span> <!-- todo  -->
       <v-spacer></v-spacer>
@@ -39,7 +42,7 @@
       <v-icon @click="logout" class="app-bar__icon">mdi-logout</v-icon>
     </v-app-bar>
     <account_settings></account_settings>
-    <v-content>
+    <v-content class="v-content">
       <router-view></router-view>
     </v-content>
   </div>
@@ -94,16 +97,21 @@ export default {
     },
     toggleAPIInfo () {
       const APIInfo = document.getElementsByClassName('api-info')[0]
+      const APIUpButton = document.getElementsByClassName('api-info__up-button')[0]
       if (APIInfo.style.transform === 'translateX(0px)') {
         APIInfo.style.transform = 'translateX(-100%)'
+        APIUpButton.style.transform = 'translateY(100%)'
       } else {
         APIInfo.style.transform = 'translateX(0px)'
+        APIUpButton.style.transform = 'translateY(-10%)'
       }
     },
     hideAPIInfo () {
+      const APIUpButton = document.getElementsByClassName('api-info__up-button')[0]
       const APIInfo = document.getElementsByClassName('api-info')[0]
       if (APIInfo.style.transform === 'translateX(0px)') {
         APIInfo.style.transform = 'translateX(-100%)'
+        APIUpButton.style.transform = 'translateY(100%)'
         this.primaryDrawer.model = true
       }
     }
@@ -132,10 +140,37 @@ export default {
 <style scoped lang="scss">
 @import '../styles/hamburger';
 @import '../styles/variables';
+.v-content {
+  padding-top: 0 !important;
+}
+.api-info__up-button {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  border-radius: 100%;
+  right: 10vw;
+  width: 80px;
+  height: 80px;
+  background-color: $primary;
+  opacity: 0.6;
+  z-index: 15;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  transform: translateY(100%);
+}
+.api-info__up-button:hover {
+  opacity: 0.9;
+}
+.api-info__up-button-icon {
+  font-size: 50px;
+  color: $hover;
+}
 #v-app-bar {
   z-index: 10;
   background-color: $app-bar__background-color;
   color: $app-bar__text__font-color;
+  position: relative;
 }
 
 #v-app-bar a {
@@ -146,21 +181,25 @@ export default {
   text-decoration-line: none;
   color: $app-bar__link__font-color-hover;
 }
+.app-bar_username {
+  font-size: 12px;
+  font-weight: 400;
+}
 .app-bar__icon {
   margin: 0 3px 0 10px;
   color: $secondary;
   cursor: pointer;
 }
-
 .app-bar__online_counter {
   margin-left: 10px;
-  font-weight: bold;
+  font-weight: 400;
   font-size: 12px;
   cursor: default;
 }
 .app-bar__icon:hover {
   color: $extra;
 }
+
 #nav-drawer {
   overflow: hidden;
   width: 500px;

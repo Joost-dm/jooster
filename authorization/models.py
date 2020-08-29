@@ -28,6 +28,8 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(
         default='images/avatars/default_avatar.png',
         upload_to=generate_avatar_path,
+        blank=True,
+        null=True,
         verbose_name='аватар',
     )
 
@@ -58,11 +60,14 @@ class CustomUser(AbstractUser):
 
     def get_avatar_ext(self):
         """ Parses an avatar image extension. """
-
-        user_avatar_ext = self.avatar.name.split('.')[-1]
-        if user_avatar_ext.upper() == 'JPG':
-            user_avatar_ext = 'jpeg'
-        self.user_avatar_ext = user_avatar_ext
+        try:
+            user_avatar_ext = self.avatar.name.split('.')[-1]
+            if user_avatar_ext.upper() == 'JPG':
+                user_avatar_ext = 'jpeg'
+            self.user_avatar_ext = user_avatar_ext
+        except AttributeError:
+            self.avatar = 'images/avatars/default_avatar.png'
+            raise ObjectDoesNotExist
 
     def resize_avatar(self):
         """ Compresses user's avatar image. New sizes declared at project settings. """

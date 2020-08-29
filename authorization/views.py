@@ -20,16 +20,6 @@ from main.settings import REDIS_SETTINGS
 User = get_user_model()
 
 
-# todo PERMISSIONS!!!
-class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """User's profile details view"""
-
-    http_method_names = ['get']
-    lookup_url_kwarg = 'id'
-    serializer_class = serializers.UserDetailSerializer
-    queryset = CustomUser.objects.all()
-
-
 class UsersOnline(APIView):
     serializer_class = serializers.UsersOnlineSerializer
     permission_classes = [AllowAny]

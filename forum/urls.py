@@ -1,7 +1,6 @@
 from django.urls import path, include
 from django.shortcuts import render
 from forum import views
-from authorization.views import UserDetailsView
 
 
 def index(request):
@@ -24,8 +23,8 @@ urlpatterns = [
 
     path('thread/add/', views.CreateThreadView.as_view()),
     path('thread/<int:thread>/', views.ThreadDetailsView.as_view()),
-    path('thread/<int:thread>/like/', views.ThreadLikeView.as_view()),
     path('thread/<int:thread>/children/', views.ListThreadChildren.as_view()),
+    path('thread/<int:thread>/like/', views.ThreadLikeView.as_view()),
 
     path('post/add/', views.CreatePostView.as_view()),
     path('post/<int:post>/', views.PostDetailsView.as_view()),
