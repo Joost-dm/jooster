@@ -44,6 +44,7 @@ export default {
       }
       commit('clearError')
       try {
+        localStorage.removeItem('auth_token')
         const token = await axios.post(API.URL + 'api/v1/auth/token/login/',
           payload)
         commit('createAuthToken', token.data.auth_token)
@@ -62,6 +63,7 @@ export default {
         commit('logoutUser')
         await axios.delete(API.URL + 'api/v1/auth/online/')
         axios.defaults.headers.common.Authorization = null
+        localStorage.clear()
       } catch (error) {
         error.message = null
       }

@@ -2,10 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/auth/Login'
 import Register from '../views/auth/Register'
-import TrainingView from '../views/TrainingView'
-import ForumCreate from '../components/forum/ForumCreate'
 import Forum from '../views/forum/Forum'
-import UsersList from '../components/forum/UsersList'
 
 Vue.use(VueRouter)
 
@@ -27,16 +24,6 @@ const routes = [
     redirect: forumDefaultsURL
   },
   {
-    path: '/training',
-    name: 'Training',
-    component: TrainingView
-  },
-  {
-    path: '/users',
-    name: 'UserList',
-    component: UsersList
-  },
-  {
     path: '/login',
     name: 'Login',
     component: Login
@@ -45,11 +32,6 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
-  },
-  {
-    path: '/forum/forum/add',
-    name: 'ForumCreate',
-    component: ForumCreate
   },
   {
     path: '/forum/',
