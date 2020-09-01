@@ -925,7 +925,6 @@ export default {
   display: flex;
   justify-content: center;
   align-content: center;
-  min-height: 100%;
   width: 100%;
   padding: 1rem 0 1rem 0;
   background-color: $secondary;

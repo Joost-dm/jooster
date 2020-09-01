@@ -51,7 +51,7 @@ export default {
         commit('loginUser', currentUser.data)
         setTimeout(getOnline.bind(this), 200)
         commit('setCurrentForum', null)
-        await router.push('/forum/1/1')
+        await router.push('/forum/1/1/37/')
       } catch (error) {
         errorMixin(error, commit)
         throw error

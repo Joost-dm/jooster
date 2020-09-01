@@ -3,9 +3,11 @@
     <div class="api-info" >
       <api_info></api_info>
     </div>
-    <a href="#api-navigation"><div class="api-info__up-button">
-      <v-icon class="api-info__up-button-icon">mdi-arrow-up</v-icon>
-    </div></a>
+    <a href="#api-navigation">
+      <div class="api-info__up-button">
+        <v-icon class="api-info__up-button-icon">mdi-arrow-up</v-icon>
+      </div>
+    </a>
     <v-navigation-drawer
       id="nav-drawer"
       v-model="primaryDrawer.model"
@@ -100,7 +102,7 @@ export default {
       const APIUpButton = document.getElementsByClassName('api-info__up-button')[0]
       if (APIInfo.style.transform === 'translateX(0px)') {
         APIInfo.style.transform = 'translateX(-100%)'
-        APIUpButton.style.transform = 'translateY(100%)'
+        APIUpButton.style.transform = 'translateY(200%)'
       } else {
         APIInfo.style.transform = 'translateX(0px)'
         APIUpButton.style.transform = 'translateY(-10%)'
@@ -111,7 +113,7 @@ export default {
       const APIInfo = document.getElementsByClassName('api-info')[0]
       if (APIInfo.style.transform === 'translateX(0px)') {
         APIInfo.style.transform = 'translateX(-100%)'
-        APIUpButton.style.transform = 'translateY(100%)'
+        APIUpButton.style.transform = 'translateY(200%)'
         this.primaryDrawer.model = true
       }
     }
@@ -146,7 +148,7 @@ export default {
 .api-info__up-button {
   display: flex;
   position: absolute;
-  bottom: 0;
+  top: calc(100vh - #{$navigation-app-bar-height} - 40px);
   border-radius: 100%;
   right: 10vw;
   width: 80px;
@@ -157,7 +159,7 @@ export default {
   justify-content: center;
   align-items: center;
   transition: 0.5s;
-  transform: translateY(100%);
+  transform: translateY(200%);
 }
 .api-info__up-button:hover {
   opacity: 0.9;

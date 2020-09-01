@@ -56,10 +56,14 @@
             </div>
 
           </div>
-          <div class="header__subtitle-content" v-else>открытая ветка</div>
+          <div v-else class="header__subtitle-content">открытая ветка</div>
+          <div v-if="user.id === currentBranch.author.id || user.is_staff" @click="deleteBranch" class="primary-view__header-delete-button">
+            <v-icon>mdi-delete</v-icon>
+          </div>
         </div>
       </div>
-      <div @click="refreshBranch" class="primary-view__header-refresh-button">
+
+      <div @click="refreshBranch" class="primary-view__header-button">
         <v-icon>mdi-refresh</v-icon>
       </div>
     </v-col>
@@ -97,7 +101,7 @@
       <div @click="setBranchInPrimary(true)" class="header__back-button">
         <v-icon >mdi-arrow-left</v-icon>
       </div>
-      <div @click="refreshThread" class="primary-view__header-refresh-button">
+      <div @click="refreshThread" class="primary-view__header-button">
         <v-icon>mdi-refresh</v-icon>
       </div>
     </v-col>
@@ -266,11 +270,19 @@ export default {
         const bottomFormHeight = document.getElementsByClassName('primary-view__bottom-form')[0].offsetHeight
         const primaryBody = document.getElementsByClassName('primary-view__body')[0]
         const mobileForumDrawer = document.getElementsByClassName('v-navigation-drawer--is-mobile')[0]
+        const apiInfo = document.getElementsByClassName('api-info')[0]
+        const apiInfoUpButton = document.getElementsByClassName('api-info__up-button')[0]
         primaryBody.style.height = (viewportHeight - appBarHeight - headerHeight - bottomFormHeight) + 'px'
-        mobileForumDrawer.style.height = (viewportHeight - appBarHeight) + 'px'
+        const screenWithoutAppBarHeight = (viewportHeight - appBarHeight)
+        mobileForumDrawer.style.height = screenWithoutAppBarHeight + 'px'
+        apiInfo.style.height = screenWithoutAppBarHeight + 'px'
+        apiInfoUpButton.style.top = screenWithoutAppBarHeight - 40 + 'px'
       } catch (error) {
         error.message = null
       }
+    },
+    async deleteBranch () {
+      await this.$store.dispatch('deleteBranch', this.currentBranch)
     }
   },
   updated () {
@@ -367,18 +379,31 @@ export default {
 .header__back-button i:hover {
     color: $extra;
 }
-.primary-view__header-refresh-button {
+.primary-view__header-button {
   display: flex;
   align-content: center;
   justify-content: center;
   cursor: pointer;
   margin-right: 30px;
 }
-.primary-view__header-refresh-button i {
+
+.primary-view__header-button i {
     color: $third-party;
 }
-.primary-view__header-refresh-button i:hover {
+.primary-view__header-button i:hover {
     color: $extra;
+}
+
+.primary-view__header-delete-button i {
+  color: $third-party;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.7rem;
+  transition: 0.2s;
+}
+.primary-view__header-delete-button  i:hover {
+  color: $error;
+  transform: scale(1.2);
 }
 .primary-view__body {
   height: calc(100vh - #{$navigation-app-bar-height} - #{$view__header__height} - #{$topic-bottom-form-height});

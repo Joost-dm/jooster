@@ -1,6 +1,7 @@
 import axios from 'axios'
 import API from '../../APIsettings'
 import errorMixin from '../../../mixins/APIErrorMixin'
+import router from '@/router'
 
 export default {
   state: {
@@ -71,6 +72,7 @@ export default {
       try {
         await axios.delete(API.URL + 'api/v1/branch/' + branch.id + '/')
         await dispatch('getForumChildren', getters.getCurrentForum)
+        await router.push('/forum/1/1/')
       } catch (error) {
         errorMixin(error, commit)
         throw error

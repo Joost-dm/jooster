@@ -106,13 +106,13 @@ export default {
         if (forum.id === currentForumId) {
           await dispatch('setCurrentForum', forum)
         }
-      }) // ---------------------------------------------------------
+      })
       if (!currentBranchId) {
         return ''
       } else if (currentBranchId) {
         await dispatch('getCurrentBranchById', currentBranchId)
         await dispatch('setCurrentBranch', getters.getCurrentBranch)
-      } // -------------------
+      }
       if (!currentThreadId) {
         return ''
       } else if (currentThreadId) {

@@ -4,7 +4,6 @@ import Login from '../views/auth/Login'
 import Register from '../views/auth/Register'
 import TrainingView from '../views/TrainingView'
 import ForumCreate from '../components/forum/ForumCreate'
-import BranchCreate from '../components/forum/BranchCreate'
 import Forum from '../views/forum/Forum'
 import UsersList from '../components/forum/UsersList'
 
@@ -51,11 +50,6 @@ const routes = [
     path: '/forum/forum/add',
     name: 'ForumCreate',
     component: ForumCreate
-  },
-  {
-    path: '/forum/branch/add',
-    name: 'BranchCreate',
-    component: BranchCreate
   },
   {
     path: '/forum/',

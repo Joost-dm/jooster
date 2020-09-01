@@ -35,7 +35,13 @@
           <v-icon class="dialog__close_icon" @click="branchCreation=false">mdi-close</v-icon>
         </div>
         <div class="dialog__body">
-          <create-branch></create-branch>
+            <v-container class="pa-0 branch-create">
+              <div class="branch-create__form">
+                <v-text-field class="branch-create__title-input" counter="20" v-model="newBranch.title" label="Название"></v-text-field>
+                <v-checkbox class="branch-create__private-checkbox"  v-model="newBranch.is_private" label="Приватная ветка"></v-checkbox>
+                <v-btn color="primary" @click="createBranch" class="branch-create__submit-button">Создать</v-btn>
+              </div>
+            </v-container>
         </div>
       </div>
     </v-dialog>
@@ -60,6 +66,7 @@
             </div>
             <div class="drawer-menu__item">
               <v-list-item v-if="currentForum
+                                && currentForum.is_private
                                 && (currentForum.author.id === user.id
                                 || user.is_staff)"
                            link
@@ -136,19 +143,22 @@
 <script>
 import ForumDrawerHeader from './ForumDrawerHeader'
 import UsersList from '@/components/forum/UsersList'
-import BranchCreate from '@/components/forum/BranchCreate'
 export default {
   name: 'ForumDrawer',
   components: {
     'drawer-header': ForumDrawerHeader,
-    'users-list': UsersList,
-    'create-branch': BranchCreate
+    'users-list': UsersList
   },
   data () {
     return {
       addUsersList: false,
       usersList: false,
-      branchCreation: false
+      branchCreation: false,
+      newBranch: {
+        title: null,
+        is_private: false,
+        parent_forum: null
+      }
     }
   },
   computed: {
@@ -180,6 +190,12 @@ export default {
     },
     deleteCurrentForum () {
       this.$store.dispatch('deleteForum', this.currentForum)
+    },
+    async createBranch () {
+      this.newBranch.parent_forum = this.$store.getters.getCurrentForum.id
+      await this.$store.dispatch('createBranch', this.newBranch)
+      await this.$store.dispatch('getForumChildren', this.$store.getters.getCurrentForum)
+      this.branchCreation = false
     }
   }
 }
@@ -325,6 +341,22 @@ export default {
   width: 100%;
   align-items: center;
   justify-content: center;
+}
+.branch-create {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.branch-create__form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem 1rem 3rem 1rem;
+}
+.branch-create__submit-button {
+  width: 200px;
 }
 
 </style>
