@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '../../router'
-import API from '../APIsettings'
+import API from '../../../APIsettings'
 import errorMixin from '../../mixins/APIErrorMixin'
 import firebase from 'firebase/app'
 import 'firebase/auth'

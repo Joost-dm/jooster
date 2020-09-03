@@ -1,15 +1,7 @@
 from django.urls import path, include
-from django.shortcuts import render
 from forum import views
 
-
-def index(request):
-    return render(request, 'forum/index.html')
-
-
 urlpatterns = [
-    path('', index),
-
     path('forum/add/', views.CreateForumView.as_view()),
     path('forum/all/', views.ListForumsView.as_view()),
     path('forum/<int:forum>/', views.ForumDetailsView.as_view()),

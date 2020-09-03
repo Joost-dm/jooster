@@ -1,5 +1,5 @@
 import axios from 'axios'
-import API from '../../APIsettings'
+import API from '../../../../APIsettings'
 import errorMixin from '../../../mixins/APIErrorMixin'
 
 export default {

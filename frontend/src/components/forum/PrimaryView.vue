@@ -26,7 +26,6 @@
         </div>
       </div>
     </v-dialog>
-  <!----------------------------------------------------------------->
     <v-row
     v-if="branchInPrimary"
     no-gutters
@@ -54,7 +53,6 @@
               <v-icon class="subtitle-members-counter__icon">mdi-account-multiple</v-icon>
               <span class="subtitle-members-counter__count">{{currentBranch.members.length}}</span>
             </div>
-
           </div>
           <div v-else class="header__subtitle-content">открытая ветка</div>
           <div v-if="user.id === currentBranch.author.id || user.is_staff" @click="deleteBranch" class="primary-view__header-delete-button">
@@ -62,7 +60,6 @@
           </div>
         </div>
       </div>
-
       <div @click="refreshBranch" class="primary-view__header-button">
         <v-icon>mdi-refresh</v-icon>
       </div>
@@ -75,10 +72,8 @@
         <forum-post v-for="thread in currentBranchThreads" :key="thread.id" :post="thread" :type="'thread'"></forum-post>
        </div>
       </v-col>
-      <!-- ФОРМА -->
       <post-form class="primary-view__bottom-form" v-if="branchInPrimary" :type="'thread'"></post-form>
     </v-row>
-    <!----------------------------------------------------------------->
      <v-row
     v-else
     no-gutters
@@ -114,10 +109,8 @@
          <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'"></forum-post>
        </div>
       </v-col>
-       <!-- ФОРМА -->
       <post-form class="primary-view__bottom-form" v-if="!branchInPrimary" :type="'post'"></post-form>
     </v-row>
-    <!----------------------------------------------------------------->
   </v-container>
 </template>
 <script>
