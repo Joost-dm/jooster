@@ -14,3 +14,7 @@ db.sqlite3
 yes
 yes.pub
 Dockerfile
+dump.rdb
+celerybeat.pid
+celerybeat-schedule
+pyvenv.cfg

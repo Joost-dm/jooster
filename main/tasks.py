@@ -1,5 +1,5 @@
 import redis
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import  EmailMessage
 import datetime
 
 from .celery import app
@@ -45,7 +45,8 @@ def send_activity_report(username):
     if user_session_activity[0] != 'None':
         email_subject = username + ': отчёт об активности.'
         email_answer_html = '<body style="background-color: #2C3138; color: white"> ' \
-                            '[' + datetime.datetime.now().strftime("%d%b, %H:%M:%S") + '] Активность пользователя ' + username + ':' + \
+                            '[' + datetime.datetime.now().strftime("%d%b, %H:%M:%S") + '] Активность пользователя ' +\
+                            username + ':' + \
                             '<ol>' + \
                             '<li style="color: white;"> ' + \
                             '<li style="color: white;"> '.join(user_session_activity) + \
