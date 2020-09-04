@@ -2,11 +2,10 @@ import redis
 import time
 from datetime import datetime
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.response import Response
 
 from main.settings import REDIS_SETTINGS
 
@@ -51,7 +50,7 @@ class UsersOnlineChecker:
                 '/api/v1/auth/online/',
                 '/api/v1/auth/users/'
             ]
-            if request.path not in allowed_paths:
+            if request.path.startswith('/api/v1/') and request.path not in allowed_paths:
                 return JsonResponse({'user': 'Not Authorized.'}, status=status.HTTP_401_UNAUTHORIZED)
             response = self.get_response(request)
         return response
