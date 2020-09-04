@@ -21,6 +21,8 @@ User = get_user_model()
 
 
 class UsersOnline(APIView):
+    """ Users online view. """
+
     serializer_class = serializers.UsersOnlineSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get', 'delete']

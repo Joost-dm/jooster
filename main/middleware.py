@@ -1,8 +1,13 @@
 import redis
 import time
 from datetime import datetime
+
+from django.http import HttpResponse, JsonResponse
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.response import Response
+
 from main.settings import REDIS_SETTINGS
 
 
@@ -39,12 +44,21 @@ class UsersOnlineChecker:
                 response = self.get_response(request)
                 self.log_user_activity(request, user, response)
                 print('user: ' + user.displayed)
-        except (ObjectDoesNotExist, KeyError):
+        except (ObjectDoesNotExist, KeyError, TypeError):
+            print('Unknown user.')
+            allowed_paths = [
+                '/api/v1/auth/token/login/',
+                '/api/v1/auth/online/',
+                '/api/v1/auth/users/'
+            ]
+            if request.path not in allowed_paths:
+                return JsonResponse({'user': 'Not Authorized.'}, status=status.HTTP_401_UNAUTHORIZED)
             response = self.get_response(request)
-            print('unknown user')
         return response
 
     def log_user_activity(self, request, user, response):
+        """ Logs user's action. """
+
         user = user.displayed
         activity = '[' + datetime.now().strftime("%d%b, %H:%M:%S") + '] ' \
                    'RESPONSE CODE: ' + str(response.status_code) + ' ' + \

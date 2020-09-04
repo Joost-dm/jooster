@@ -1,3 +1,5 @@
+""" Celery tasks. """
+
 import redis
 from django.core.mail import  EmailMessage
 import datetime
@@ -23,6 +25,8 @@ celery_broker = redis.StrictRedis(
 
 @app.task()
 def check_activity():
+    """ Checking fot user's session finish. """
+
     users_online_list = users_online.keys()
 
     try:
@@ -39,6 +43,8 @@ def check_activity():
 
 
 def send_activity_report(username):
+    """ Sends a report about user's activity to my e-mail. """
+
     key = username + '_activity'
     user_session_activity = str(celery_broker.get(key)).split(' | ')
 

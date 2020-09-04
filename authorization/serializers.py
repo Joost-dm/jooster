@@ -47,4 +47,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 
 class UsersOnlineSerializer(serializers.Serializer):
+    """ Serializes a list of online users. """
+
     users_online = serializers.ListField(child=UserDetailSerializer())

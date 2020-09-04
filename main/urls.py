@@ -3,12 +3,16 @@ from django.views.static import serve as _serve
 
 
 def serve(request, path):
+    """ Redirects to frontend files. """
+
     if "." not in path:
         path = "index.html"
     return _serve(request, path, "./frontend/dist")
 
 
 def serveIMG(request, path):
+    """ Redirects to locally hosted images. """
+
     return _serve(request, path, "")
 
 
