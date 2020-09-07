@@ -52,7 +52,7 @@
         <div class="forum-drawer-header__create-forum-button" @click="toggleForumCreateForm">
           <v-icon class="create-forum-button__icon">mdi-plus</v-icon>
         </div>
-        <div class="forum-drawer-header__create-forum-form">
+        <div class="forum-drawer-header__create-forum-form" ref="createForum">
           <forum-create></forum-create>
         </div>
       </div>
@@ -85,12 +85,7 @@ export default {
   },
   methods: {
     toggleForumCreateForm () {
-      const createForm = document.getElementsByClassName('forum-drawer-header__create-forum-form')[0]
-      if (createForm.style.display === 'none' || !createForm.style.display) {
-        createForm.style.display = 'inherit'
-      } else {
-        createForm.style.display = 'none'
-      }
+      this.$store.dispatch('toggleCreateForum')
     },
     async setCurrentForum (forum) {
       if (!forum.is_private ||
@@ -101,6 +96,9 @@ export default {
         await this.$store.dispatch('getForumValues', { currentForumId: forum.id })
       }
     }
+  },
+  mounted () {
+    this.$store.dispatch('setCreateForum', this.$refs.createForum)
   }
 }
 </script>

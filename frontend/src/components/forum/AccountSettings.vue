@@ -1,5 +1,5 @@
 <template>
-  <div class="account_settings">
+  <div class="account_settings" ref="accountSettings">
     <div class="account_settings__window_top">
       <div class="account_settings__user_info">
         <div v-if="previewImageSrc" class="account_settings__user_avatar">
@@ -22,7 +22,7 @@
       </div>
       <div class="account_settings__top_controls">
         <v-icon class="account_settings__icon" @click="setAvatar">mdi-content-save</v-icon>
-        <v-icon class="account_settings__icon" @click="closeAccountSettings">mdi-chevron-up</v-icon>
+        <v-icon class="account_settings__icon" @click="toggleAccountSettings">mdi-chevron-up</v-icon>
       </div>
     </div>
 
@@ -66,6 +66,9 @@ export default {
   created () {
     this.UpdatedProfile = this.user
   },
+  mounted () {
+    this.$store.dispatch('setSettingsWindow', this.$refs.accountSettings)
+  },
   methods: {
     async setAvatar () {
       await this.$store.dispatch('updateUser', this.UpdatedProfile)
@@ -85,7 +88,7 @@ export default {
         }
       })
       this.user.avatar_url = this.previewImageSrc
-      this.$store.dispatch('setAccountSettingsWindowStatus', false)
+      this.$store.dispatch('toggleSettingsWindow')
       delete this.UpdatedProfile.avatar
     },
     loadImage () {
@@ -98,8 +101,8 @@ export default {
       reader.readAsDataURL(file)
       this.UpdatedProfile.avatar = file
     },
-    closeAccountSettings () {
-      this.$store.dispatch('setAccountSettingsWindowStatus', false)
+    toggleAccountSettings () {
+      this.$store.dispatch('toggleSettingsWindow')
     }
   }
 }
@@ -116,13 +119,15 @@ export default {
   border: $third-party solid 1px;
   border-radius: 0 0 5px 0;
   width: 500px;
-  height: 200px;
-  top: -200px;
+  transform: translateY(-150%);
   z-index: 7;
   transition: 0.5s;
   overflow: hidden;
-  padding: calc(#{$navigation-app-bar-height} + 10px) 10px 10px 10px;
+  padding: 10px;
   box-shadow:  0 0 5px $shadow
+}
+.account_settings__displayed {
+  transform: translateY(0);
 }
 .account_settings__window_top {
   display: flex;

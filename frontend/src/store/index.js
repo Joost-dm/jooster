@@ -7,6 +7,7 @@ import branches from './modules/forum/branches'
 import topics from './modules/forum/posts'
 import threads from './modules/forum/threads'
 import forumCondition from './modules/forum/forumCondition'
+import elements from '@/store/modules/forum/elements'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     forums,
     branches,
     topics,
-    threads
+    threads,
+    elements
   }
 })

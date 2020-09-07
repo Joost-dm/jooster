@@ -34,12 +34,7 @@ export default {
       this.toggleForumCreateForm()
     },
     toggleForumCreateForm () {
-      const createForm = document.getElementsByClassName('forum-drawer-header__create-forum-form')[0]
-      if (createForm.style.display === 'none' || !createForm.style.display) {
-        createForm.style.display = 'inherit'
-      } else {
-        createForm.style.display = 'none'
-      }
+      this.$store.dispatch('toggleCreateForum')
     }
   }
 }

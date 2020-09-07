@@ -54,7 +54,6 @@
 <script>
 import EmojiPicker from 'vue-emoji-picker'
 import twemoji from 'twemoji'
-
 export default {
   name: 'TrainingVue',
   components: {
@@ -123,7 +122,6 @@ export default {
 
 <style scoped lang="scss">
 @import "../../styles/variables";
-
 .wrapper {
   position: relative;
   display: inline-block;
@@ -141,11 +139,9 @@ export default {
   font-size: 25px;
   transition: all 0.2s;
 }
-
 .bottom-form__button:hover {
   transform: scale(1.2);
 }
-
 .emoji-invoker {
   z-index: 3;
   position: absolute;
@@ -157,20 +153,17 @@ export default {
   cursor: pointer;
   transition: all 0.2s;
 }
-
 .regular-input {
   position: relative;
   width: 100%;
   font-family: Montserrat;
 }
-
 .emoji-invoker:hover {
   transform: scale(1.2);
 }
 .emoji-invoker > svg {
   fill: $third-party;
 }
-
 .emoji-picker {
   position: absolute;
   z-index: 4;

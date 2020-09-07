@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="post" :class="postClass">
+  <v-container fluid class="post" ref="post">
     <div class="post__left-side">
       <v-avatar class="post__avatar">
         <v-img :src=post.author.avatar_url></v-img>
@@ -46,7 +46,7 @@
         <div class="post__divider-part2"></div>
       </div>
       <div class="post__body">
-        <p class="post__text" :class="postTextClass">{{post.text}}</p>
+        <p class="post__text" ref="postText">{{post.text}}</p>
       </div>
       <div class="post__footer">
         <div class="post__discussion" @click="clearUnread(post)">
@@ -91,18 +91,6 @@ export default {
     },
     currentForum () {
       return this.$store.getters.getCurrentForum
-    },
-    postClass () {
-      return 'post-' + this.post.id
-    },
-    postTextClass () {
-      if (this.type === 'thread') {
-        return 'thread-' + this.post.id + '-text'
-      } else if (this.threadStarter) {
-        return 'thread-' + this.post.id + '-text'
-      } else {
-        return 'post-' + this.post.id + '-text'
-      }
     },
     usersOnlineIds () {
       const ids = []
@@ -221,11 +209,8 @@ export default {
       return date.toLocaleString('ru', options)
     },
     async emojiHandler () {
-      async function emojiParser (post) {
-        await twemoji.parse(post)
-      }
-      document.getElementsByClassName(this.postClass).forEach(post => emojiParser(post))
-      document.getElementsByClassName('emoji').forEach(emoji => {
+      await twemoji.parse(this.$refs.post)
+      this.$refs.post.getElementsByClassName('emoji').forEach(emoji => {
         emoji.style.cssText = `
           height: 1em;
           width: 1em;
@@ -235,9 +220,7 @@ export default {
       })
     },
     updateAndMountedHandler () {
-      document.getElementsByClassName(this.postTextClass).forEach(post => {
-        post.innerHTML = this.post.text
-      })
+      this.$refs.postText.innerHTML = this.post.text
       this.emojiHandler()
     }
   },

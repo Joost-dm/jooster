@@ -26,10 +26,10 @@
     </v-col>
     <v-col
       cols="12"
-      id="secondary-view__posts-body" @scroll="postsScrollHandler">
+      id="secondary-view__posts-body" ref="postsBody" @scroll="postsScrollHandler">
        <forum-post v-if="!threadNextPageUrl && currentThread"
                    :post="currentThread" threadStarter="true" :type="'thread'"></forum-post>
-      <div id="secondary__posts">
+      <div id="secondary__posts" ref="posts">
         <local-loader v-if="secondaryLoading"></local-loader>
         <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'" ></forum-post>
       </div>
@@ -86,18 +86,17 @@ export default {
       }
     },
     async postsScrollHandler () {
-      const postsBody = document.getElementById('secondary-view__posts-body')
+      const postsBody = this.$refs.postsBody
       if (postsBody.scrollTop <= 20 && postsBody.scrollTop > 0 && !this.preventThreadScrollTrigger) {
         this.preventThreadScrollTrigger = true
-        const postsBody = document.getElementById('secondary-view__posts-body')
         this.$store.dispatch('setCurrentThreadBottomScroll', postsBody.scrollHeight + 100)
         await this.threadNextPage()
         this.preventThreadScrollTrigger = false
       }
     },
     updateComponentScrollController () {
-      const postsList = document.getElementById('secondary__posts')
-      const postsBody = document.getElementById('secondary-view__posts-body')
+      const postsList = this.$refs.posts
+      const postsBody = this.$refs.postsBody
       if (postsBody) {
         postsBody.scrollTop = postsBody.scrollHeight - this.$store.getters.getCurrentThreadBottomScroll
       }

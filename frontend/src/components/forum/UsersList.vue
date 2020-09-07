@@ -2,7 +2,7 @@
   <div class="users_list">
     <div class="users_list__search">
       <div class="users_list__search_area">
-        <input :class=searchClassName class="users_list__search_input" type="text" placeholder="Начните ввод имени">
+        <input class="users_list__search_input" ref="search" type="text" placeholder="Начните ввод имени">
         <div class="users_list__search_icon" @click="search">
           <v-icon>mdi-magnify</v-icon>
         </div>
@@ -91,9 +91,6 @@ export default {
       } else {
         return {}
       }
-    },
-    searchClassName () {
-      return 'users_list__search_input_' + this.type
     }
   },
   methods: {
@@ -117,7 +114,7 @@ export default {
     },
     search () {
       this.filteredList = this.targetList
-      const searchValue = document.getElementsByClassName(this.searchClassName)[0].value.toUpperCase()
+      const searchValue = this.$refs.search.value.toUpperCase()
       this.filteredList = this.filteredList.filter(user => user.displayed.toUpperCase().startsWith(searchValue))
     }
   },
@@ -126,8 +123,7 @@ export default {
     this.filteredList = this.targetList
   },
   mounted () {
-    const searchInput = document.getElementsByClassName(this.searchClassName)[0]
-    searchInput.addEventListener('keyup', this.search)
+    this.$refs.search.addEventListener('keyup', this.search)
     this.filteredList = this.targetList
   }
 }

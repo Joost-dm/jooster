@@ -66,8 +66,8 @@
     </v-col>
     <v-col
       cols="12"
-      class="primary-view__body" id="primary-view__threads-body" @scroll="threadsScrollHandler">
-      <div id="primary__threads" v-if="currentBranchThreads">
+      class="primary-view__body" id="primary-view__threads-body" ref="threadsBody" @scroll="threadsScrollHandler">
+      <div id="primary__threads" ref="threads" v-if="currentBranchThreads">
         <local-loader v-if="primaryLoading"></local-loader>
         <forum-post v-for="thread in currentBranchThreads" :key="thread.id" :post="thread" :type="'thread'"></forum-post>
        </div>
@@ -102,9 +102,9 @@
     </v-col>
     <v-col
       cols="12"
-      class="primary-view__body" id="primary-view__posts-body" @scroll="postsScrollHandler">
+      class="primary-view__body" id="primary-view__posts-body" ref="postsBody" @scroll="postsScrollHandler">
         <forum-post v-if="!threadNextPageUrl && currentThread" :post="currentThread" threadStarter="true" :type="'post'"></forum-post>
-       <div id="primary__posts" v-if="currentThreadPosts">
+       <div id="primary__posts" ref="posts" v-if="currentThreadPosts">
          <local-loader v-if="primaryLoading"></local-loader>
          <forum-post v-for="post in currentThreadPosts" :post="post" :key="post.id" :type="'post'"></forum-post>
        </div>
@@ -196,30 +196,28 @@ export default {
       }
     },
     async threadsScrollHandler () {
-      const threadsBody = document.getElementById('primary-view__threads-body')
+      const threadsBody = this.$refs.threadsBody
       if (threadsBody.scrollTop <= 10 && threadsBody.scrollTop > 0 && !this.preventBranchScrollTrigger) {
         this.preventBranchScrollTrigger = true
-        const threadsBody = document.getElementById('primary-view__threads-body')
         this.$store.dispatch('setCurrentBranchBottomScroll', threadsBody.scrollHeight + 100)
         await this.branchNextPage()
         this.preventBranchScrollTrigger = false
       }
     },
     async postsScrollHandler () {
-      const postsBody = document.getElementById('primary-view__posts-body')
+      const postsBody = this.$refs.postsBody
       if (postsBody.scrollTop <= 10 && postsBody.scrollTop > 0 && !this.preventThreadScrollTrigger) {
         this.preventThreadScrollTrigger = true
-        const postsBody = document.getElementById('primary-view__posts-body')
         this.$store.dispatch('setCurrentThreadBottomScroll', postsBody.scrollHeight + 100)
         await this.threadNextPage()
         this.preventThreadScrollTrigger = false
       }
     },
     updateComponentScrollController () {
-      const threadsList = document.getElementById('primary__threads')
-      const postsList = document.getElementById('primary__posts')
-      const threadsBody = document.getElementById('primary-view__threads-body')
-      const postsBody = document.getElementById('primary-view__posts-body')
+      const threadsList = this.$refs.threads
+      const postsList = this.$refs.posts
+      const threadsBody = this.$refs.threadsBody
+      const postsBody = this.$refs.postsBody
       if (threadsBody) {
         threadsBody.scrollTop = threadsBody.scrollHeight - this.$store.getters.getCurrentBranchBottomScroll
       } else if (postsBody) {

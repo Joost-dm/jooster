@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="api-info" >
+    <div class="api-info" ref="APIInfo">
       <api_info></api_info>
     </div>
     <a href="#api-navigation">
-      <div class="api-info__up-button">
+      <div class="api-info__up-button" ref="upButton">
         <v-icon class="api-info__up-button-icon">mdi-arrow-up</v-icon>
       </div>
     </a>
@@ -27,6 +27,7 @@
       app>
        <button
          id="hamburger"
+         ref="hamburger"
          @click.stop="primaryDrawer.model = !primaryDrawer.model"
          @click="hideAPIInfo"
          class="hamburger hamburger--elastic is-active"
@@ -77,11 +78,7 @@ export default {
       this.$store.dispatch('logoutUser', this.loginData)
     },
     toggleAccountSettings () {
-      if (this.accountSettingsIsShown) {
-        this.$store.dispatch('setAccountSettingsWindowStatus', false)
-      } else {
-        this.$store.dispatch('setAccountSettingsWindowStatus', true)
-      }
+      this.$store.dispatch('toggleSettingsWindow')
     },
     async onlineChecker () {
       function checker () {
@@ -90,7 +87,7 @@ export default {
       await setInterval(checker.bind(this), 60000)
     },
     hamburgerController () {
-      const hamburger = document.getElementById('hamburger')
+      const hamburger = this.$refs.hamburger
       if (document.querySelector('nav').style.transform === 'translateX(0%)') {
         hamburger.classList.add('is-active')
       } else {
@@ -98,8 +95,8 @@ export default {
       }
     },
     toggleAPIInfo () {
-      const APIInfo = document.getElementsByClassName('api-info')[0]
-      const APIUpButton = document.getElementsByClassName('api-info__up-button')[0]
+      const APIInfo = this.$refs.APIInfo
+      const APIUpButton = this.$refs.upButton
       if (APIInfo.style.transform === 'translateX(0px)') {
         APIInfo.style.transform = 'translateX(-100%)'
         APIUpButton.style.transform = 'translateY(200%)'
@@ -109,8 +106,8 @@ export default {
       }
     },
     hideAPIInfo () {
-      const APIUpButton = document.getElementsByClassName('api-info__up-button')[0]
-      const APIInfo = document.getElementsByClassName('api-info')[0]
+      const APIUpButton = this.$refs.upButton
+      const APIInfo = this.$refs.APIInfo
       if (APIInfo.style.transform === 'translateX(0px)') {
         APIInfo.style.transform = 'translateX(-100%)'
         APIUpButton.style.transform = 'translateY(200%)'
@@ -121,9 +118,6 @@ export default {
   computed: {
     user () {
       return this.$store.getters.getCurrentUser
-    },
-    accountSettingsIsShown () {
-      return this.$store.getters.accountSettingsIsShown
     },
     usersOnline () {
       return this.$store.getters.getUsersOnline
