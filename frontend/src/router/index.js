@@ -15,7 +15,7 @@ var forumDefaultsURL
 if (forumDefaults.forumId) {
   forumDefaultsURL = '/forum/' + forumDefaults.forumId + '/' + forumDefaults.branchId + '/' + forumDefaults.threadId
 } else {
-  forumDefaultsURL = '/forum/1/1/1'
+  forumDefaultsURL = '/forum/1/1/37'
 }
 
 const routes = [
