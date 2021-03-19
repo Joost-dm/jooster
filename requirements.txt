@@ -1,5 +1,5 @@
 django==3.0.7
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djoser==2.0.3
 gunicorn==20.0.4
 sentry-sdk==0.14.3
